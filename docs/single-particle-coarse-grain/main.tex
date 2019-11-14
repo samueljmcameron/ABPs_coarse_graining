@@ -1,0 +1,179 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{comment}
+
+\title{calculation: coarse-graining active brownian particles}
+\author{Sam Cameron}
+\date{October 2019}
+
+\begin{document}
+
+\maketitle
+
+\section{Writing the active brownian particles equations of motion into the correct form}
+
+THIS IS ALL WRONG! I NEED TO LOOK AT THE N PARTICLE DENSITY AND THEN INTEGRATE OUT THINGS (I THINK).
+
+
+
+The equations of motion for active brownian particles are:
+
+\begin{align}
+    \frac{d\tilde{\bm{r}}^{(i)}}{dt}&=\frac{D^t}{k_BT}\big(\tilde{\bm{F}}^{(i)}+f^P\tilde{\bm{P}}^{(i)}\big)+\sqrt{2D^t}\tilde{\bm{u}}_i^t,\label{eq:micro_pos}\\
+    \frac{d\theta^{(i)}}{dt}&=\sqrt{2D^r}\tilde{w}_i.\label{eq:micro_theta}
+\end{align}
+where $\tilde{\bm{r}}^{(i)}=(\tilde{x}^{(i)},\tilde{y}^{(i)})$ are the particle positions, $\tilde{\bm{P}}^{(i)}=(\cos\theta^{(i)},\sin\theta^{(i)})$ are the particle orientations, and $\tilde{\bm{u}}^{(i)}=(\tilde{u}^{(i)},\tilde{v}^{(i)})$, $w_i$ are Gaussian white noise with zero mean and unit variance, i.e. for any two components of the vector $\bm{s}=(\tilde{u}^{(i)},\tilde{v}^{(i)},\tilde{w}^{(i)})$,
+\begin{align}
+    \big<s_i(t)\big>=0;\;\;\;\;\; \big<s_i(t)s_j(t^{\prime})\big>=\delta_{ij}\delta(t-t^{\prime}).
+\end{align}.
+
+I will re-write this, by defining
+\begin{align}
+    \bm{r}_i&=(\tilde{r}^{(1)}_i,\tilde{r}^{(2)}_i,\theta_i)\nonumber\\
+    &\equiv(r^{(1)}_i,r^{(2)}_i,r^{(3)}_i).
+\end{align}
+
+Then I can re-write eqns \ref{eq:micro_pos} and \ref{eq:micro_theta} as
+\begin{align}
+    \frac{d\bm{r}^{(i)}}{dt}=\bm{F}^{(i)}(\{\bm{r}_j\})+\bm{v}^{(i)}(\{\bm{r}_j\})+\sqrt{2D_{\alpha\beta}}u_{\beta}^{(i)}(t).
+\end{align}
+with $i$ ranging from particle $1$ to $N$. Here $\bm{F}^{(i)}$ can be written as the gradient of a scalar, $\bm{v}^{(i)}$ cannot, $D_{\alpha\beta}$ is diagonal with $D_{11}=D_{22}=D^t$, $D_{33}=D^r$, and $\bm{u}^{(i)}$ is the noise.
+
+
+I want to project this onto a density space, so I'll define a few things. First, I'll define
+\begin{align}
+    \bm{x}&=(x,y,\theta)\nonumber\\
+    &\equiv(x_1,x_2,x_3),\label{eq:def_x}\\
+    \nabla&\equiv\bigg(\frac{\partial}{\partial x_1},\frac{\partial}{\partial x_2},\frac{\partial}{\partial x_3}\bigg).
+\end{align}
+
+Now I'll define the stochastic probability density operator
+\begin{align}
+    \hat{\rho}(\bm{x},t)=\sum_{i}^N\delta(\bm{x}-\bm{r}^{(i)}(t)).
+\end{align}
+
+From this, I will then take the partial derivative with respect to time,
+\begin{align}\label{eq:start}
+    \frac{\partial \hat{\rho}}{\partial t} &= -\sum_{i=1}^N(\nabla_{\bm{x}}\delta(\bm{r}-\bm{r}^{(i)}(t)))\cdot\frac{d\bm{r}^{(i)}}{dt}\nonumber\\
+    &=-\nabla_{\bm{x}}\cdot\hat{\bm{j}}(\bm{x},t).
+\end{align}
+Here, I have defined
+\begin{align}
+    \hat{\bm{j}}(\bm{x},t)\equiv\sum_{i=1}^N\bigg(\bm{F}^{(i)}(\{\bm{x},\bm{r}^{(j\neq i)}\})\delta(\bm{x}-\bm{r}^{(i)}(t))+\bm{v}^{(i)}(\{\bm{x},\bm{r}^{(j\neq i)}\})\delta(\bm{x}-\bm{r}^{(i)}(t))\nonumber\\
+    +\sqrt{2D_{\alpha\beta}}u_{\beta}^{(i)}(t)\delta(\bm{x}-\bm{r}^{(i)}(t))\bigg)
+\end{align}
+and $\{\bm{x},\bm{r}^{(j\neq i)}\}= \{\cdots,\bm{r}^{(i-1)},\bm{x},\bm{r}^{(i+1)}.\cdots\}$
+
+You can average $\hat{\rho}(\bm{x},t)$ over the fluctuations of $\bm{u}(t)$, and the resulting density is
+\begin{align}
+    P(\bm{x},t)=<\hat{\rho}(\bm{x},t)>,
+\end{align}
+where I have used the fact that for some observable $\mathcal{O}$,
+\begin{align}
+    <\mathcal{O}(\bm{u}^{(i)}(t))>=\frac{1}{Z}\int\mathcal{D}\bm{u}^{(i)}(t)\mathcal{O}(\bm{u}^{(i)}(t))\exp\bigg(-\frac{1}{2}\int_0^Tdt(\bm{u}^{(i)}(t))^2\bigg),
+\end{align}
+since the mean of all the Gaussian noise vectors are zero, and they have unit variance.
+
+Averaging over eqn \ref{eq:start}, I get
+\begin{align}\label{eq:continuity}
+    \frac{\partial P(\bm{x},t)}{\partial t}+\nabla\cdot\bm{J}(\bm{x},t)=0,
+\end{align}
+where
+\begin{align}
+    \bm{J}(\bm{x},t)&=\sum_{i=1}^N\bigg(\bm{F}^{(i)}(\{\bm{x},\bm{r}^{(j\neq i)}\})P(\bm{x},t)+\bm{v}^{(i)}(\{\bm{x},\bm{r}^{(j\neq i)}\})P(\bm{x},t)+\sqrt{2D_{\alpha\beta}}<u_{\beta}^{(i)}(t)\hat{\rho}(\bm{x},t)>\bigg)\nonumber\\
+    &=\bm{R}(\bm{x},\{\bm{r}_j\})P(\bm{x},t)+\sum_{i=1}^N\sqrt{2D_{\alpha\beta}}<u_{\beta}^{(i)}(t)\delta(\bm{x}-\bm{r}_i(t))>
+\end{align}
+where $\bm{R}(\bm{x},\{\bm{r}_j\})P(\bm{x},t)$ is the flux without noise.
+
+To evaluate the noise term, I will Taylor expand eqn \ref{eq:continuity} in the limit of $\Delta t\to0$, so
+\begin{align}
+    \lim_{\Delta t\to0}&\frac{\partial}{\partial t}P(\bm{x},t)\equiv\lim_{\Delta t\to0}\frac{1}{\Delta t}[P(\bm{x},t+\Delta t)-P(\bm{x},t)]\nonumber\\
+    =&-\lim_{\Delta t\to0}\frac{1}{\Delta t}\int_t^{t+\Delta t}dt'\nabla\cdot\big(\bm{R}(\bm{x},\{\bm{r}_j\})P(\bm{x},t')\nonumber\\
+    &+\sum_{i=1}^N\sqrt{2D_{\alpha\beta}}<u_{\beta}^{(i)}(t)\delta(\bm{x}-\bm{r}_i(t')\big)>)
+\end{align}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Below this, I have an old calculation from before I really understood what to do... %
+%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{comment}
+
+
+I will introduce $\zeta^{\alpha}=D^{\alpha}/(k_BT)$ for $\alpha=t,r$. I can re-write eqn \ref{eq:start} as
+
+\begin{align}
+    \frac{d\bm{x}}{dt}=-\bm{D}\cdot\nabla\mathcal{H}(\bm{x})+\bm{D}\cdot\bm{v}(\bm{x})+\bm{\xi}(t),
+\end{align}
+where I will let the first component of $\bm{r}_i$ be (for $i=1..N$) the first $N$ components of $\bm{x}$, the y components of $\bm{r}_i$ be the next $N$ components of $\bm{x}$, and the $\theta_i$ components are the last $N$ components of $\bm{x}$. All other vectors will follow this same structure. 
+\begin{align}
+    \bm{x}&= (r^{(1)}_1,\cdots,r^{(1)}_N,r^{(2)}_1,\cdots,r^{(2)}_N,\theta_1,\cdots,\theta_N)\nonumber\\
+    &=(x_1,\cdots,x_N,x_{N+1},\cdots,x_{2N},x_{2N+1},\cdots,x_{3N}),
+\end{align}
+and
+\begin{align}
+    \bm{v}(\bm{x})=(f^P\cos x_{2N+1},\cdots,f^P\cos x_{3N},f^P\sin x_{2N+1},\cdots,f^P\sin x_{3N},0,\cdots,0).
+\end{align}
+Similarly, $\bm{\xi}$ is a vector with the first $N$ components corresponding to the noise associated with the first $N$ components of $\bm{x}$, etc. The noise vector satisfies
+\begin{align}
+    \big<\xi_i(t)\big>=0;
+\end{align}
+\begin{equation}
+    \big<\xi_i(t)\xi_j(t^{\prime})\big>=
+    \begin{cases}
+    2\delta_{ij}\delta_{\beta,\gamma}\zeta^tk_BT\delta(t-t^{\prime}), & i\leq 2N, \\
+    2\delta_{ij}\delta_{\beta,\gamma}\zeta^rk_BT\delta(t-t^{\prime}), & i>2N.
+    \end{cases}
+\end{equation}.
+Also, $\bm{D}$ is a diagonal matrix, with the first $2N$ components being equal to $\zeta^t$, and the final $N$ components being equal to $\zeta^r$.
+
+
+\section{Interaction between particles - WCA approximation}
+NOTE: Summation notation will not be used in this section.
+
+To actually do any calculations, an interaction form for $\mathcal{H}$ must be chosen. Since we are interested in capturing motility induced phase separation (MIPS) in the simplest form, we will choose the (repulsive) Weeks-Chandler-Anderson (WCA) interaction,
+\begin{equation}
+    \mathcal{V}^{\alpha\beta} =
+    \begin{cases}
+    4\epsilon\bigg[\bigg(\frac{\sigma}{r^{\alpha\beta}}\bigg)^{12}-\bigg(\frac{\sigma}{r^{\alpha\beta}}\bigg)^6\bigg]+\epsilon, & r<2^{\frac{1}{6}}\sigma \\
+    0, & \mathrm{otherwise},
+    \end{cases}
+\end{equation}
+where $r^{\alpha\beta}=\sqrt{(x_{\alpha}-x_{\beta})^2+(x_{\alpha+N}-x_{\beta+N})^2}$ (the indices in the bottom should be treated as integer addition modulo $2N$). Then, the full interaction potential is
+\begin{align}
+    \mathcal{H}=\sum_{\alpha=1}^N\sum_{\beta=1}^{\alpha-1}\mathcal{V}^{\alpha\beta},
+\end{align}
+where I am summing over the $N(N-1)/2$ different pairings of the positions.
+Noting that
+\begin{equation}\label{eq:dVij}
+    \frac{\partial \mathcal{V}^{\alpha\beta}}{\partial r^{\alpha\beta}}=
+    \begin{cases}
+    -24\epsilon\bigg[\bigg(\sigma^{12}(r^{\alpha\beta})^{-13}-\sigma^6(r^{\alpha\beta})^{-6}\bigg], & r^{\alpha\beta}<2^{\frac{1}{6}}\sigma \\
+    0, & \mathrm{otherwise},
+    \end{cases}
+\end{equation}
+and
+\begin{align}\label{eq:drij}
+    \frac{\partial r^{\alpha\beta}}{\partial x_k}&=\frac{(x_{\alpha}-x_{\beta})(\delta_{k\alpha}-\delta_{k\beta})}{r^{\alpha\beta}},
+\end{align}
+the gradient of the interaction potential is
+\begin{equation}
+    \frac{\partial}{\partial x_k}\mathcal{H}=
+    \begin{cases}
+    \sum\limits_{\substack{\beta=1\\ \beta\neq k}}^N Q_{k\beta}, &1\leq k \leq N,\\
+    \sum\limits_{\substack{\beta=N+1\\ \beta\neq k}}^{2N} Q_{k\beta}, &N+1\leq k \leq 2N,\\
+    0, & k > 2N
+    \end{cases}
+\end{equation}
+where I have defined $Q_{\alpha\beta}=-Q_{\beta\alpha}$ is
+\begin{align}
+    Q_{\alpha\beta}=\frac{\partial\mathcal{V}^{\alpha\beta}}{\partial r^{\alpha\beta}}\times\frac{(x_{\alpha}-x_{\beta})}{r^{\alpha\beta}}
+\end{align}
+\end{comment}
+
+
+\end{document}

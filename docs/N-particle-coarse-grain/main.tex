@@ -1,0 +1,294 @@
+\documentclass{article}
+\usepackage[margin=1.25cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{comment}
+
+\title{calculation: coarse-graining active brownian particles}
+\author{Sam Cameron}
+\date{October 2019}
+
+\begin{document}
+
+\maketitle
+
+\section{Writing the active brownian particles equations of motion into the correct form}
+
+
+
+The equations of motion for active brownian particles are:
+
+\begin{align}
+  \frac{d\tilde{\bm{r}}^{(i)}}{dt}&=\frac{D^t}{k_BT}\big(\tilde{\bm{F}}^{(i)}
+                                    +f^P\tilde{\bm{P}}^{(i)}\big)
+                                    +\sqrt{2D^t}\tilde{\bm{u}}_i^t,\label{eq:micro_pos}\\
+    \frac{d\theta^{(i)}}{dt}&=\sqrt{2D^r}\tilde{w}_i.\label{eq:micro_theta}
+\end{align}
+where $\tilde{\bm{r}}^{(i)}=(\tilde{x}^{(i)},\tilde{y}^{(i)})$ are the particle positions,
+$\tilde{\bm{P}}^{(i)}=(\cos\theta^{(i)},\sin\theta^{(i)})$ are the particle orientations,
+and $\tilde{\bm{u}}^{(i)}=(\tilde{u}^{(i)},\tilde{v}^{(i)})$, $_i$ are Gaussian white noise
+with zero mean and unit variance, i.e. for any two components of the vector
+$\bm{s}=(\tilde{u}^{(i)},\tilde{v}^{(i)},\tilde{w}^{(i)})$,
+\begin{align}
+  \big<s_i(t)\big>=0;\;\;\;\;\; \big<s_i(t)s_j(t^{\prime})\big>=
+  \delta_{ij}\delta(t-t^{\prime}).
+\end{align}.
+
+I will re-write this, by defining
+\begin{align}
+    \bm{r}_i&=(\tilde{r}^{(1)}_i,\tilde{r}^{(2)}_i,\theta_i)\nonumber\\
+    &\equiv(r^{(1)}_i,r^{(2)}_i,r^{(3)}_i).
+\end{align}
+
+Then I can re-write eqns \ref{eq:micro_pos} and \ref{eq:micro_theta} as
+\begin{align}
+  \frac{d\bm{r}^{(i)}}{dt}=\bm{F}^{(i)}(\{\bm{r}_j\})+\bm{v}^{(i)}(\{\bm{r}_j\})
+  +\sqrt{2D_{\alpha\beta}}u_{\beta}^{(i)}(t).
+\end{align}
+with $i$ ranging from particle $1$ to $N$. Here $\bm{F}^{(i)}$ can be written as the gradient
+of a scalar, $\bm{v}^{(i)}$ cannot, $D_{\alpha\beta}$ is diagonal with $D_{11}=D_{22}=D^t$,
+$D_{33}=D^r$, and $\bm{u}^{(i)}$ is the noise.
+
+Now, finally, I can re-write this again to give $3N$ length vector of all particles,
+\begin{align}
+    \bm{r}=(\bm{r}^{(1)},\bm{r}^{(2)},\cdots,\bm{r}^{(N)}).
+\end{align}
+
+This will then give the differential equation
+\begin{align}
+  \frac{d\bm{r}}{dt}=\bm{F}(\bm{r})+\bm{v}(\bm{r})
+  +\sqrt{2D_{\alpha\beta}}u_{\beta}(t),
+\end{align}
+where $D_{\alpha\beta}$ is diagonal, and the values of the diagonal are $D^t$ if $\alpha$ is
+not divisible by $3$, and $D^r$ if it is.
+
+Next, I will define
+\begin{align}
+  \bm{x}&\equiv(x_1,x_2,\cdots,x_{3N}),\\
+  \nabla&\equiv(\partial_1,\partial_2,\cdots,\partial_{3N}).
+\end{align}
+
+as well as the stochastic probability density operator
+\begin{align}
+  \hat{\rho}(\bm{x},t)=\delta(\bm{x}-\bm{r}(t)).
+\end{align}
+
+Taking the partial derivative of this with respect to time gives
+\begin{align}
+  \frac{\partial\hat{\rho}}{\partial t}&=-(\nabla_{\bm{x}}\delta(\bm{x}-\bm{r}(t))
+                                         \cdot\frac{d\bm{r}}{dt}\nonumber\\
+                                       &=-\nabla_{\bm{x}}\cdots(\frac{d\bm{r}}{dt}
+                                         \delta(\bm{x}-\bm{r}(t))\nonumber\\
+                                       &=-\nabla_{\bm{x}}\cdots\hat{\bm{j}}(\bm{x},t),
+\end{align}
+where I have defined the stochastic current operator
+\begin{align}
+  \hat{\bm{j}}(\bm{x},t)&\equiv\bm{F}(\bm{x})\delta(\bm{x}-\bm{r}(t))
+                          +\bm{v}(\bm{x})\delta(\bm{x}-\bm{r}(t))
+                          +\sqrt{2D_{\alpha\beta}}u_{\beta}(t)
+                          \delta(\bm{x}-\bm{r}(t))\nonumber\\
+                        &=\bm{F}(\bm{x})\hat{\rho}(\bm{x},t)
+                          +\bm{v}(\bm{x})\hat{\rho}(\bm{x},t)
+                          +\sqrt{2D_{\alpha\beta}}u_{\beta}(t)\hat{\rho}(\bm{x},t).
+\end{align}
+
+You can average $\hat{\rho}(\bm{x},t)$ over the fluctuations $\bm{u}(t)$, and get the
+resulting density
+\begin{align}
+  P(\bm{x},t)=<\hat{\rho}(\bm{x},t)>,
+\end{align}
+where I have used the definition that for some observable $\hat{\mathcal{O}}$,
+\begin{align}
+  <\hat{\mathcal{O}}(\bm{u}(t))>=\frac{1}{Z}\int\mathcal{D}\bm{u}
+  \hat{\mathcal{O}}(\bm{u}(t))\exp\bigg(-\frac{1}{2}\int_0^Tdt(\bm{u}(t))^2\bigg).
+\end{align}
+From this, I can calculate that noise-averaged current as
+\begin{align}
+  \bm{J}(\bm{x},t)=\bm{F}(\bm{x})P(\bm{x},t)+\bm{v}(\bm{x})P(\bm{x},t)
+  +\sqrt{2D_{\alpha\beta}}<u_{\beta}(t)\hat{\rho}(\bm{x},t)>.
+\end{align}
+
+In order to write the noise term above in terms of $P(\bm{x},t)$, I will use the properties
+of the Dirac-delta function, namely,
+\begin{align}
+  \delta(\bm{x})=\int\frac{d^dk}{(2\pi)^d}\exp(-ik_jx_j),
+\end{align}
+to write
+\begin{align}
+  <u_{\beta}\hat{\rho}(\bm{x},t)>=\int\frac{d^dk}{(2\pi)^d}u_{\beta}(t)
+  \exp(-ik_j(x_j-r_j(t))).
+\end{align}
+
+Since correlations between the noise
+$<u_{\alpha}(t)u_{\beta}(t)>=\delta_{\alpha\beta}\delta(t-t^{\prime})$ only occur for
+fluctuations happening at the same time, we can write
+\begin{align}
+  \bm{r}(t)=\bm{r}(t-\Delta t)+\int_{t-\Delta t}^tdt_1[\bm{F}(\bm{r}(t_1))
+  +\bm{v}{\bm{r}(t_1)}+\sqrt{2D_{j\gamma}}u_{\gamma}(t_1)]
+\end{align}
+as $\Delta t\to0$. Then, since
+\begin{align}
+  \exp\bigg[\int_{t-\Delta t}^tdt_1(\bm{F}(\bm{r}(t_1)
+  +\bm{v}({\bm{r}(t_1)})\bigg]=1+O(\Delta t),
+\end{align}
+this can be written as
+\begin{align}
+  <u_{\beta}(t)\exp(-ik_jr_j(t)>=&\bigg<u_{\beta}(t)\exp\bigg[-ik_jr_j(t-\Delta t)-ik_j
+                                   \int_{t-\Delta t}^tdt_1(F_j(\bm{r}(t_1)
+                                   +v_j{\bm{r}(t_1)}\nonumber\\
+                                 &+\sqrt{2D_{j\gamma}}u_{\gamma}
+                                   (t_1))\bigg]\bigg>\nonumber\\
+  =&\bigg<u_{\beta}(t)\exp(-ik_jr_j(t-\Delta t))
+     \bigg[1-ik_j\int_{t-\Delta t}^tdt_1
+     \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>+O(\Delta t).
+\end{align}
+
+Next, since $t-\Delta t<t_1,t$, there won't be any correlations between the
+fluctuations at earlier times and those at $t$, so using the fact that for uncorrelated
+functions $<AB>=<A><B>$, I get
+\begin{align}
+  <u_{\beta}(t)\exp(-ik_jr_j(t)>&=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+                                  \bigg<u_{\beta}(t)\bigg[1-ik_j\int_{t-\Delta t}^tdt_1
+                                  \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>
+                                  +O(\Delta t)\nonumber\\
+                                &=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+                                  \bigg(<u_{\beta}(t)>
+                                  -\bigg<ik_j\int_{t-\Delta t}^tdt_1
+                                  \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)
+                                  u_{\beta}(t)\bigg]\bigg>\bigg)
+                                  +O(\Delta t)\nonumber\\
+                                &=-\bigg<ik_j\sqrt{2D_{j\gamma}}\int_{t-\Delta t}^tdt_1
+                                  \delta_{\beta \gamma}\delta(t-t_1)\bigg]\bigg>
+                                  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+                                  +O(\Delta t)\nonumber\\
+                                &=-\bigg<ik_j\sqrt{2D_{j\beta}}\int_{t-\Delta t}^tdt_1
+                                  \delta(t-t_1)\bigg>
+                                  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+                                  +O(\Delta t)\nonumber\\
+                                &=-\bigg<ik_j\sqrt{2D_{j\beta}}\int_0^{\Delta t}du
+                                  \delta(u)\bigg>
+                                  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+                                  +O(\Delta t)\nonumber\\
+                                &=-\frac{1}{2}ik_j\sqrt{2D_{j\beta}}
+                                  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+                                  +O(\Delta t)\nonumber\\.
+\end{align}
+Taking the limit as $\Delta t\to0$, this becomes
+\begin{align}
+  <u_{\beta}(t)\exp(-ik_jr_j(t)>=-\frac{1}{2}ik_j\sqrt{2D_{j\beta}}
+  \bigg<\exp(-ik_jr_j(t))\bigg>.
+\end{align}
+Taking the inverse Fourier transform then gives
+\begin{align}
+  <u_{\beta}(t)\hat{\rho}(\bm{x},t)>=-\frac{1}{2}\sqrt{2D_{j\beta}}
+  \partial_jP(\bm{x},t).
+\end{align}
+Finally, inserting this into the current I get
+\begin{align}
+  J_{\alpha}(\bm{x},t)&=F_{\alpha}(\bm{x})P(\bm{x},t)+v_{\alpha}(\bm{x})P(\bm{x},t)
+                        +\sqrt{2D_{\alpha\beta}}(-\frac{1}{2}\sqrt{2D_{j\beta}}
+                        \partial_jP(\bm{x},t))\nonumber\\
+                      &=F_{\alpha}(\bm{x})P(\bm{x},t)+v_{\alpha}(\bm{x})P(\bm{x},t)
+                        -\sqrt{D_{\alpha\beta}D_{j\beta}}
+                        \partial_jP(\bm{x},t))
+\end{align}
+
+Since in our case, $D_{\alpha\beta}$ is diagonal, this just becomes
+\begin{align}
+  \bm{J}(\bm{x},t)&=\bm{F}(\bm{x})P(\bm{x},t)+\bm{v}(\bm{x})P(\bm{x},t)
+                    -\bm{D}\cdot\nabla P(\bm{x},t)
+\end{align}
+
+\section{Deriving a two-particle density function.}
+
+
+                                  
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Below this, I have an old calculation from before I really understood what to do... %
+%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{comment}
+
+
+I will introduce $\zeta^{\alpha}=D^{\alpha}/(k_BT)$ for $\alpha=t,r$. I can re-write eqn \ref{eq:start} as
+
+\begin{align}
+    \frac{d\bm{x}}{dt}=-\bm{D}\cdot\nabla\mathcal{H}(\bm{x})+\bm{D}\cdot\bm{v}(\bm{x})+\bm{\xi}(t),
+\end{align}
+where I will let the first component of $\bm{r}_i$ be (for $i=1..N$) the first $N$ components of $\bm{x}$, the y components of $\bm{r}_i$ be the next $N$ components of $\bm{x}$, and the $\theta_i$ components are the last $N$ components of $\bm{x}$. All other vectors will follow this same structure. 
+\begin{align}
+    \bm{x}&= (r^{(1)}_1,\cdots,r^{(1)}_N,r^{(2)}_1,\cdots,r^{(2)}_N,\theta_1,\cdots,\theta_N)\nonumber\\
+    &=(x_1,\cdots,x_N,x_{N+1},\cdots,x_{2N},x_{2N+1},\cdots,x_{3N}),
+\end{align}
+and
+\begin{align}
+    \bm{v}(\bm{x})=(f^P\cos x_{2N+1},\cdots,f^P\cos x_{3N},f^P\sin x_{2N+1},\cdots,f^P\sin x_{3N},0,\cdots,0).
+\end{align}
+Similarly, $\bm{\xi}$ is a vector with the first $N$ components corresponding to the noise associated with the first $N$ components of $\bm{x}$, etc. The noise vector satisfies
+\begin{align}
+    \big<\xi_i(t)\big>=0;
+\end{align}
+\begin{equation}
+    \big<\xi_i(t)\xi_j(t^{\prime})\big>=
+    \begin{cases}
+    2\delta_{ij}\delta_{\beta,\gamma}\zeta^tk_BT\delta(t-t^{\prime}), & i\leq 2N, \\
+    2\delta_{ij}\delta_{\beta,\gamma}\zeta^rk_BT\delta(t-t^{\prime}), & i>2N.
+    \end{cases}
+\end{equation}.
+Also, $\bm{D}$ is a diagonal matrix, with the first $2N$ components being equal to $\zeta^t$, and the final $N$ components being equal to $\zeta^r$.
+
+
+\section{Interaction between particles - WCA approximation}
+NOTE: Summation notation will not be used in this section.
+
+To actually do any calculations, an interaction form for $\mathcal{H}$ must be chosen. Since we are interested in capturing motility induced phase separation (MIPS) in the simplest form, we will choose the (repulsive) Weeks-Chandler-Anderson (WCA) interaction,
+\begin{equation}
+    \mathcal{V}^{\alpha\beta} =
+    \begin{cases}
+    4\epsilon\bigg[\bigg(\frac{\sigma}{r^{\alpha\beta}}\bigg)^{12}-\bigg(\frac{\sigma}{r^{\alpha\beta}}\bigg)^6\bigg]+\epsilon, & r<2^{\frac{1}{6}}\sigma \\
+    0, & \mathrm{otherwise},
+    \end{cases}
+\end{equation}
+where $r^{\alpha\beta}=\sqrt{(x_{\alpha}-x_{\beta})^2+(x_{\alpha+N}-x_{\beta+N})^2}$ (the indices in the bottom should be treated as integer addition modulo $2N$). Then, the full interaction potential is
+\begin{align}
+    \mathcal{H}=\sum_{\alpha=1}^N\sum_{\beta=1}^{\alpha-1}\mathcal{V}^{\alpha\beta},
+\end{align}
+where I am summing over the $N(N-1)/2$ different pairings of the positions.
+Noting that
+\begin{equation}\label{eq:dVij}
+    \frac{\partial \mathcal{V}^{\alpha\beta}}{\partial r^{\alpha\beta}}=
+    \begin{cases}
+    -24\epsilon\bigg[\bigg(\sigma^{12}(r^{\alpha\beta})^{-13}-\sigma^6(r^{\alpha\beta})^{-6}\bigg], & r^{\alpha\beta}<2^{\frac{1}{6}}\sigma \\
+    0, & \mathrm{otherwise},
+    \end{cases}
+\end{equation}
+and
+\begin{align}\label{eq:drij}
+    \frac{\partial r^{\alpha\beta}}{\partial x_k}&=\frac{(x_{\alpha}-x_{\beta})(\delta_{k\alpha}-\delta_{k\beta})}{r^{\alpha\beta}},
+\end{align}
+the gradient of the interaction potential is
+\begin{equation}
+    \frac{\partial}{\partial x_k}\mathcal{H}=
+    \begin{cases}
+    \sum\limits_{\substack{\beta=1\\ \beta\neq k}}^N Q_{k\beta}, &1\leq k \leq N,\\
+    \sum\limits_{\substack{\beta=N+1\\ \beta\neq k}}^{2N} Q_{k\beta}, &N+1\leq k \leq 2N,\\
+    0, & k > 2N
+    \end{cases}
+\end{equation}
+where I have defined $Q_{\alpha\beta}=-Q_{\beta\alpha}$ is
+\begin{align}
+    Q_{\alpha\beta}=\frac{\partial\mathcal{V}^{\alpha\beta}}{\partial r^{\alpha\beta}}\times\frac{(x_{\alpha}-x_{\beta})}{r^{\alpha\beta}}
+\end{align}
+\end{comment}
+
+\bibliographystyle{plain}
+\bibliography{bib}
+
+\end{document}
