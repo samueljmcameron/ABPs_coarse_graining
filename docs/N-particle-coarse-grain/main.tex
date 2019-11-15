@@ -21,48 +21,34 @@
 The equations of motion for active brownian particles are:
 
 \begin{align}
-  \frac{d\tilde{\bm{r}}^{(i)}}{dt}&=\frac{D^t}{k_BT}\big(\tilde{\bm{F}}^{(i)}
-                                    +f^P\tilde{\bm{P}}^{(i)}\big)
-                                    +\sqrt{2D^t}\tilde{\bm{u}}_i^t,\label{eq:micro_pos}\\
-    \frac{d\theta^{(i)}}{dt}&=\sqrt{2D^r}\tilde{w}_i.\label{eq:micro_theta}
+  \frac{d\bm{r}_i}{dt}&=\frac{D^t}{k_BT}\big(\bm{F}_i
+                        +f^P\bm{P}_i\big)
+                        +\sqrt{2D^t}\tilde{\bm{u}}_i^t,\label{eq:micro_pos}\\
+    \frac{d\theta_i}{dt}&=\sqrt{2D^r}w_i.\label{eq:micro_theta}
 \end{align}
-where $\tilde{\bm{r}}^{(i)}=(\tilde{x}^{(i)},\tilde{y}^{(i)})$ are the particle positions,
-$\tilde{\bm{P}}^{(i)}=(\cos\theta^{(i)},\sin\theta^{(i)})$ are the particle orientations,
-and $\tilde{\bm{u}}^{(i)}=(\tilde{u}^{(i)},\tilde{v}^{(i)})$, $_i$ are Gaussian white noise
+where $\bm{r}_i=(x_i,y_i)$ are the particle positions,
+$\bm{P}_i=(\cos\theta_i,\sin\theta_i)$ are the particle orientations,
+and $\tilde{\bm{u}}_i=(\tilde{u}_i,v_i)$, $w_i$ are Gaussian white noise
 with zero mean and unit variance, i.e. for any two components of the vector
-$\bm{s}=(\tilde{u}^{(i)},\tilde{v}^{(i)},\tilde{w}^{(i)})$,
+$\bm{s}=(u_i,v_i,w_i)$,
 \begin{align}
   \big<s_i(t)\big>=0;\;\;\;\;\; \big<s_i(t)s_j(t^{\prime})\big>=
   \delta_{ij}\delta(t-t^{\prime}).
 \end{align}.
 
-I will re-write this, by defining
+Now, I can define a vector of length $3N$ with components
 \begin{align}
-    \bm{r}_i&=(\tilde{r}^{(1)}_i,\tilde{r}^{(2)}_i,\theta_i)\nonumber\\
-    &\equiv(r^{(1)}_i,r^{(2)}_i,r^{(3)}_i).
-\end{align}
-
-Then I can re-write eqns \ref{eq:micro_pos} and \ref{eq:micro_theta} as
-\begin{align}
-  \frac{d\bm{r}^{(i)}}{dt}=\bm{F}^{(i)}(\{\bm{r}_j\})+\bm{v}^{(i)}(\{\bm{r}_j\})
-  +\sqrt{2D_{\alpha\beta}}u_{\beta}^{(i)}(t).
-\end{align}
-with $i$ ranging from particle $1$ to $N$. Here $\bm{F}^{(i)}$ can be written as the gradient
-of a scalar, $\bm{v}^{(i)}$ cannot, $D_{\alpha\beta}$ is diagonal with $D_{11}=D_{22}=D^t$,
-$D_{33}=D^r$, and $\bm{u}^{(i)}$ is the noise.
-
-Now, finally, I can re-write this again to give $3N$ length vector of all particles,
-\begin{align}
-    \bm{r}=(\bm{r}^{(1)},\bm{r}^{(2)},\cdots,\bm{r}^{(N)}).
+  \bm{r}=(\bm{r}^{(1)},\bm{r}^{(2)},\cdots,\bm{r}^{(N)},\theta_1,\theta_2,\cdots,
+  \theta_N).
 \end{align}
 
 This will then give the differential equation
 \begin{align}
   \frac{d\bm{r}}{dt}=\bm{F}(\bm{r})+\bm{v}(\bm{r})
-  +\sqrt{2D_{\alpha\beta}}u_{\beta}(t),
+  +\sqrt{2\tilde{D}_{\alpha\beta}}u_{\beta}(t),
 \end{align}
-where $D_{\alpha\beta}$ is diagonal, and the values of the diagonal are $D^t$ if $\alpha$ is
-not divisible by $3$, and $D^r$ if it is.
+where $\tilde{D}_{\alpha\beta}$ is diagonal, and the values of the diagonal are
+$D^t$ for the first $2N$ terms, and $D^r$ for the last $N$ terms.
 
 Next, I will define
 \begin{align}
@@ -79,19 +65,19 @@ Taking the partial derivative of this with respect to time gives
 \begin{align}
   \frac{\partial\hat{\rho}}{\partial t}&=-(\nabla_{\bm{x}}\delta(\bm{x}-\bm{r}(t))
                                          \cdot\frac{d\bm{r}}{dt}\nonumber\\
-                                       &=-\nabla_{\bm{x}}\cdots(\frac{d\bm{r}}{dt}
-                                         \delta(\bm{x}-\bm{r}(t))\nonumber\\
-                                       &=-\nabla_{\bm{x}}\cdots\hat{\bm{j}}(\bm{x},t),
+                                       &=-\nabla_{\bm{x}}\cdot\bigg(\frac{d\bm{r}}{dt}
+                                         \delta(\bm{x}-\bm{r}(t)\bigg)\nonumber\\
+                                       &=-\nabla_{\bm{x}}\cdot\hat{\bm{j}}(\bm{x},t),
 \end{align}
 where I have defined the stochastic current operator
 \begin{align}
   \hat{\bm{j}}(\bm{x},t)&\equiv\bm{F}(\bm{x})\delta(\bm{x}-\bm{r}(t))
                           +\bm{v}(\bm{x})\delta(\bm{x}-\bm{r}(t))
-                          +\sqrt{2D_{\alpha\beta}}u_{\beta}(t)
+                          +\sqrt{2\tilde{D}_{\alpha\beta}}u_{\beta}(t)
                           \delta(\bm{x}-\bm{r}(t))\nonumber\\
                         &=\bm{F}(\bm{x})\hat{\rho}(\bm{x},t)
                           +\bm{v}(\bm{x})\hat{\rho}(\bm{x},t)
-                          +\sqrt{2D_{\alpha\beta}}u_{\beta}(t)\hat{\rho}(\bm{x},t).
+                          +\sqrt{2\tilde{D}_{\alpha\beta}}u_{\beta}(t)\hat{\rho}(\bm{x},t).
 \end{align}
 
 You can average $\hat{\rho}(\bm{x},t)$ over the fluctuations $\bm{u}(t)$, and get the
@@ -107,7 +93,7 @@ where I have used the definition that for some observable $\hat{\mathcal{O}}$,
 From this, I can calculate that noise-averaged current as
 \begin{align}
   \bm{J}(\bm{x},t)=\bm{F}(\bm{x})P(\bm{x},t)+\bm{v}(\bm{x})P(\bm{x},t)
-  +\sqrt{2D_{\alpha\beta}}<u_{\beta}(t)\hat{\rho}(\bm{x},t)>.
+  +\sqrt{2\tilde{D}_{\alpha\beta}}<u_{\beta}(t)\hat{\rho}(\bm{x},t)>.
 \end{align}
 
 In order to write the noise term above in terms of $P(\bm{x},t)$, I will use the properties
@@ -126,7 +112,7 @@ $<u_{\alpha}(t)u_{\beta}(t)>=\delta_{\alpha\beta}\delta(t-t^{\prime})$ only occu
 fluctuations happening at the same time, we can write
 \begin{align}
   \bm{r}(t)=\bm{r}(t-\Delta t)+\int_{t-\Delta t}^tdt_1[\bm{F}(\bm{r}(t_1))
-  +\bm{v}{\bm{r}(t_1)}+\sqrt{2D_{j\gamma}}u_{\gamma}(t_1)]
+  +\bm{v}{\bm{r}(t_1)}+\sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}(t_1)]
 \end{align}
 as $\Delta t\to0$. Then, since
 \begin{align}
@@ -138,11 +124,11 @@ this can be written as
   <u_{\beta}(t)\exp(-ik_jr_j(t)>=&\bigg<u_{\beta}(t)\exp\bigg[-ik_jr_j(t-\Delta t)-ik_j
                                    \int_{t-\Delta t}^tdt_1(F_j(\bm{r}(t_1)
                                    +v_j{\bm{r}(t_1)}\nonumber\\
-                                 &+\sqrt{2D_{j\gamma}}u_{\gamma}
+                                 &+\sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}
                                    (t_1))\bigg]\bigg>\nonumber\\
   =&\bigg<u_{\beta}(t)\exp(-ik_jr_j(t-\Delta t))
      \bigg[1-ik_j\int_{t-\Delta t}^tdt_1
-     \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>+O(\Delta t).
+     \sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>+O(\Delta t).
 \end{align}
 
 Next, since $t-\Delta t<t_1,t$, there won't be any correlations between the
@@ -151,60 +137,125 @@ functions $<AB>=<A><B>$, I get
 \begin{align}
   <u_{\beta}(t)\exp(-ik_jr_j(t)>&=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
                                   \bigg<u_{\beta}(t)\bigg[1-ik_j\int_{t-\Delta t}^tdt_1
-                                  \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>
+                                  \sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>
                                   +O(\Delta t)\nonumber\\
                                 &=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
                                   \bigg(<u_{\beta}(t)>
                                   -\bigg<ik_j\int_{t-\Delta t}^tdt_1
-                                  \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)
+                                  \sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}(t_1)
                                   u_{\beta}(t)\bigg]\bigg>\bigg)
                                   +O(\Delta t)\nonumber\\
-                                &=-\bigg<ik_j\sqrt{2D_{j\gamma}}\int_{t-\Delta t}^tdt_1
+                                &=-\bigg<ik_j\sqrt{2\tilde{D}_{j\gamma}}\int_{t-\Delta t}^tdt_1
                                   \delta_{\beta \gamma}\delta(t-t_1)\bigg]\bigg>
                                   \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
                                   +O(\Delta t)\nonumber\\
-                                &=-\bigg<ik_j\sqrt{2D_{j\beta}}\int_{t-\Delta t}^tdt_1
+                                &=-\bigg<ik_j\sqrt{2\tilde{D}_{j\beta}}\int_{t-\Delta t}^tdt_1
                                   \delta(t-t_1)\bigg>
                                   \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
                                   +O(\Delta t)\nonumber\\
-                                &=-\bigg<ik_j\sqrt{2D_{j\beta}}\int_0^{\Delta t}du
+                                &=-\bigg<ik_j\sqrt{2\tilde{D}_{j\beta}}\int_0^{\Delta t}du
                                   \delta(u)\bigg>
                                   \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
                                   +O(\Delta t)\nonumber\\
-                                &=-\frac{1}{2}ik_j\sqrt{2D_{j\beta}}
+                                &=-\frac{1}{2}ik_j\sqrt{2\tilde{D}_{j\beta}}
                                   \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
                                   +O(\Delta t)\nonumber\\.
 \end{align}
 Taking the limit as $\Delta t\to0$, this becomes
 \begin{align}
-  <u_{\beta}(t)\exp(-ik_jr_j(t)>=-\frac{1}{2}ik_j\sqrt{2D_{j\beta}}
+  <u_{\beta}(t)\exp(-ik_jr_j(t)>=-\frac{1}{2}ik_j\sqrt{2\tilde{D}_{j\beta}}
   \bigg<\exp(-ik_jr_j(t))\bigg>.
 \end{align}
 Taking the inverse Fourier transform then gives
 \begin{align}
-  <u_{\beta}(t)\hat{\rho}(\bm{x},t)>=-\frac{1}{2}\sqrt{2D_{j\beta}}
+  <u_{\beta}(t)\hat{\rho}(\bm{x},t)>=-\frac{1}{2}\sqrt{2\tilde{D}_{j\beta}}
   \partial_jP(\bm{x},t).
 \end{align}
 Finally, inserting this into the current I get
 \begin{align}
   J_{\alpha}(\bm{x},t)&=F_{\alpha}(\bm{x})P(\bm{x},t)+v_{\alpha}(\bm{x})P(\bm{x},t)
-                        +\sqrt{2D_{\alpha\beta}}(-\frac{1}{2}\sqrt{2D_{j\beta}}
+                        +\sqrt{2\tilde{D}_{\alpha\beta}}(-\frac{1}{2}\sqrt{2\tilde{D}_{j\beta}}
                         \partial_jP(\bm{x},t))\nonumber\\
                       &=F_{\alpha}(\bm{x})P(\bm{x},t)+v_{\alpha}(\bm{x})P(\bm{x},t)
-                        -\sqrt{D_{\alpha\beta}D_{j\beta}}
+                        -\sqrt{\tilde{D}_{\alpha\beta}\tilde{D}_{j\beta}}
                         \partial_jP(\bm{x},t))
 \end{align}
 
-Since in our case, $D_{\alpha\beta}$ is diagonal, this just becomes
-\begin{align}
+Since in our case, $\tilde{D}_{\alpha\beta}$ is diagonal, this just becomes
+\begin{align}\label{eq:Nparticlecurrent}
   \bm{J}(\bm{x},t)&=\bm{F}(\bm{x})P(\bm{x},t)+\bm{v}(\bm{x})P(\bm{x},t)
-                    -\bm{D}\cdot\nabla P(\bm{x},t)
+                    -\bm{\tilde{D}}\cdot\nabla P(\bm{x},t).
 \end{align}
 
-\section{Deriving a two-particle density function.}
+Finally, I get the desired result of the section, which is
+\begin{align}\label{eq:NparticleFP}
+  \frac{\partial P}{\partial t} + \nabla_{\bm{x}}\cdot\big(\bm{F}(\bm{x})P(\bm{x},t)
+  +\bm{v}(\bm{x})P(\bm{x},t)-\bm{\tilde{D}}\cdot\nabla P(\bm{x},t)\big)=0
+\end{align}
 
 
-                                  
+\section{Deriving a one-particle density function.}
+
+In this section, I am interested in determining the one particle density function, i.e. in
+terms of $\bm{r}_1$ (not the angular components). To start with, I will remind myself that
+\begin{align}
+  P(\bm{x},t)\equiv P(\bm{r}_1,\bm{r}_2,\cdots,\bm{r}_N,\theta_1,\theta_2,\cdots,\theta_N,t)
+\end{align}
+
+I will then split the the current of eqn \ref{eq:Nparticlecurrent} into two parts, a part which
+cannot be written as a gradient term, and a part that can. The part that cannot be written as
+a gradient term is just
+\begin{align}
+  \bm{v}(\bm{x})&=\frac{D^t}{k_BT}f^P(\cos\theta_1,\sin\theta_1,\cos\theta_2,
+                  \sin\theta_2,\cdots,\cos\theta_N,\sin\theta_N,0,0,\dots,0)^T\nonumber\\
+                &=\frac{1}{k_BT}\bm{\tilde{D}}\cdot \bm{u}(\{\theta_i\})
+\end{align}
+
+Before writing out the gradient term, I will first note that I am considering just two-body
+interactions,
+\begin{align}
+  \bm{F}(\bm{x})&=-\nabla_{\bm{x}}\mathcal{H}(\bm{x})\nonumber\\
+                &=-\nabla_{\bm{x}}\sum_{i<j}^N\mathcal{V}(\bm{r}_i-\bm{r}_j).
+\end{align}
+
+Then, I can re-write eqn \ref{eq:Nparticlecurrent} as
+\begin{align}\label{eq:Nparticlewithpotential}
+  \bm{J}(\bm{x},t)&=-\bm{\tilde{D}}
+                    \cdot\big(\nabla_{\bm{x}}(\frac{1}{k_BT}\mathcal{H}(\{\bm{r}_i\})
+                    P(\bm{x},t)
+                    +P(\bm{x},t))
+                    -\frac{1}{k_BT}\bm{u}(\{\theta_i\})P(\bm{x},t)\big).
+\end{align}
+
+I will now redefine
+\begin{align}
+  \bm{D}=\beta\bm{\tilde{D}},
+\end{align}
+where $\beta^{-1}=k_BT$.
+
+
+Finally, I can write the Fokker-Planck equation as
+\begin{align}
+  \frac{\partial P}{\partial t}=\nabla_{\bm{x}}\cdot\big(\bm{D}
+  \big[\beta^{-1}\nabla_{\bm{x}}P(\bm{x},t)+P(\bm{x},t)(\nabla_{\bm{x}}
+  \mathcal{H}(\{\bm{r}_i\})-\bm{v}(\{\theta_i\}))\big]\big)
+\end{align}
+
+From \cite{liverpool2018nonequilibrium}, I then know that there exists a generalized steady
+state of the form
+\begin{align}
+  P_{ss}=\exp(-h(\bm{x}))
+\end{align}
+where $h(\bm{x})$ satisfies the equation
+\begin{align}
+  \bm{D}\cdot \bm{L}(h)=\bm{0},
+\end{align}
+and
+\begin{align}
+  L_i(h) = \beta^{-1}(\partial_ih)^2+\partial_i^2\mathcal{H}
+  +(v_i-\partial_i\mathcal{H})\partial_ih-\beta^{-1}\partial_i^2h-\partial_iv_i.
+\end{align}
+
 
 
 
