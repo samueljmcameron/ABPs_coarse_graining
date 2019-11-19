@@ -205,7 +205,7 @@ terms of $\bm{r}_1$ (not the angular components). To start with, I will remind m
 I will then split the the current of eqn \ref{eq:Nparticlecurrent} into two parts, a part which
 cannot be written as a gradient term, and a part that can. The part that cannot be written as
 a gradient term is just
-\begin{align}
+\begin{align}\label{eq:dissipative_force}
   \bm{v}(\bm{x})&=\frac{D^t}{k_BT}f^P(\cos\theta_1,\sin\theta_1,\cos\theta_2,
                   \sin\theta_2,\cdots,\cos\theta_N,\sin\theta_N,0,0,\dots,0)^T\nonumber\\
                 &=\frac{1}{k_BT}\bm{\tilde{D}}\cdot \bm{u}(\{\theta_i\})
@@ -213,10 +213,11 @@ a gradient term is just
 
 Before writing out the gradient term, I will first note that I am considering just two-body
 interactions,
-\begin{align}
+\begin{align}\label{eq:general_conservative_force}
   \bm{F}(\bm{x})&=-\nabla_{\bm{x}}\mathcal{H}(\bm{x})\nonumber\\
-                &=-\nabla_{\bm{x}}\sum_{i<j}^N\mathcal{V}(\bm{r}_i-\bm{r}_j).
+                &=-\nabla_{\bm{x}}\sum_{i<j}^N\mathcal{V}(r_{ij}),
 \end{align}
+where $r_{ij}=|\bm{r}_i-\bm{r}_j|$.
 
 Then, I can re-write eqn \ref{eq:Nparticlecurrent} as
 \begin{align}\label{eq:Nparticlewithpotential}
@@ -241,20 +242,208 @@ Finally, I can write the Fokker-Planck equation as
   \mathcal{H}(\{\bm{r}_i\})-\bm{v}(\{\theta_i\}))\big]\big)
 \end{align}
 
+\subsection{Steady state calculation.}
+
 From \cite{liverpool2018nonequilibrium}, I then know that there exists a generalized steady
 state of the form
 \begin{align}
   P_{ss}=\exp(-h(\bm{x}))
 \end{align}
 where $h(\bm{x})$ satisfies the equation
+\begin{align}\label{eq:ss_condition}
+  \sum_{i=1}^{3N}D_iL_i(h)=\bm{0},
+\end{align}
+where $D_i$ are the (diagonal) components of $\bm{D}$,
 \begin{align}
-  \bm{D}\cdot \bm{L}(h)=\bm{0},
+  D_i =
+  \begin{cases}
+    D^t\beta,&i\leq 2N,\\
+    D^r\beta,&i>2N
+  \end{cases}
 \end{align}
 and
-\begin{align}
+\begin{align}\label{eq:L_i}
   L_i(h) = \beta^{-1}(\partial_ih)^2+\partial_i^2\mathcal{H}
   +(v_i-\partial_i\mathcal{H})\partial_ih-\beta^{-1}\partial_i^2h-\partial_iv_i.
 \end{align}
+
+I can explicitly calculate the terms not involving $h$ in eqn \ref{eq:L_i}, using eqns
+\ref{eq:general_conservative_force} and eqn \ref{eq:dissipative_force}. I do this now:
+\begin{subequations}
+  \label{eqs:partials_of_L_i}
+  \begin{align}
+    \partial_{\alpha}\mathcal{H} &=
+                                   \begin{cases}
+                                     \sum_{i\neq\alpha}^N\mathcal{V}^{\prime}
+                                     (r_{\alpha i})\frac{x_{\alpha}-x_i}{r_{\alpha i}},
+                                     & \alpha\: \mathrm{odd},\:\alpha\leq2N,\\
+                                     \sum_{i\neq\alpha}^N\mathcal{V}^{\prime}
+                                     (r_{\alpha i})\frac{y_{\alpha}-y_i}{r_{\alpha i}},
+                                     & \alpha\: \mathrm{even},\:\alpha\leq2N,\\
+                                     0 & \alpha>2N
+                                   \end{cases}\label{eq:partial_H_of_L_i}\\
+    \partial_{\alpha}^2\mathcal{H} &=
+                                     \begin{cases}
+                                       \sum_{i\neq\alpha}^N\bigg[\frac{\mathcal{V}^{\prime}
+                                         (r_{\alpha i})}{r_{\alpha i}}
+                                       +\frac{(x_{\alpha}-x_i)^2}{r_{\alpha i}^2}
+                                       \bigg(-\frac{\mathcal{V}^{\prime}(r_{\alpha i})}
+                                       {r_{\alpha i}}+\mathcal{V}^{\prime\prime}
+                                       (r_{\alpha i})\bigg)\bigg],
+                                       & \alpha\: \mathrm{odd},\:\alpha\leq2N,\\
+                                       \sum_{i\neq\alpha}^N\bigg[\frac{\mathcal{V}^{\prime}
+                                         (r_{\alpha i})}{r_{\alpha i}}
+                                       +\frac{(y_{\alpha}-y_i)^2}{r_{\alpha i}^2}
+                                       \bigg(-\frac{\mathcal{V}^{\prime}(r_{\alpha i})}
+                                       {r_{\alpha i}}+\mathcal{V}^{\prime\prime}
+                                       (r_{\alpha i})\bigg)\bigg],
+                                       & \alpha\: \mathrm{even},\:\alpha\leq2N,\\
+                                       0 & \alpha>2N
+                                     \end{cases}\label{eq:partialsq_H_of_L_i}\\
+    \partial_i v_i &= 0\label{eq:partial_v_of_L_i}
+  \end{align}
+\end{subequations}
+
+From these results I can see immediately that eqn \ref{eq:ss_condition} simplifies to
+\begin{align}\label{eq:steadystatecondition}
+  D^t\beta\sum_{i=1}^{2N}L_i(h)+D^r\sum_{i=1}^{N}\big[(\partial_{\theta_i}h)^2
+  -\partial_{\theta_i}^2h\big]=0
+\end{align}
+
+\subsection{Coarse-graining the steady $h(\bm{x})$ function.}
+
+To solve eqn \ref{eq:steadystatecondition}, I will start by writing a guess for $h(\bm{x})$, and I
+will take it to be of the form
+\begin{align}\label{eq:hgeneric}
+  h(\bm{x})=R(\{\bm{r}_i\})\Theta(\{\theta_i\})
+\end{align}
+where
+\begin{align}\label{eq:generalR}
+  R(\{\bm{r}_i\})=\sum_{i=1}^Na(\bm{r}_i) + \sum_{i=1}^N\sum_{j=1}^Nb(\bm{r}_i,\bm{r}_j)
+  +\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^Nc(\bm{r}_i,\bm{r}_j,\bm{r}_k)
+  +\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\sum_{l=1}^Nd(\bm{r}_i,\bm{r}_j,\bm{r}_k,\bm{r}_l)
+\end{align}
+and $\Theta(\{\theta_i\})$ is some arbitrary function which I will determine later.
+
+Now, I will assume that the system has translational symmetry, so
+\begin{align}\label{eq:Rtranssym}
+  R(\{\bm{r}_i+\bm{T}\}=R(\{\bm{r}_i\})
+\end{align}
+for any arbitrary translational vector $\bm{T}$. This justifies writing $h(\bm{x})$ as a separable
+function as in eqn \ref{eq:hgeneric}. I will also impose full rotational symmetry, so that
+\begin{align}\label{eq:hrotsymm}
+  R(\{\bm{Q}(\phi)\bm{r}_i\})\Theta(\{\theta_i+\phi\})=R(\{\bm{r}_i\})\Theta(\{\theta_i\}),
+\end{align}
+where $Q(\phi)$ is a tensor which rotates a vector by some arbitrary angle, $\phi$.
+
+I will focus on $R(\{\bm{r}_i\})$ to start with. By eqn \ref{eq:Rtranssym}, I know that
+$a(\{\bm{r}_i\})=\mathrm{constant}$. From eqns \ref{eq:Rtranssym} and \ref{eq:hrotsymm}, I know
+that $b(\bm{r}_i,\bm{r}_j)=b(|\bm{r}_i-\bm{r}_j|)$. I can derive similar results for higher order
+terms and so
+\begin{align}
+  R(\{\bm{r}_i\})=\sum_{i=1}^Na_0 + \sum_{i=1}^N\sum_{j=1}^Nb(|\bm{r}_i-\bm{r}_j|)
+  +\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^Nc(\{|\bm{r}_q-\bm{r}_s|\}_{q\neq s,q,s\in(i,j,k)})
+  +\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\sum_{l=1}^N
+  d(\{|\bm{r}_q-\bm{r}_s|\}_{q\neq s,q,s\in(i,j,k,l)}).
+\end{align}
+
+Now, I am interested in a coarse-grained version of the $h(\bm{x})$, and so I will use the fact that
+\begin{align}
+  \sum_{i=1}^Nf(\bm{r}_i)=\sum_{i=1}^N\int d^2r f(\bm{r})\delta^2(\bm{r}-\bm{r}_i)
+\end{align}
+and also the definition of the single particle density function
+\begin{align}
+  \rho(\bm{r}) = \sum_{i=1}^N\delta^2(\bm{r}-\bm{r}_i)
+\end{align}
+to obtain a functional $h(\rho)$, where
+\begin{align}
+  R(\{\bm{r}_i\})=&a_0\int d^2r\rho(\bm{r})+\sum_{i=1}^N\sum_{j=1}^N\int d^2r \int d^2y
+                    \delta^2(\bm{r}-\bm{r}_i)\delta^2(\bm{y}-\bm{r}_j)b(|\bm{r}-\bm{y}|)\nonumber\\
+                  &+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\int d^2r \int d^2y_1\int d^2y_2
+                    \delta^2(\bm{r}-\bm{r}_i)\delta^2(\bm{y}_1-\bm{r}_j)\delta^2(\bm{y}_2-\bm{r}_k)
+                    c(|\bm{r}-\bm{y}_1|,|\bm{r}-\bm{y}_2|,|\bm{y}_1-\bm{y}_2|)\nonumber\\
+                  &+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\sum_{l=1}^N\int d^2r \int d^2y_1
+                    \int d^2y_2\int d^2y_3\delta^2(\bm{r}-\bm{r}_i)\delta^2(\bm{y}_1-\bm{r}_j)
+                    \delta^2(\bm{y}_2-\bm{r}_k)\delta^2(\bm{y}_3-\bm{r}_l)
+                    d(\cdots).
+\end{align}
+If I assume that $b$, $c$, and $d$ are sufficiently peaked near particle overlap, then I can
+write the delta functions as taylor series near $r$, i.e.
+\begin{align}
+  \delta^2(\bm{y}-\bm{r}_j)=\delta^2(\bm{r}-\bm{r}_j)
+  +\frac{1}{2}|\bm{y}-\bm{r}|^2\nabla^2\delta^2(\bm{r}-\bm{r}_j)+\cdots.
+\end{align}
+Then, I can re-write $R$ as
+\begin{align}
+  R(\rho) = &a_0\int d^2r\rho(\bm{r})+\sum_{i=1}^N\sum_{j=1}^N\int d^2r \int d^2y
+              \delta^2(\bm{r}-\bm{r}_i)\bigg[\delta^2(\bm{r}-\bm{r}_j)
+              +\frac{1}{2}|\bm{y}-\bm{r}|^2\nabla^2\delta^2(\bm{r}-\bm{r}_j)+\cdots\bigg]
+              b(|\bm{r}-\bm{y}|)\nonumber\\
+            &+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\int d^2r \int d^2y_1\int d^2y_2
+              \bigg\{\delta^2(\bm{r}-\bm{r}_i)\bigg[\delta^2(\bm{r}-\bm{r}_j)
+              +\frac{1}{2}|\bm{y}_1-\bm{r}|^2\nabla^2\delta^2(\bm{r}-\bm{r}_j)
+              +\cdots\bigg]\nonumber\\
+            &\hphantom{+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\int d^2r \int d^2y_1
+              \int d^2y_2\bigg\{\}}
+              \bigg[\delta^2(\bm{r}-\bm{r}_k)+\frac{1}{2}|\bm{y}_2-\bm{r}|^2
+              \nabla^2\delta^2(\bm{r}-\bm{r}_k)+\cdots\bigg]
+              c(|\bm{r}-\bm{y}_1|,|\bm{r}-\bm{y}_2|,|\bm{y}_1-\bm{y}_2|)\bigg\}\nonumber\\
+            &+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\sum_{l=1}^N\int d^2r \int d^2y_1
+              \int d^2y_2\int d^2y_3\bigg\{\delta^2(\bm{r}-\bm{r}_i)
+              \bigg[\delta^2(\bm{r}-\bm{r}_j)+\frac{1}{2}|\bm{y}_1-\bm{r}|^2
+              \nabla^2\delta^2(\bm{r}-\bm{r}_j)+\cdots\bigg]\nonumber\\
+            &\hphantom{+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\sum_{l=1}^N\int d^2r \int d^2y_1
+              \int d^2y_2\int d^2y_3\bigg\{\}}
+              \bigg[\delta^2(\bm{r}-\bm{r}_k)+\frac{1}{2}|\bm{y}_2-\bm{r}|^2
+              \nabla^2\delta^2(\bm{r}-\bm{r}_k)+\cdots\bigg]\nonumber\\
+            &\hphantom{+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\sum_{l=1}^N\int d^2r \int d^2y_1
+              \int d^2y_2\int d^2y_3\bigg\{\}}
+              \bigg[\delta^2(\bm{r}-\bm{r}_l)+\frac{1}{2}|\bm{y}_3-\bm{r}|^2
+              \nabla^2\delta^2(\bm{r}-\bm{r}_l)+\cdots\bigg]d(\cdots)\bigg\}.
+\end{align}
+
+I can re-write this in terms of the single particle density function,
+\begin{align}\label{eq:R_with_expandedrho}
+  R(\rho) &= \int d^2r\big[ a_0\rho + b_0\rho^2 + b_2 (\nabla\rho)^2
+            + c_0 \rho^3 + c_2\rho(\nabla\rho)^2 + c_4\rho(\nabla^2\rho)^2
+            + d_0 \rho^4 + d_2\rho^2(\nabla\rho)^2 + d_4(\rho(\nabla\rho)^3)\big]\nonumber\\
+          &\approx \int d^2r\big[a_0\rho + b_0\rho^2+b_2(\nabla\rho)^2+c_0\rho^3+d_0\rho^4\big]
+\end{align}
+where I have assumed that gradients and densities are small enough such that terms of
+order $\rho(\nabla\rho)^2$ and higher are negligible. The pre-factors in eqn
+\ref{eq:R_with_expandedrho} can be explicitly calculated in terms of the (unknown)
+$b$, $c$, and $d$ functions as
+\begin{align}
+  b_0 & = \int d^2u b(|\bm{u}|),\\
+  b_2 & = -\frac{1}{2}\int d^2u |\bm{u}|^2b(|\bm{u}|),\\
+  c_0 & = \int d^2ud^2vc(|\bm{u}|,|\bm{v}|,|\bm{u}-\bm{v}|),\\
+  d_0 & = \int d^2ud^2vd^2w d(|\bm{u}|,|\bm{v}|,|\bm{u}|,|\bm{u}-\bm{v}|,
+        |\bm{u}-\bm{w}|,|\bm{v}-\bm{w}|).
+\end{align}
+
+\subsection{Equilibrium case ($\bm{v}(\bm{x})=0$).}
+In the case of an equilibrium steady-state, where $\bm{v}(\bm{x})=0$, the $h(\bm{x})$ function is
+just equal to the usual Hamiltonian $\mathcal{H}(\bm{x})$, and you can explicitly coarse-grain your
+system in terms of the potential $\mathcal{V}(r_{ij})$. To avoid over counting the overlapping
+particles, you can write
+\begin{align}\label{eq:selfenergy}
+  \mathcal{H}(\bm{x}) = \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\mathcal{V}(r_{ij})
+  -\frac{1}{2}\sum_{i=1}^N\mathcal{V}(0).
+\end{align}
+Then, using the above coarse-graining of eqn \ref{eq:R_with_expandedrho} while identifying
+$b(r_{ij})=\mathcal{V}(r_{ij})$ (modulo a self-energy correction and a factor of two as in
+eqn \ref{eq:selfenergy}), you can then write
+\begin{align}
+  h(\rho) = \int d^2r\big[ b_0\rho^2 + b_2 (\nabla\rho)^2\big]-\frac{N}{2}\mathcal{V}(0),
+\end{align}
+where
+\begin{align}
+  b_0 & = \frac{1}{2}\int d^2u \mathcal{V}(|\bm{u}|),\\
+  b_2 & = -\frac{1}{4}\int d^2u |\bm{u}|^2 \mathcal{V}(|\bm{u}|).
+\end{align}
+
+
+
 
 
 
