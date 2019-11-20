@@ -1,10 +1,11 @@
 \documentclass{article}
-\usepackage[margin=1.25cm]{geometry}
+\usepackage[hmargin=1.25cm,vmargin=2.5cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{bm}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{comment}
+\usepackage{graphicx}
 
 \title{calculation: coarse-graining active brownian particles}
 \author{Sam Cameron}
@@ -433,18 +434,67 @@ particles, you can write
 Then, using the above coarse-graining of eqn \ref{eq:R_with_expandedrho} while identifying
 $b(r_{ij})=\mathcal{V}(r_{ij})$ (modulo a self-energy correction and a factor of two as in
 eqn \ref{eq:selfenergy}), you can then write
-\begin{align}
+\begin{align}\label{eq:naive_heq}
   h(\rho) = \int d^2r\big[ b_0\rho^2 + b_2 (\nabla\rho)^2\big]-\frac{N}{2}\mathcal{V}(0),
 \end{align}
 where
-\begin{align}
+\begin{align}\label{eq:equilibrium_coefficients}
   b_0 & = \frac{1}{2}\int d^2u \mathcal{V}(|\bm{u}|),\\
   b_2 & = -\frac{1}{4}\int d^2u |\bm{u}|^2 \mathcal{V}(|\bm{u}|).
 \end{align}
 
 
+\subsubsection{Interaction between particles - WCA approximation}
+NOTE: Summation notation will not be used in this section.
+
+To actually do any calculations, an interaction form for $\mathcal{H}$ must be chosen. Since we
+are interested in capturing motility induced phase separation (MIPS) in the simplest form, I
+will choose the (repulsive) Weeks-Chandler-Anderson (WCA) interaction,
+\begin{equation}
+  \mathcal{V}_{ij} =
+  \begin{cases}
+    4\epsilon\bigg[\bigg(\frac{\sigma}{r^{ij}}\bigg)^{12}
+    -\bigg(\frac{\sigma}{r^{ij}}\bigg)^6\bigg]+\epsilon, & r<2^{\frac{1}{6}}\sigma \\
+    0, & \mathrm{otherwise}.
+  \end{cases}
+\end{equation}
+
+Inserting this into equation \ref{eq:equilibrium_coefficients}, I get
+\begin{subequations}
+  \label{eq:WCA_naive}
+  \begin{align}
+    b_0 &= \frac{\pi\epsilon\sigma^2}{20}\bigg[\frac{36}{2^{5/3}}
+          +8\bigg(\frac{\sigma}{a}\bigg)^{10}-20\bigg(\frac{\sigma}{a}\bigg)^4
+          -10\bigg(\frac{a}{\sigma}\bigg)^2\bigg],\label{eq:WCA_naive_b_0}\\
+    b_2 &= -\frac{\pi\epsilon\sigma^4}{8}\bigg[\frac{18}{2^{4/3}}
+          +2\bigg(\frac{\sigma}{a}\bigg)^8-8\bigg(\frac{\sigma}{a}\bigg)^2
+          -\bigg(\frac{a}{\sigma}\bigg)^4\bigg]\label{eq:WCA_naive_b_2},
+  \end{align}
+\end{subequations}
+where I have defined a molecular length scale $a$ to avoid a divergence in the integral. In Figure
+\ref{fig:WCA_naive}, I have plotted eqns \ref{eq:WCA_naive_b_0} and \ref{eq:WCA_naive_b_2} vs the
+molecular length scale $a$ (setting $\epsilon=1$). What you can see from this figure is that for
+small $a\lesssim\sigma$, you get that $b_0\to\infty$, and $b_2\to-\infty$. This is not good
+behaviour, as looking at eqn \ref{eq:naive_heq}, this means that the minimum energy will be
+in a system which has large gradients and very small density. The small density is okay, but the
+large gradients will mean that higher order gradient terms in $h(\rho)$ must be included, i.e.
+it is not self consistent as it is.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.4\textwidth]{Figures/WCA_naive_b_0_b_2.pdf}
+  \caption{Coefficients of the explicit coarse-graining for the WCA potential from
+    eqn \ref{eq:WCA_naive} as a function of molecular length scale $a$. Both potentials diverge
+    as $a\to 0$, with $b_0\to\infty$, and $b_2\to-\infty$.}\label{fig:WCA_naive}
+\end{figure}
 
 
+\subsection{Resummation of coefficients in coarse-graining.}
+
+To avoid a divergence in the coefficients of eqn \ref{eq:equilibrium_coefficients}, I think I will
+need to re-examine the way I'm coarse-graining the Hamiltonian. I think it should be related to the
+cumulant expansion vs the cluster expansion (as discussed in Kardar's book). I'm still thinking on
+how to translate that procedure in this formalism.
 
 
 
@@ -452,51 +502,8 @@ where
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Below this, I have an old calculation from before I really understood what to do... %
 %%%%%%%%%%%%%%%%%%%%%%%
-
-
 \begin{comment}
-
-
-I will introduce $\zeta^{\alpha}=D^{\alpha}/(k_BT)$ for $\alpha=t,r$. I can re-write eqn \ref{eq:start} as
-
-\begin{align}
-    \frac{d\bm{x}}{dt}=-\bm{D}\cdot\nabla\mathcal{H}(\bm{x})+\bm{D}\cdot\bm{v}(\bm{x})+\bm{\xi}(t),
-\end{align}
-where I will let the first component of $\bm{r}_i$ be (for $i=1..N$) the first $N$ components of $\bm{x}$, the y components of $\bm{r}_i$ be the next $N$ components of $\bm{x}$, and the $\theta_i$ components are the last $N$ components of $\bm{x}$. All other vectors will follow this same structure. 
-\begin{align}
-    \bm{x}&= (r^{(1)}_1,\cdots,r^{(1)}_N,r^{(2)}_1,\cdots,r^{(2)}_N,\theta_1,\cdots,\theta_N)\nonumber\\
-    &=(x_1,\cdots,x_N,x_{N+1},\cdots,x_{2N},x_{2N+1},\cdots,x_{3N}),
-\end{align}
-and
-\begin{align}
-    \bm{v}(\bm{x})=(f^P\cos x_{2N+1},\cdots,f^P\cos x_{3N},f^P\sin x_{2N+1},\cdots,f^P\sin x_{3N},0,\cdots,0).
-\end{align}
-Similarly, $\bm{\xi}$ is a vector with the first $N$ components corresponding to the noise associated with the first $N$ components of $\bm{x}$, etc. The noise vector satisfies
-\begin{align}
-    \big<\xi_i(t)\big>=0;
-\end{align}
-\begin{equation}
-    \big<\xi_i(t)\xi_j(t^{\prime})\big>=
-    \begin{cases}
-    2\delta_{ij}\delta_{\beta,\gamma}\zeta^tk_BT\delta(t-t^{\prime}), & i\leq 2N, \\
-    2\delta_{ij}\delta_{\beta,\gamma}\zeta^rk_BT\delta(t-t^{\prime}), & i>2N.
-    \end{cases}
-\end{equation}.
-Also, $\bm{D}$ is a diagonal matrix, with the first $2N$ components being equal to $\zeta^t$, and the final $N$ components being equal to $\zeta^r$.
-
-
-\section{Interaction between particles - WCA approximation}
-NOTE: Summation notation will not be used in this section.
-
-To actually do any calculations, an interaction form for $\mathcal{H}$ must be chosen. Since we are interested in capturing motility induced phase separation (MIPS) in the simplest form, we will choose the (repulsive) Weeks-Chandler-Anderson (WCA) interaction,
-\begin{equation}
-    \mathcal{V}^{\alpha\beta} =
-    \begin{cases}
-    4\epsilon\bigg[\bigg(\frac{\sigma}{r^{\alpha\beta}}\bigg)^{12}-\bigg(\frac{\sigma}{r^{\alpha\beta}}\bigg)^6\bigg]+\epsilon, & r<2^{\frac{1}{6}}\sigma \\
-    0, & \mathrm{otherwise},
-    \end{cases}
-\end{equation}
-where $r^{\alpha\beta}=\sqrt{(x_{\alpha}-x_{\beta})^2+(x_{\alpha+N}-x_{\beta+N})^2}$ (the indices in the bottom should be treated as integer addition modulo $2N$). Then, the full interaction potential is
+Then, the full interaction potential is
 \begin{align}
     \mathcal{H}=\sum_{\alpha=1}^N\sum_{\beta=1}^{\alpha-1}\mathcal{V}^{\alpha\beta},
 \end{align}
@@ -526,6 +533,7 @@ where I have defined $Q_{\alpha\beta}=-Q_{\beta\alpha}$ is
 \begin{align}
     Q_{\alpha\beta}=\frac{\partial\mathcal{V}^{\alpha\beta}}{\partial r^{\alpha\beta}}\times\frac{(x_{\alpha}-x_{\beta})}{r^{\alpha\beta}}
 \end{align}
+
 \end{comment}
 
 \bibliographystyle{plain}
