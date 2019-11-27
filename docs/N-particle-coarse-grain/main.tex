@@ -311,142 +311,6 @@ From these results I can see immediately that eqn \ref{eq:ss_condition} simplifi
   -\partial_{\theta_i}^2h\big]=0
 \end{align}
 
-\subsection{Coarse-graining the steady $h(\bm{x})$ function.}
-
-To solve eqn \ref{eq:steadystatecondition}, I will start by writing a guess for $h(\bm{x})$, and I
-will take it to be of the form
-\begin{align}\label{eq:hgeneric}
-  h(\bm{x})=R(\{\bm{r}_i\})\Theta(\{\theta_i\})
-\end{align}
-where
-\begin{align}\label{eq:generalR}
-  R(\{\bm{r}_i\})=\sum_{i=1}^Na(\bm{r}_i) + \sum_{i=1}^N\sum_{j=1}^Nb(\bm{r}_i,\bm{r}_j)
-  +\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^Nc(\bm{r}_i,\bm{r}_j,\bm{r}_k)
-  +\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\sum_{l=1}^Nd(\bm{r}_i,\bm{r}_j,\bm{r}_k,\bm{r}_l)
-\end{align}
-and $\Theta(\{\theta_i\})$ is some arbitrary function which I will determine later.
-
-Now, I will assume that the system has translational symmetry, so
-\begin{align}\label{eq:Rtranssym}
-  R(\{\bm{r}_i+\bm{T}\}=R(\{\bm{r}_i\})
-\end{align}
-for any arbitrary translational vector $\bm{T}$. This justifies writing $h(\bm{x})$ as a separable
-function as in eqn \ref{eq:hgeneric}. I will also impose full rotational symmetry, so that
-\begin{align}\label{eq:hrotsymm}
-  R(\{\bm{Q}(\phi)\bm{r}_i\})\Theta(\{\theta_i+\phi\})=R(\{\bm{r}_i\})\Theta(\{\theta_i\}),
-\end{align}
-where $Q(\phi)$ is a tensor which rotates a vector by some arbitrary angle, $\phi$.
-
-I will focus on $R(\{\bm{r}_i\})$ to start with. By eqn \ref{eq:Rtranssym}, I know that
-$a(\{\bm{r}_i\})=\mathrm{constant}$. From eqns \ref{eq:Rtranssym} and \ref{eq:hrotsymm}, I know
-that $b(\bm{r}_i,\bm{r}_j)=b(|\bm{r}_i-\bm{r}_j|)$. I can derive similar results for higher order
-terms and so
-\begin{align}
-  R(\{\bm{r}_i\})=\sum_{i=1}^Na_0 + \sum_{i=1}^N\sum_{j=1}^Nb(|\bm{r}_i-\bm{r}_j|)
-  +\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^Nc(\{|\bm{r}_q-\bm{r}_s|\}_{q\neq s,q,s\in(i,j,k)})
-  +\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\sum_{l=1}^N
-  d(\{|\bm{r}_q-\bm{r}_s|\}_{q\neq s,q,s\in(i,j,k,l)}).
-\end{align}
-
-Now, I am interested in a coarse-grained version of the $h(\bm{x})$, and so I will use the fact that
-\begin{align}
-  \sum_{i=1}^Nf(\bm{r}_i)=\sum_{i=1}^N\int d^2r f(\bm{r})\delta^2(\bm{r}-\bm{r}_i)
-\end{align}
-and also the definition of the single particle density function
-\begin{align}
-  \rho(\bm{r}) = \sum_{i=1}^N\delta^2(\bm{r}-\bm{r}_i)
-\end{align}
-to obtain a functional $h(\rho)$, where
-\begin{align}
-  R(\{\bm{r}_i\})=&a_0\int d^2r\rho(\bm{r})+\sum_{i=1}^N\sum_{j=1}^N\int d^2r \int d^2y
-                    \delta^2(\bm{r}-\bm{r}_i)\delta^2(\bm{y}-\bm{r}_j)b(|\bm{r}-\bm{y}|)\nonumber\\
-                  &+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\int d^2r \int d^2y_1\int d^2y_2
-                    \delta^2(\bm{r}-\bm{r}_i)\delta^2(\bm{y}_1-\bm{r}_j)\delta^2(\bm{y}_2-\bm{r}_k)
-                    c(|\bm{r}-\bm{y}_1|,|\bm{r}-\bm{y}_2|,|\bm{y}_1-\bm{y}_2|)\nonumber\\
-                  &+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\sum_{l=1}^N\int d^2r \int d^2y_1
-                    \int d^2y_2\int d^2y_3\delta^2(\bm{r}-\bm{r}_i)\delta^2(\bm{y}_1-\bm{r}_j)
-                    \delta^2(\bm{y}_2-\bm{r}_k)\delta^2(\bm{y}_3-\bm{r}_l)
-                    d(\cdots).
-\end{align}
-If I assume that $b$, $c$, and $d$ are sufficiently peaked near particle overlap, then I can
-write the delta functions as taylor series near $r$, i.e.
-\begin{align}
-  \delta^2(\bm{y}-\bm{r}_j)=\delta^2(\bm{r}-\bm{r}_j)
-  +\frac{1}{2}|\bm{y}-\bm{r}|^2\nabla^2\delta^2(\bm{r}-\bm{r}_j)+\cdots.
-\end{align}
-Then, I can re-write $R$ as
-\begin{align}
-  R(\rho) = &a_0\int d^2r\rho(\bm{r})+\sum_{i=1}^N\sum_{j=1}^N\int d^2r \int d^2y
-              \delta^2(\bm{r}-\bm{r}_i)\bigg[\delta^2(\bm{r}-\bm{r}_j)
-              +\frac{1}{2}|\bm{y}-\bm{r}|^2\nabla^2\delta^2(\bm{r}-\bm{r}_j)+\cdots\bigg]
-              b(|\bm{r}-\bm{y}|)\nonumber\\
-            &+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\int d^2r \int d^2y_1\int d^2y_2
-              \bigg\{\delta^2(\bm{r}-\bm{r}_i)\bigg[\delta^2(\bm{r}-\bm{r}_j)
-              +\frac{1}{2}|\bm{y}_1-\bm{r}|^2\nabla^2\delta^2(\bm{r}-\bm{r}_j)
-              +\cdots\bigg]\nonumber\\
-            &\hphantom{+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\int d^2r \int d^2y_1
-              \int d^2y_2\bigg\{\}}
-              \bigg[\delta^2(\bm{r}-\bm{r}_k)+\frac{1}{2}|\bm{y}_2-\bm{r}|^2
-              \nabla^2\delta^2(\bm{r}-\bm{r}_k)+\cdots\bigg]
-              c(|\bm{r}-\bm{y}_1|,|\bm{r}-\bm{y}_2|,|\bm{y}_1-\bm{y}_2|)\bigg\}\nonumber\\
-            &+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\sum_{l=1}^N\int d^2r \int d^2y_1
-              \int d^2y_2\int d^2y_3\bigg\{\delta^2(\bm{r}-\bm{r}_i)
-              \bigg[\delta^2(\bm{r}-\bm{r}_j)+\frac{1}{2}|\bm{y}_1-\bm{r}|^2
-              \nabla^2\delta^2(\bm{r}-\bm{r}_j)+\cdots\bigg]\nonumber\\
-            &\hphantom{+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\sum_{l=1}^N\int d^2r \int d^2y_1
-              \int d^2y_2\int d^2y_3\bigg\{\}}
-              \bigg[\delta^2(\bm{r}-\bm{r}_k)+\frac{1}{2}|\bm{y}_2-\bm{r}|^2
-              \nabla^2\delta^2(\bm{r}-\bm{r}_k)+\cdots\bigg]\nonumber\\
-            &\hphantom{+\sum_{i=1}^N\sum_{j=1}^N\sum_{k=1}^N\sum_{l=1}^N\int d^2r \int d^2y_1
-              \int d^2y_2\int d^2y_3\bigg\{\}}
-              \bigg[\delta^2(\bm{r}-\bm{r}_l)+\frac{1}{2}|\bm{y}_3-\bm{r}|^2
-              \nabla^2\delta^2(\bm{r}-\bm{r}_l)+\cdots\bigg]d(\cdots)\bigg\}.
-\end{align}
-
-I can re-write this in terms of the single particle density function,
-\begin{align}\label{eq:R_with_expandedrho}
-  R(\rho) &= \int d^2r\big[ a_0\rho + b_0\rho^2 + b_2 (\nabla\rho)^2
-            + c_0 \rho^3 + c_2\rho(\nabla\rho)^2 + c_4\rho(\nabla^2\rho)^2
-            + d_0 \rho^4 + d_2\rho^2(\nabla\rho)^2 + d_4(\rho(\nabla\rho)^3)\big]\nonumber\\
-          &\approx \int d^2r\big[a_0\rho + b_0\rho^2+b_2(\nabla\rho)^2+c_0\rho^3+d_0\rho^4\big]
-\end{align}
-where I have assumed that gradients and densities are small enough such that terms of
-order $\rho(\nabla\rho)^2$ and higher are negligible. The pre-factors in eqn
-\ref{eq:R_with_expandedrho} can be explicitly calculated in terms of the (unknown)
-$b$, $c$, and $d$ functions as
-\begin{align}
-  b_0 & = \int d^2u b(|\bm{u}|),\\
-  b_2 & = -\frac{1}{2}\int d^2u |\bm{u}|^2b(|\bm{u}|),\\
-  c_0 & = \int d^2ud^2vc(|\bm{u}|,|\bm{v}|,|\bm{u}-\bm{v}|),\\
-  d_0 & = \int d^2ud^2vd^2w d(|\bm{u}|,|\bm{v}|,|\bm{u}|,|\bm{u}-\bm{v}|,
-        |\bm{u}-\bm{w}|,|\bm{v}-\bm{w}|).
-\end{align}
-
-\subsection{Equilibrium case ($\bm{v}(\bm{x})=0$).}
-In the case of an equilibrium steady-state, where $\bm{v}(\bm{x})=0$, the $h(\bm{x})$ function is
-just equal to the usual Hamiltonian $\mathcal{H}(\bm{x})$, and you can explicitly coarse-grain your
-system in terms of the potential $\mathcal{V}(r_{ij})$. To avoid over counting the overlapping
-particles, you can write
-\begin{align}\label{eq:selfenergy}
-  \mathcal{H}(\bm{x}) = \frac{1}{2}\sum_{i=1}^N\sum_{j=1}^N\mathcal{V}(r_{ij})
-  -\frac{1}{2}\sum_{i=1}^N\mathcal{V}(0).
-\end{align}
-Then, using the above coarse-graining of eqn \ref{eq:R_with_expandedrho} while identifying
-$b(r_{ij})=\mathcal{V}(r_{ij})$ (modulo a self-energy correction and a factor of two as in
-eqn \ref{eq:selfenergy}), you can then write
-\begin{align}\label{eq:naive_heq}
-  h(\rho) = \int d^2r\big[ b_0\rho^2 + b_2 (\nabla\rho)^2\big]-\frac{N}{2}\mathcal{V}(0),
-\end{align}
-where
-\begin{align}\label{eq:equilibrium_coefficients}
-  b_0 & = \frac{1}{2}\int d^2u \mathcal{V}(|\bm{u}|),\\
-  b_2 & = -\frac{1}{4}\int d^2u |\bm{u}|^2 \mathcal{V}(|\bm{u}|).
-\end{align}
-
-
-\subsubsection{Interaction between particles - WCA approximation}
-NOTE: Summation notation will not be used in this section.
-
 To actually do any calculations, an interaction form for $\mathcal{H}$ must be chosen. Since we
 are interested in capturing motility induced phase separation (MIPS) in the simplest form, I
 will choose the (repulsive) Weeks-Chandler-Anderson (WCA) interaction,
@@ -459,42 +323,121 @@ will choose the (repulsive) Weeks-Chandler-Anderson (WCA) interaction,
   \end{cases}
 \end{equation}
 
-Inserting this into equation \ref{eq:equilibrium_coefficients}, I get
-\begin{subequations}
-  \label{eq:WCA_naive}
-  \begin{align}
-    b_0 &= \frac{\pi\epsilon\sigma^2}{20}\bigg[\frac{36}{2^{5/3}}
-          +8\bigg(\frac{\sigma}{a}\bigg)^{10}-20\bigg(\frac{\sigma}{a}\bigg)^4
-          -10\bigg(\frac{a}{\sigma}\bigg)^2\bigg],\label{eq:WCA_naive_b_0}\\
-    b_2 &= -\frac{\pi\epsilon\sigma^4}{8}\bigg[\frac{18}{2^{4/3}}
-          +2\bigg(\frac{\sigma}{a}\bigg)^8-8\bigg(\frac{\sigma}{a}\bigg)^2
-          -\bigg(\frac{a}{\sigma}\bigg)^4\bigg]\label{eq:WCA_naive_b_2},
-  \end{align}
-\end{subequations}
-where I have defined a molecular length scale $a$ to avoid a divergence in the integral. In Figure
-\ref{fig:WCA_naive}, I have plotted eqns \ref{eq:WCA_naive_b_0} and \ref{eq:WCA_naive_b_2} vs the
-molecular length scale $a$ (setting $\epsilon=1$). What you can see from this figure is that for
-small $a\lesssim\sigma$, you get that $b_0\to\infty$, and $b_2\to-\infty$. This is not good
-behaviour, as looking at eqn \ref{eq:naive_heq}, this means that the minimum energy will be
-in a system which has large gradients and very small density. The small density is okay, but the
-large gradients will mean that higher order gradient terms in $h(\rho)$ must be included, i.e.
-it is not self consistent as it is.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.4\textwidth]{Figures/WCA_naive_b_0_b_2.pdf}
-  \caption{Coefficients of the explicit coarse-graining for the WCA potential from
-    eqn \ref{eq:WCA_naive} as a function of molecular length scale $a$. Both potentials diverge
-    as $a\to 0$, with $b_0\to\infty$, and $b_2\to-\infty$.}\label{fig:WCA_naive}
-\end{figure}
+\subsection{Coarse-graining the steady $h(\bm{x})$ function.}
 
+To solve eqn \ref{eq:steadystatecondition}, I will start by writing a guess for $h(\bm{x})$, and I
+will take it to be of the form
+\begin{align}\label{eq:hgeneric}
+  h(\bm{x})=R(\{\bm{r}_i\})\Theta(\{\theta_i\})
+\end{align}
+where $R(\{\bm{r}_i\})$ and $\Theta(\{\theta_i\})$ are functions which I will determine later.
 
-\subsection{Resummation of coefficients in coarse-graining.}
+Now, I will assume that the system has translational symmetry, so
+\begin{align}\label{eq:Rtranssym}
+  R(\{\bm{r}_i+\bm{T}\}=R(\{\bm{r}_i\})
+\end{align}
+for any arbitrary translational vector $\bm{T}$. This justifies writing $h(\bm{x})$ as a separable
+function as in eqn \ref{eq:hgeneric}. I will also impose full rotational symmetry, so that
+\begin{align}\label{eq:hrotsymm}
+  R(\{\bm{Q}(\phi)\bm{r}_i\})\Theta(\{\theta_i+\phi\})=R(\{\bm{r}_i\})\Theta(\{\theta_i\}),
+\end{align}
+where $Q(\phi)$ is a tensor which rotates a vector by some arbitrary angle, $\phi$.
 
-To avoid a divergence in the coefficients of eqn \ref{eq:equilibrium_coefficients}, I think I will
-need to re-examine the way I'm coarse-graining the Hamiltonian. I think it should be related to the
-cumulant expansion vs the cluster expansion (as discussed in Kardar's book). I'm still thinking on
-how to translate that procedure in this formalism.
+\subsubsection{$R(\{\bm{r}_i\})$ function.}
+
+I will focus on $R(\{\bm{r}_i\})$ to start with. By eqn \ref{eq:Rtranssym}, I know that
+$a(\{\bm{r}_i\})=\mathrm{constant}$. From eqns \ref{eq:Rtranssym} and \ref{eq:hrotsymm}, I know
+that $b(\bm{r}_i,\bm{r}_j)=b(r_{ij})$. I can derive similar results for higher order
+terms, but will focus only on second order, and so
+\begin{align}
+  R(\{\bm{r}_k\})= \sum_{i=1}^N\sum_{j=1}^{i-1}b(r_{ij})
+\end{align}
+
+I will take a variational guess to the form of $b(r_{ij})$, and just keep at as a standard
+Lennard-Jones effective potential
+\begin{align}
+  b(r_{ij})\equiv 4\eta\bigg[\bigg(\frac{\delta}{r_{ij}}\bigg)^{12}-
+  \bigg(\frac{\delta}{r_{ij}}\bigg)^6\bigg]
+\end{align}
+where $\eta$ and $\delta$ are effective parameters for the effective interaction. Note that if
+$f_P=0$ (i.e. no activity), then $\eta=\epsilon$ and $\delta=\sigma$.
+
+\subsubsection{$\Theta(\{\theta_i\})$ function.}
+
+The only requirement of $\Theta(\{\theta_i\})$ is that it is invariant under arbitrary rotations
+of all angles by some constant $\phi$. So, to lowest order this would be
+\begin{align}
+  \Theta(\{\theta_k\})=\sum_{i=1}^N\sum_{j=1}^{i-1}c(\theta_i-\theta_j).
+\end{align}
+
+\subsubsection{Starting with the two particle case.}
+
+If I just take $N=2$, then eqn \ref{eq:steadystatecondition} becomes
+\begin{align}
+  &D^t\bigg\{c(\theta_1-\theta_2)^2\bigg[\bigg(b'(r_{12})\frac{(x_1-x_2)}{r_{12}}\bigg)^2
+    +\bigg(b'(r_{12})\frac{(y_1-y_2)}{r_{12}}\bigg)^2
+    +\bigg(b'(r_{21})\frac{(x_2-x_1)}{r_{21}}\bigg)^2
+    +\bigg(b'(r_{21})\frac{(y_2-y_1)}{r_{21}}\bigg)^2\bigg]\nonumber\\
+  &+\beta\bigg[\frac{\mathcal{V}'(r_{12})}{r_{12}}
+    +\frac{(x_1-x_2)^2}{r_{12}^2}\bigg(\mathcal{V}''(r_{12})
+    -\frac{\mathcal{V}'(r_{12})}{r_{12}}\bigg)
+    +\frac{\mathcal{V}'(r_{12})}{r_{12}}
+    +\frac{(y_1-y_2)^2}{r_{12}^2}\bigg(\mathcal{V}''(r_{12})
+    -\frac{\mathcal{V}'(r_{12})}{r_{12}}\bigg)\nonumber\\
+  &+\frac{\mathcal{V}'(r_{21})}{r_{21}}
+    +\frac{(x_2-x_1)^2}{r_{21}^2}\bigg(\mathcal{V}''(r_{12})
+    -\frac{\mathcal{V}'(r_{12})}{r_{12}}\bigg)
+    +\frac{\mathcal{V}'(r_{12})}{r_{12}}
+    +\frac{(y_1-y_2)^2}{r_{12}^2}\bigg(\mathcal{V}''(r_{12})
+    -\frac{\mathcal{V}'(r_{12})}{r_{12}}\bigg)\bigg]\nonumber\\
+  &+\beta c(\theta_1-\theta_2)\bigg[
+    \bigg(f^P\cos\theta_1-\mathcal{V}'(r_{12})\frac{(x_1-x_2)}{r_{12}}\bigg)
+    b'(r_{12})\frac{(x_1-x_2)}{r_{12}}
+    +\bigg(f^P\sin\theta_1-\mathcal{V}'(r_{12})\frac{(y_1-y_2)}{r_{12}}\bigg)
+    b'(r_{12})\frac{(y_1-y_2)}{r_{12}}\nonumber\\
+  &+\bigg(f^P\cos\theta_2-\mathcal{V}'(r_{21})\frac{(x_2-x_1)}{r_{21}}\bigg)
+    b'(r_{21})\frac{(x_2-x_1)}{r_{21}}
+    +\bigg(f^P\sin\theta_2-\mathcal{V}'(r_{21})\frac{(y_2-y_1)}{r_{21}}\bigg)
+    b'(r_{21})\frac{(y_2-y_1)}{r_{21}}\bigg]\nonumber\\
+  &-c(\theta_1-\theta_2)\bigg[\frac{b'(r_{12})}{r_{12}}
+    +\frac{(x_1-x_2)^2}{r_{12}^2}\bigg(b''(r_{12})
+    -\frac{b'(r_{12})}{r_{12}}\bigg)
+    +\frac{b'(r_{12})}{r_{12}}
+    +\frac{(y_1-y_2)^2}{r_{12}^2}\bigg(b''(r_{12})
+    -\frac{b'(r_{12})}{r_{12}}\bigg)\nonumber\\
+  &+\frac{b'(r_{21})}{r_{21}}
+    +\frac{(x_2-x_1)^2}{r_{21}^2}\bigg(b''(r_{12})
+    -\frac{b'(r_{12})}{r_{12}}\bigg)
+    +\frac{b'(r_{12})}{r_{12}}
+    +\frac{(y_1-y_2)^2}{r_{12}^2}\bigg(b''(r_{12})
+    -\frac{b'(r_{12})}{r_{12}}\bigg)\bigg]\bigg\}\nonumber\\
+  &+D^r\bigg\{\big(b(r_{12})\big)^2\bigg[\bigg(\frac{\partial c}{\partial \theta_1}\bigg)^2
+    +\bigg(\frac{\partial c}{\partial \theta_2}\bigg)^2\bigg]
+    -b(r_{12})\bigg[\frac{\partial^2 c}{\partial \theta_1^2}
+    +\frac{\partial^2 c}{\partial \theta_2^2}\bigg]\bigg\}=0.
+\end{align}
+which can be written after some simplification as
+\begin{align}
+  &D^t\bigg\{2(b'(r_{12}))^2c(\theta_1-\theta_2)^2
+    +2\beta\bigg(\frac{\mathcal{V}'(r_{12})}{r_{12}}
+    +\mathcal{V}''(r_{12})\bigg)
+    -2\beta c(\theta_1-\theta_2)b'(r_{12})\mathcal{V}'(r_{12})
+    -2c(\theta_1-\theta_2)\bigg(\frac{b'(r_{12})}{r_{12}}
+    +b''(r_{12})\bigg)\bigg\}\nonumber\\
+  &+D^t\beta c(\theta_1-\theta_2)b'(r_{12})f^P
+    \bigg\{\big(\cos\theta_1-\cos\theta_2)\frac{x_1-x_2}{r_{12}}
+    +\big(\sin\theta_1-\sin\theta_2)\frac{y_1-y_2}{r_{12}}\bigg\}\nonumber\\
+  &+D^r\bigg\{\big(b(r_{12})\big)^2\bigg[\bigg(\frac{\partial c}{\partial \theta_1}\bigg)^2
+    +\bigg(\frac{\partial c}{\partial \theta_2}\bigg)^2\bigg]
+    -b(r_{12})\bigg[\frac{\partial^2 c}{\partial \theta_1^2}
+    +\frac{\partial^2 c}{\partial \theta_2^2}\bigg]\bigg\}=0.
+\end{align}
+
+From this calculation, it appears that even for a two-particle, interacting system with activity
+(i.e. $f^P\neq0$), you have to consider a non-constant angular distribution function
+$c(\theta_1-\theta_2)$ in order to do some sort of matching between the theta terms. Also, this
+equation is making me second guess whether rotation of particle pairs should not change the energy...
 
 
 
