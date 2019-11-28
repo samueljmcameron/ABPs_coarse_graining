@@ -340,7 +340,7 @@ Now, I will assume that the system has translational symmetry, so
 for any arbitrary translational vector $\bm{T}$. This justifies writing $h(\bm{x})$ as a separable
 function as in eqn \ref{eq:hgeneric}. I will also impose full rotational symmetry, so that
 \begin{align}\label{eq:hrotsymm}
-  R(\{\bm{Q}(\phi)\bm{r}_i\})\Theta(\{\theta_i+\phi\})=R(\{\bm{r}_i\})\Theta(\{\theta_i\}),
+  R(\{\bm{Q}(\phi)\bm{r}_i\})=R(\{\bm{r}_i\}),
 \end{align}
 where $Q(\phi)$ is a tensor which rotates a vector by some arbitrary angle, $\phi$.
 
@@ -365,17 +365,18 @@ $f_P=0$ (i.e. no activity), then $\eta=\epsilon$ and $\delta=\sigma$.
 
 \subsubsection{$\Theta(\{\theta_i\})$ function.}
 
-The only requirement of $\Theta(\{\theta_i\})$ is that it is invariant under arbitrary rotations
-of all angles by some constant $\phi$. So, to lowest order this would be
+I will start with the assumption that $h(\{\bm{r}_i\},\theta_i)$ is an isotropic function, and so
+it is just going to be a constant. So for an isotropic case,
 \begin{align}
-  \Theta(\{\theta_k\})=\sum_{i=1}^N\sum_{j=1}^{i-1}c(\theta_i-\theta_j).
+  \Theta(\{\theta_i\})&=\frac{1}{2\pi}\nonumber\\
+                      &\equiv\Theta_0
 \end{align}
 
 \subsubsection{Starting with the two particle case.}
 
 If I just take $N=2$, then eqn \ref{eq:steadystatecondition} becomes
 \begin{align}
-  &D^t\bigg\{c(\theta_1-\theta_2)^2\bigg[\bigg(b'(r_{12})\frac{(x_1-x_2)}{r_{12}}\bigg)^2
+  &D^t\bigg\{\Theta^2\bigg[\bigg(b'(r_{12})\frac{(x_1-x_2)}{r_{12}}\bigg)^2
     +\bigg(b'(r_{12})\frac{(y_1-y_2)}{r_{12}}\bigg)^2
     +\bigg(b'(r_{21})\frac{(x_2-x_1)}{r_{21}}\bigg)^2
     +\bigg(b'(r_{21})\frac{(y_2-y_1)}{r_{21}}\bigg)^2\bigg]\nonumber\\
@@ -391,7 +392,7 @@ If I just take $N=2$, then eqn \ref{eq:steadystatecondition} becomes
     +\frac{\mathcal{V}'(r_{12})}{r_{12}}
     +\frac{(y_1-y_2)^2}{r_{12}^2}\bigg(\mathcal{V}''(r_{12})
     -\frac{\mathcal{V}'(r_{12})}{r_{12}}\bigg)\bigg]\nonumber\\
-  &+\beta c(\theta_1-\theta_2)\bigg[
+  &+\beta \Theta\bigg[
     \bigg(f^P\cos\theta_1-\mathcal{V}'(r_{12})\frac{(x_1-x_2)}{r_{12}}\bigg)
     b'(r_{12})\frac{(x_1-x_2)}{r_{12}}
     +\bigg(f^P\sin\theta_1-\mathcal{V}'(r_{12})\frac{(y_1-y_2)}{r_{12}}\bigg)
@@ -400,7 +401,7 @@ If I just take $N=2$, then eqn \ref{eq:steadystatecondition} becomes
     b'(r_{21})\frac{(x_2-x_1)}{r_{21}}
     +\bigg(f^P\sin\theta_2-\mathcal{V}'(r_{21})\frac{(y_2-y_1)}{r_{21}}\bigg)
     b'(r_{21})\frac{(y_2-y_1)}{r_{21}}\bigg]\nonumber\\
-  &-c(\theta_1-\theta_2)\bigg[\frac{b'(r_{12})}{r_{12}}
+  &-\Theta\bigg[\frac{b'(r_{12})}{r_{12}}
     +\frac{(x_1-x_2)^2}{r_{12}^2}\bigg(b''(r_{12})
     -\frac{b'(r_{12})}{r_{12}}\bigg)
     +\frac{b'(r_{12})}{r_{12}}
@@ -412,33 +413,232 @@ If I just take $N=2$, then eqn \ref{eq:steadystatecondition} becomes
     +\frac{b'(r_{12})}{r_{12}}
     +\frac{(y_1-y_2)^2}{r_{12}^2}\bigg(b''(r_{12})
     -\frac{b'(r_{12})}{r_{12}}\bigg)\bigg]\bigg\}\nonumber\\
-  &+D^r\bigg\{\big(b(r_{12})\big)^2\bigg[\bigg(\frac{\partial c}{\partial \theta_1}\bigg)^2
-    +\bigg(\frac{\partial c}{\partial \theta_2}\bigg)^2\bigg]
-    -b(r_{12})\bigg[\frac{\partial^2 c}{\partial \theta_1^2}
-    +\frac{\partial^2 c}{\partial \theta_2^2}\bigg]\bigg\}=0.
+  &+D^r\bigg\{\big(b(r_{12})\big)^2\bigg[\bigg(\frac{\partial \Theta}
+    {\partial \theta_1}\bigg)^2
+    +\bigg(\frac{\partial \Theta}{\partial \theta_2}\bigg)^2\bigg]
+    -b(r_{12})\bigg[\frac{\partial^2 \Theta}{\partial \theta_1^2}
+    +\frac{\partial^2 \Theta}{\partial \theta_2^2}\bigg]\bigg\}=0.
 \end{align}
 which can be written after some simplification as
 \begin{align}
-  &D^t\bigg\{2(b'(r_{12}))^2c(\theta_1-\theta_2)^2
+  &D^t\bigg\{2(b'(r_{12}))^2\Theta^2
     +2\beta\bigg(\frac{\mathcal{V}'(r_{12})}{r_{12}}
     +\mathcal{V}''(r_{12})\bigg)
-    -2\beta c(\theta_1-\theta_2)b'(r_{12})\mathcal{V}'(r_{12})
-    -2c(\theta_1-\theta_2)\bigg(\frac{b'(r_{12})}{r_{12}}
+    -2\beta \Theta b'(r_{12})\mathcal{V}'(r_{12})
+    -2\Theta\bigg(\frac{b'(r_{12})}{r_{12}}
     +b''(r_{12})\bigg)\bigg\}\nonumber\\
-  &+D^t\beta c(\theta_1-\theta_2)b'(r_{12})f^P
+  &+D^t\beta \Theta b'(r_{12})f^P
     \bigg\{\big(\cos\theta_1-\cos\theta_2)\frac{x_1-x_2}{r_{12}}
     +\big(\sin\theta_1-\sin\theta_2)\frac{y_1-y_2}{r_{12}}\bigg\}\nonumber\\
-  &+D^r\bigg\{\big(b(r_{12})\big)^2\bigg[\bigg(\frac{\partial c}{\partial \theta_1}\bigg)^2
-    +\bigg(\frac{\partial c}{\partial \theta_2}\bigg)^2\bigg]
-    -b(r_{12})\bigg[\frac{\partial^2 c}{\partial \theta_1^2}
-    +\frac{\partial^2 c}{\partial \theta_2^2}\bigg]\bigg\}=0.
+  &+D^r\bigg\{\big(b(r_{12})\big)^2\bigg[\bigg(\frac{\partial \Theta}
+    {\partial \theta_1}\bigg)^2
+    +\bigg(\frac{\partial \Theta}{\partial \theta_2}\bigg)^2\bigg]
+    -b(r_{12})\bigg[\frac{\partial^2 \Theta}{\partial \theta_1^2}
+    +\frac{\partial^2 \Theta}{\partial \theta_2^2}\bigg]\bigg\}=0.
 \end{align}
 
-From this calculation, it appears that even for a two-particle, interacting system with activity
+From this calculation, it appears that for a two-particle, interacting system with activity
 (i.e. $f^P\neq0$), you have to consider a non-constant angular distribution function
-$c(\theta_1-\theta_2)$ in order to do some sort of matching between the theta terms. Also, this
-equation is making me second guess whether rotation of particle pairs should not change the energy...
+$\Theta$ in order to do some sort of matching between the theta terms. However, if you consider
+enough particles, you would expect that for an isotropic distribution function, summing over all
+angles $i$ for $\cos\theta_i$ and $\sin\theta_i$ would end up averaging out to zero.
 
+\subsubsection{Generic N-particle case for $h$ being independent of $\{\theta_i\}$.}
+For the generic, $N$-particle case, the function $L_i(h)$ looks like this:
+\begin{align}\label{eq:genericNpart}
+  L_i(h) =& \beta^{-1}\Theta_0^2\sum_{j\neq i}\sum_{k\neq i} b'(r_{ij})b'(r_{ik})
+            \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}
+            + \sum_{j\neq i}\bigg[\mathcal{V}''(r_{ij})
+            +\frac{\mathcal{V}'(r_{ij})}{r_{ij}}\bigg]\nonumber\\
+          & - \Theta_0\sum_{j\neq i}\sum_{k\neq i}b'(r_{ij})\mathcal{V}'(r_{ik})
+            \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}
+            +\Theta_0f^P(\cos\theta_i\hat{\bm{e}}_x+\sin\theta_i\hat{\bm{e}}_y)
+            \sum_{j\neq i}b'(r_{ij})
+            \frac{\bm{r}_{ij}}{r_{ij}}\nonumber\\
+          & - \beta^{-1}\Theta_0\sum_{j\neq i}\bigg[b''(r_{ij})
+            +\frac{b'(r_{ij})}{r_{ij}}\bigg],\:\:\: i = 1,2,...,N
+\end{align}
+
+Here I have defined $\bm{r}_{ij}=(x_i-x_j)\hat{\bm{e}}_x+(y_i-y_j)\hat{\bm{e}}_y$ as the vector
+between particles $i$ and $j$. I have also just combined the first $2N$ indices into just $N$
+indices by using the unit vectors $\hat{\bm{e}}_x$ and $\hat{\bm{e}}_y$. Further, I have used the
+fact that $\partial_i v_i=0$ always, and $v_i$ is only non-zero for the position terms. Finally,
+I have assumed that $h(\{\bm{r}_i\},\{\theta_i\})$ is independent of $\theta_i$, and so the last
+$N$ equations for the $\theta_i$ drop out.
+
+In order to simplify things now, I will use the fact that
+\begin{align}
+  f(x_i) = \int dx f(x)\delta(x-x_i),
+\end{align}
+and so if I define
+\begin{align}
+  \hat{\rho}(\bm{x},\theta) = \sum_j \delta^2(\bm{x}-\bm{r}_j)\delta(\theta-\theta_j)
+\end{align}
+I can coarse-grain the system. I will note that for a generic term,
+\begin{align}
+  \sum_{j\neq i} f(\bm{r}_i-\bm{r}_j,\theta_j)
+  &=\sum_{j\neq i} \int d^2xd\theta\delta^2(\bm{x}-\bm{r}_j)\delta(\theta-\theta_j)
+    f(\bm{r}_i-\bm{x},\theta_j)\nonumber\\
+  &=\sum_j \int d^2xd\theta\delta^2(\bm{x}-\bm{r}_j)\delta(\theta-\theta_j)
+    f(\bm{r}_i-\bm{x},\theta_j)
+    -\int d^2xd\theta\delta^2(\bm{x}-\bm{r}_i)\delta(\theta-\theta_i)
+    f(\bm{r}_i-\bm{x},\theta_i)\nonumber\\
+  &=\int d^2xd\theta\hat{\rho}(\bm{x},\theta)f(\bm{r}_i-\bm{x},\theta)-\int d\theta f(0,\theta),
+\end{align}
+and so summing over all $i$ of these generic terms will give
+\begin{align}
+  \sum_i\sum_{j\neq i} f(\bm{r}_i-\bm{r}_j|,\theta_j)
+  &=\sum_i\int d^2x\hat{\rho}(\bm{x},\theta)f(\bm{r}_i-\bm{x},\theta)
+    -N\int d\theta f(0,\theta)\nonumber\\
+  &=\sum_i\int d^2xd^2yd\theta d\phi\delta(\bm{y}-\bm{r}_i)\delta(\phi-\theta_i)
+    \hat{\rho}(\bm{x},\theta)f(\bm{y}-\bm{x},\theta)-N\int d\theta f(0,\theta)\nonumber\\
+  &=\int d^2xd^2yd\theta d\phi\hat{\rho}(\bm{y},\phi)\hat{\rho}(\bm{x},\theta)f(\bm{y}-\bm{x},\theta)
+    -N\int d\theta f(0,\theta).
+\end{align}
+
+It is also the case in some of the above terms that there are three sums present, and so
+\begin{align}
+  \sum_{j\neq i}\sum_{k\neq i} f(\bm{r}_i-\bm{r}_j|,\theta_j)
+  g(\bm{r}_i-\bm{r}_k|,\theta_k)
+  &=\bigg(\int d^2xd\theta\hat{\rho}(\bm{x},\theta)f(\bm{r}_i-\bm{x},\theta)
+    -\int d\theta f(0,\theta)\bigg)\nonumber\\
+  &\phantom{=}
+    \times\bigg(\int d^2yd\phi\hat{\rho}(\bm{y},\phi)g(\bm{r}_i-\bm{y},\phi)
+    -\int d\phi g(0,\phi)\bigg)\nonumber\\
+  &=\int d^2xd^2yd\theta d\phi\hat{\rho}(\bm{x},\theta)\hat{\rho}(\bm{y},\phi)
+    f(\bm{r}_i-\bm{x},\theta)g(\bm{r}_i-\bm{y},\phi)\nonumber\\
+  &\phantom{=}-\int d^2xd\theta\hat{\rho}(\bm{x},\theta)\bigg[f(\bm{r}_i-\bm{x},\theta)
+    \int d\phi g(0,\phi)+g(\bm{r}_i-\bm{x},\theta)
+    \int d\phi f(0,\phi)\bigg]\nonumber\\
+  &\phantom{=}+\int d\phi g(0,\phi)\int d\theta f(0,\theta),
+\end{align}
+which, after summing over all $i$, gives
+\begin{align}
+  \sum_i\sum_{j\neq i}\sum_{k\neq i}
+  & f(\bm{r}_i-\bm{r}_j|,\theta_j)g(\bm{r}_i-\bm{r}_k|,\theta_k)\nonumber\\
+  &=\sum_i\int d^2xd^2yd\theta d\phi\hat{\rho}(\bm{x},\theta)\hat{\rho}(\bm{y},\phi)
+    f(\bm{r}_i-\bm{x},\theta)g(\bm{r}_i-\bm{y},\phi)\nonumber\\
+  &\phantom{=}-\sum_i\int d^2xd\theta\hat{\rho}(\bm{x},\theta)\bigg[f(\bm{r}_i-\bm{x},\theta)
+    \int d\phi g(0,\phi)+g(\bm{r}_i-\bm{x},\theta)
+    \int d\phi f(0,\phi)\bigg]\nonumber\\
+  &\phantom{=}+\sum_i\int d\phi g(0,\phi)\int d\theta f(0,\theta)\nonumber\\
+  &=\int d^2xd^2yd^2zd\theta d\phi d\gamma\hat{\rho}(\bm{x},\theta)\hat{\rho}(\bm{y},\phi)
+    \hat{\rho}(\bm{z},\gamma)f(\bm{z}-\bm{x},\theta)g(\bm{z}-\bm{y},\phi)\nonumber\\
+  &\phantom{=}-\int d^2xd^2yd\theta d\gamma\hat{\rho}(\bm{x},\theta)\hat{\rho}(\bm{y},\gamma)
+    \bigg[f(\bm{y}-\bm{x},\theta)
+    \int d\phi g(0,\phi)+g(\bm{y}-\bm{x},\theta)
+    \int d\phi f(0,\phi)\bigg]\nonumber\\
+  &\phantom{=}+N\int d\phi g(0,\phi)\int d\theta f(0,\theta)
+\end{align}
+
+I will insert these ideas into eqn \ref{eq:genericNpart} term by term. I will start with the
+first term of eqn \ref{eq:genericNpart}, which will give
+\begin{align}
+\sum_i\sum_{j\neq i}\sum_{k\neq i} b'(r_{ij})b'(r_{ik})
+  &\frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}\nonumber\\
+  &=\int d^2xd^2yd^2zd\theta d\phi d\gamma\hat{\rho}(\bm{x},\theta)\hat{\rho}(\bm{y},\phi)
+    \hat{\rho}(\bm{z},\gamma)b'(|\bm{z}-\bm{x}|)b'(|\bm{z}-\bm{y}|)
+    \frac{(\bm{z}-\bm{x})\cdot(\bm{z}-\bm{y})}{|\bm{z}-\bm{x}||\bm{z}-\bm{y}|}\nonumber\\
+  &\phantom{=}-4\pi\int d^2xd^2yd\theta d\gamma\hat{\rho}(\bm{x},\theta)\hat{\rho}(\bm{y},\gamma)
+    b'(|\bm{y}-\bm{x}|)b'(0)\bm{q}(\bm{0})\cdot[\bm{y}-\bm{x}]\nonumber\\
+  &\phantom{=}+4\pi^2Nb'(0)^2(\bm{q}(\bm{0}))^2
+\end{align}
+where I have defined
+\begin{align}
+  \bm{q}(\bm{r}) = \frac{\bm{r}}{r}.
+\end{align}
+
+The second term becomes
+\begin{align}
+  \sum_i\sum_{j\neq i}\bigg[\mathcal{V}''(r_{ij})
+  & +\frac{\mathcal{V}'(r_{ij})}{r_{ij}}\bigg]\nonumber\\
+  &=\int d^2xd^2yd\theta d\phi\hat{\rho}(\bm{y},\phi)\hat{\rho}(\bm{x},\theta)
+    \bigg[\mathcal{V}''(|\bm{x}-\bm{y}|)
+    +\frac{\mathcal{V}'(|\bm{x}-\bm{y}|)}{|\bm{x}-\bm{y}|}\bigg]
+    -2\pi N[\mathcal{V}''(0)+s(0)]
+\end{align}
+where I have defined
+\begin{align}
+  s(r) = \frac{\mathcal{V}'(r)}{r}.
+\end{align}
+
+The third term is
+\begin{align}
+  \sum_i\sum_{j\neq i}\sum_{k\neq i}b'(r_{ij})\mathcal{V}'(r_{ik})
+  &\frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}\nonumber\\
+  &=\int d^2xd^2yd^2zd\theta d\phi d\gamma\hat{\rho}(\bm{x},\theta)\hat{\rho}(\bm{y},\phi)
+    \hat{\rho}(\bm{z},\gamma)b'(|\bm{z}-\bm{x}|)\mathcal{V}'(|\bm{z}-\bm{y}|)
+    \frac{(\bm{z}-\bm{x})\cdot(\bm{z}-\bm{y})}{|\bm{z}-\bm{x}||\bm{z}-\bm{y}|}\nonumber\\
+  &\phantom{=}-2\pi\int d^2xd^2yd\theta d\gamma\hat{\rho}(\bm{x},\theta)\hat{\rho}(\bm{y},\gamma)
+    \bigg[b'(|\bm{y}-\bm{x}|)\mathcal{V}'(0)+\mathcal{V}'(|\bm{y}-\bm{x}|)b'(0)\bigg]
+    \bm{q}(\bm{0})\cdot[\bm{y}-\bm{x}]\nonumber\\
+  &\phantom{=}+4\pi^2Nb'(0)\mathcal{V}'(0)(\bm{q}(\bm{0}))^2.
+\end{align}
+The fourth term is
+\begin{align}
+  \sum_i(\cos\theta_i\hat{\bm{e}}_x+\sin\theta_i\hat{\bm{e}}_y)
+  &\sum_{j\neq i}b'(r_{ij})\frac{\bm{r}_{ij}}{r_{ij}}\nonumber\\
+  &=\sum_i\int d^2xd\theta\hat{\rho}(\bm{x},\theta)b'(|\bm{r}_i-\bm{x}|)
+    \frac{(\bm{r}_i-\bm{x})}{|\bm{r}_i-\bm{x}|}
+    (\cos\theta_i\hat{\bm{e}}_x+\sin\theta_i\hat{\bm{e}}_y)\nonumber\\
+  &\phantom{=}-2\pi\sum_i(\cos\theta_i\hat{\bm{e}}_x+\sin\theta_i\hat{\bm{e}}_y)
+    \cdot\bm{q}(\bm{0}) b'(0)\nonumber\\
+  &=\int d^2xd^2yd\theta d\phi\hat{\rho}(\bm{x},\theta)\hat{\rho}(\bm{y},\phi)b'(|\bm{y}-\bm{x}|)
+    \frac{(\bm{y}-\bm{x})}{|\bm{y}-\bm{x}|}
+    (\cos\theta\hat{\bm{e}}_x+\sin\theta\hat{\bm{e}}_y)\nonumber\\
+  &\phantom{=}-2\pi\int d^2xd\theta\hat{\rho}(\bm{x},\theta)
+    (\cos\theta\hat{\bm{e}}_x+\sin\theta\hat{\bm{e}}_y)
+    \cdot\bm{q}(\bm{0}) b'(0)\nonumber\\.
+\end{align}
+
+The last term is
+\begin{align}
+  \sum_i\sum_{j\neq i}\bigg[b''(r_{ij})
+  & +\frac{b'(r_{ij})}{r_{ij}}\bigg]\nonumber\\
+  &=\int d^2xd^2yd\theta d\phi\hat{\rho}(\bm{y},\phi)\hat{\rho}(\bm{x},\theta)
+    \bigg[b''(|\bm{x}-\bm{y}|)
+    +\frac{b'(|\bm{x}-\bm{y}|)}{|\bm{x}-\bm{y}|}\bigg]
+    -2\pi N[b''(0)+t(0)]
+\end{align}
+where
+\begin{align}
+  t(r) = \frac{b'(r)}{r}.
+\end{align}
+
+\subsubsection{Isotropic distribution function.}
+
+I will constrain $\hat{\rho}(\bm{x},\theta)$ to be independent of $\theta$, corresponding to
+an isotropic distribution function. Then, I will redefine the distribution as
+\begin{align}
+  \rho(\bm{x})&\equiv\int d\theta\hat{\rho}(\bm{x},\theta)\nonumber\\
+\end{align}
+
+Adding all of these contributions, the sum of $L_i(h)$ over all $N$ is then
+\begin{align}
+  \sum_i L_i(h)
+  &=\beta^{-1}\Theta_0^2\int d^2xd^2yd^2z\rho(\bm{x})\rho(\bm{y})
+    \rho(\bm{z})b'(|\bm{z}-\bm{x}|)b'(|\bm{z}-\bm{y}|)
+    \frac{(\bm{z}-\bm{x})\cdot(\bm{z}-\bm{y})}{|\bm{z}-\bm{x}||\bm{z}-\bm{y}|}\nonumber\\
+  &\phantom{=}-4\pi\beta^{-1}\Theta_0^2\int d^2xd^2y\rho(\bm{x})\rho(\bm{y})
+    b'(|\bm{y}-\bm{x}|)b'(0)\bm{q}(\bm{0})\cdot[\bm{y}-\bm{x}]\nonumber\\
+  &\phantom{=}+4\pi^2\beta^{-1}\Theta_0^2Nb'(0)^2(\bm{q}(\bm{0}))^2\nonumber\\
+  &\phantom{=}+\int d^2xd^2y\rho(\bm{y})\rho(\bm{x})
+    \bigg[\mathcal{V}''(|\bm{x}-\bm{y}|)
+    +\frac{\mathcal{V}'(|\bm{x}-\bm{y}|)}{|\bm{x}-\bm{y}|}\bigg]
+    -2\pi N[\mathcal{V}''(0)+s(0)]\nonumber\\
+  &\phantom{=}
+    -\Theta_0\int d^2xd^2yd^2z\rho(\bm{x})\rho(\bm{y})
+    \rho(\bm{z})b'(|\bm{z}-\bm{x}|)\mathcal{V}'(|\bm{z}-\bm{y}|)
+    \frac{(\bm{z}-\bm{x})\cdot(\bm{z}-\bm{y})}{|\bm{z}-\bm{x}||\bm{z}-\bm{y}|}\nonumber\\
+  &\phantom{=}+2\pi\Theta_0\int d^2xd^2y\rho(\bm{x})\rho(\bm{y})
+    \bigg[b'(|\bm{y}-\bm{x}|)\mathcal{V}'(0)+\mathcal{V}'(|\bm{y}-\bm{x}|)b'(0)\bigg]
+    \bm{q}(\bm{0})\cdot[\bm{y}-\bm{x}]\nonumber\\
+  &\phantom{=}-4\pi^2\Theta_0Nb'(0)\mathcal{V}'(0)(\bm{q}(\bm{0}))^2\nonumber\\
+  &\phantom{=}-\beta^{-1}\Theta_0\int d^2xd^2y\rho(\bm{y})\rho(\bm{x})
+    \bigg[b''(|\bm{x}-\bm{y}|)
+    +\frac{b'(|\bm{x}-\bm{y}|)}{|\bm{x}-\bm{y}|}\bigg]
+    +2\pi\beta^{-1}\Theta_0 N[b''(0)+t(0)]
+\end{align}
 
 
 
