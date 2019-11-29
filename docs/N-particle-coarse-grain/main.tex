@@ -15,6 +15,12 @@
 
 \maketitle
 
+\section{To get source code for this.}
+
+This is an old version of the document, look for the git commit which says:
+``Just did calculation which showed that h needs to be a function of the $\theta_i$'s as well
+as the $\bm{r}_i$'s to get any sort of activity.''
+
 \section{Writing the active brownian particles equations of motion into the correct form}
 
 
@@ -314,7 +320,7 @@ From these results I can see immediately that eqn \ref{eq:ss_condition} simplifi
 To actually do any calculations, an interaction form for $\mathcal{H}$ must be chosen. Since we
 are interested in capturing motility induced phase separation (MIPS) in the simplest form, I
 will choose the (repulsive) Weeks-Chandler-Anderson (WCA) interaction,
-\begin{equation}
+\begin{equation}\label{eq:WCAapprox}
   \mathcal{V}_{ij} =
   \begin{cases}
     4\epsilon\bigg[\bigg(\frac{\sigma}{r^{ij}}\bigg)^{12}
@@ -637,8 +643,161 @@ Adding all of these contributions, the sum of $L_i(h)$ over all $N$ is then
   &\phantom{=}-\beta^{-1}\Theta_0\int d^2xd^2y\rho(\bm{y})\rho(\bm{x})
     \bigg[b''(|\bm{x}-\bm{y}|)
     +\frac{b'(|\bm{x}-\bm{y}|)}{|\bm{x}-\bm{y}|}\bigg]
-    +2\pi\beta^{-1}\Theta_0 N[b''(0)+t(0)]
+    +2\pi\beta^{-1}\Theta_0 N[b''(0)+t(0)].
 \end{align}
+
+\subsection{Constant density calculation}
+If I take $\rho(\bm{x})=\rho_0$ as the average density, then
+\begin{align}
+  0
+  &=\beta^{-1}\Theta_0^2\rho_0^3\int d^2xd^2yd^2z
+    b'(|\bm{z}-\bm{x}|)b'(|\bm{z}-\bm{y}|)
+    \frac{(\bm{z}-\bm{x})\cdot(\bm{z}-\bm{y})}{|\bm{z}-\bm{x}||\bm{z}-\bm{y}|}\nonumber\\
+  &\phantom{=}-4\pi\beta^{-1}\Theta_0^2\rho_0^2\int d^2xd^2y
+    b'(|\bm{y}-\bm{x}|)b'(0)\bm{q}(\bm{0})\cdot[\bm{y}-\bm{x}]\nonumber\\
+  &\phantom{=}+4\pi^2\beta^{-1}\Theta_0^2Nb'(0)^2(\bm{q}(\bm{0}))^2\nonumber\\
+  &\phantom{=}+\rho_0^2\int d^2xd^2y
+    \bigg[\mathcal{V}''(|\bm{x}-\bm{y}|)
+    +\frac{\mathcal{V}'(|\bm{x}-\bm{y}|)}{|\bm{x}-\bm{y}|}\bigg]
+    -2\pi N[\mathcal{V}''(0)+s(0)]\nonumber\\
+  &\phantom{=}
+    -\Theta_0\rho_0^3\int d^2xd^2yd^2z
+    b'(|\bm{z}-\bm{x}|)\mathcal{V}'(|\bm{z}-\bm{y}|)
+    \frac{(\bm{z}-\bm{x})\cdot(\bm{z}-\bm{y})}{|\bm{z}-\bm{x}||\bm{z}-\bm{y}|}\nonumber\\
+  &\phantom{=}+2\pi\Theta_0\rho_0^2\int d^2xd^2y
+    \bigg[b'(|\bm{y}-\bm{x}|)\mathcal{V}'(0)+\mathcal{V}'(|\bm{y}-\bm{x}|)b'(0)\bigg]
+    \bm{q}(\bm{0})\cdot[\bm{y}-\bm{x}]\nonumber\\
+  &\phantom{=}-4\pi^2\Theta_0Nb'(0)\mathcal{V}'(0)(\bm{q}(\bm{0}))^2\nonumber\\
+  &\phantom{=}-\beta^{-1}\Theta_0\rho_0^2\int d^2xd^2y
+    \bigg[b''(|\bm{x}-\bm{y}|)
+    +\frac{b'(|\bm{x}-\bm{y}|)}{|\bm{x}-\bm{y}|}\bigg]
+    +2\pi\beta^{-1}\Theta_0 N[b''(0)+t(0)]\nonumber\\
+  &=\beta^{-1}\Theta_0^2\rho_0^3V\int d^2ud^2v
+    b'(|\bm{u}|)b'(|\bm{v}|)
+    \frac{\bm{u}\cdot\bm{v}}{|\bm{u}||\bm{v}|}\nonumber\\
+  &\phantom{=}-4\pi\beta^{-1}\Theta_0^2\rho_0^2V\int d^2u
+    b'(|\bm{u}|)b'(0)\bm{q}(\bm{0})\cdot\bm{u}\nonumber\\
+  &\phantom{=}+4\pi^2\beta^{-1}\Theta_0^2Nb'(0)^2(\bm{q}(\bm{0}))^2\nonumber\\
+  &\phantom{=}+\rho_0^2V\int d^2u
+    \bigg[\mathcal{V}''(|\bm{u}|)
+    +\frac{\mathcal{V}'(|\bm{u}|)}{|\bm{u}|}\bigg]
+    -2\pi N[\mathcal{V}''(0)+s(0)]\nonumber\\
+  &\phantom{=}
+    -\Theta_0\rho_0^3V\int d^2ud^2v
+    b'(|\bm{u}|)\mathcal{V}'(|\bm{v}|)
+    \frac{\bm{u}\cdot\bm{v}}{|\bm{u}||\bm{v}|}\nonumber\\
+  &\phantom{=}+2\pi\Theta_0\rho_0^2V\int d^2x
+    \bigg[b'(|\bm{u}|)\mathcal{V}'(0)+\mathcal{V}'(|\bm{u}|)b'(0)\bigg]
+    \bm{q}(\bm{0})\cdot\bm{u}\nonumber\\
+  &\phantom{=}-4\pi^2\Theta_0Nb'(0)\mathcal{V}'(0)(\bm{q}(\bm{0}))^2\nonumber\\
+  &\phantom{=}-\beta^{-1}\Theta_0\rho_0^2V\int d^2u
+    \bigg[b''(|\bm{u}|)
+    +\frac{b'(|\bm{u}|)}{|\bm{u}|}\bigg]
+    +2\pi\beta^{-1}\Theta_0 N[b''(0)+t(0)].
+\end{align}
+
+If I just re-write the above equations with some molecular length scale cutoff, $a_0$, then
+the divergent terms go away (i.e. all terms with a $f(0)$ in them), and so
+\begin{align}\label{eq:constantdensity_not_integrated_condition}
+  0
+  &=\beta^{-1}\rho_0\int_{u>a_0,v>a_0} d^2ud^2v
+    b'(|\bm{u}|)b'(|\bm{v}|)
+    \frac{\bm{u}\cdot\bm{v}}{|\bm{u}||\bm{v}|}\nonumber\\
+  &\phantom{=}+\int_{u>a_0} d^2u
+    \bigg[\mathcal{V}''(|\bm{u}|)
+    +\frac{\mathcal{V}'(|\bm{u}|)}{|\bm{u}|}\bigg]\nonumber\\
+  &\phantom{=}
+    -\rho_0\int_{u>a_0,v>a_0} d^2ud^2v
+    b'(|\bm{u}|)\mathcal{V}'(|\bm{v}|)
+    \frac{\bm{u}\cdot\bm{v}}{|\bm{u}||\bm{v}|}\nonumber\\
+  &\phantom{=}-\beta^{-1}\int_{u>a_0} d^2u
+    \bigg[b''(|\bm{u}|)
+    +\frac{b'(|\bm{u}|)}{|\bm{u}|}\bigg]
+\end{align}
+where I have divided through by a factor of the density squared times the total
+volume $\rho_0^2V$ and set $\Theta_0=1$.
+
+For the WCA approximation of eqn \ref{eq:WCAapprox}, the purely $\mathcal{V}$ integrals are
+\begin{equation}
+  \int_{u>a_0} d^2u\mathcal{V}''(|\bm{u}|) =
+  \begin{cases}
+    8\pi\epsilon\bigg\{7\bigg[\frac{1}{2}-\bigg(\frac{\sigma}{a_0}\bigg)^6\bigg]
+    -13\bigg[\frac{1}{4}-\bigg(\frac{\sigma}{a_0}\bigg)^{12}\bigg]\bigg\},
+    &a_0<2^{\frac{1}{6}}\sigma,\\
+    0,&a_0\geq 2^{\frac{1}{6}}\sigma,
+  \end{cases}
+\end{equation}
+\begin{equation}
+  \int_{u>a_0} d^2u\frac{\mathcal{V}'(|\bm{u}|)}{|\bm{u}|} =
+  \begin{cases}
+    8\pi\epsilon\bigg\{\bigg[\frac{1}{4}-\bigg(\frac{\sigma}{a_0}\bigg)^{12}\bigg]
+    -\bigg[\frac{1}{2}-\bigg(\frac{\sigma}{a_0}\bigg)^6\bigg]\bigg\},
+    &a_0<2^{\frac{1}{6}}\sigma,\\
+    0,&a_0\geq 2^{\frac{1}{6}}\sigma,
+  \end{cases}
+\end{equation}
+and so the second term in eqn \ref{eq:constantdensity_not_integrated_condition} is
+\begin{align}\label{eq:constantdensity_only_V_integral}
+  \int_{u>a_0} d^2u\bigg[\mathcal{V}''(|\bm{u}|)
+  + \frac{\mathcal{V}'(|\bm{u}|)}{|\bm{u}|}\bigg]
+  = 48\pi\epsilon\bigg[2\bigg(\frac{\sigma}{a_0}\bigg)^{12}
+  -\bigg(\frac{\sigma}{a_0}\bigg)^6\bigg]>0.
+\end{align}
+I can see that eqn \ref{eq:constantdensity_only_V_integral} is greater than zero if I insert
+$a_0=2^{1/6}\sigma(1-\chi)$ with $0<\chi<1$. I then get
+\begin{align}
+  24\pi\epsilon\bigg[\frac{1}{(1-\chi)^{12}}-\frac{1}{(1-\chi)^6}\bigg],
+\end{align}
+which is always greater than zero for $0<\chi<1$.
+
+\subsubsection{Choice of $b(r)$.}
+
+In order to go any further, I need to choose the form of $b(r)$. I will start with a basic square
+well,
+\begin{align}
+  b(r) =\infty-\infty H(r-a_0)+\alpha[H(r-(a_0+\beta))-H(r-a_0)]
+\end{align}
+where $H(x)$ is the heaviside function. 
+With this definition, the first derivative is
+\begin{align}
+  b'(r) = -\infty\delta(r-a_0)+\alpha[\delta(r-(a_0+\beta))-\delta(r-a_0)]
+\end{align}
+Then, I can write the integral
+\begin{align}
+  \int_{u>a_0} d^2ub''(|\bm{u}|)
+  &= 2\pi\int_{u>a_0} udub''(u)\nonumber\\
+  &=2\pi \int_{u>a_0} [(ub'(u))'-b'(u)]du\nonumber\\
+  &=\lim_{\Delta\to0+}2\pi[ub'(u)-b(u)]_{u=a_0+\Delta}^{u=\infty}\nonumber\\
+  &=2\pi\alpha.
+\end{align}
+Similarly, I can the integral
+\begin{align}
+  \int_{u>a_0} d^2u\frac{b'(|\bm{u}|)}{|\bm{u}|}
+  &=2\pi\int_{u>a_0} dub'(u)\nonumber\\
+  &=\lim_{\Delta\to0+}2\pi[b(u)]_{u=a_0+\Delta}^{u=\infty}\nonumber\\
+  &=-4\pi\alpha
+\end{align}
+and so
+\begin{align}
+  \int_{u>a_0} d^2u\bigg[b''(|\bm{u}|)+\frac{b'(|\bm{u}|)}{|\bm{u}|}\bigg]
+  = -2\pi\alpha.
+\end{align}
+
+For the remaining two integrals, I will use the fact that I can fix $\bm{u}=u \hat{\bm{e}}_x$
+for doing the inner $v$ integral, and then allow $\bm{u}$ to vary freely again for the outer
+$u$ integral. Then I can write $\bm{u}\cdot\bm{v}=\cos\phi_v$, and 
+
+\begin{align}
+  \int_{u>a_0,v>a_0} d^2ud^2vb'(|\bm{u}|)b'(|\bm{v}|)
+  \frac{\bm{u}\cdot\bm{v}}{|\bm{u}||\bm{v}|}
+  &=0,
+\end{align}
+since $\int_0^{2\pi} \cos\phi_v d\phi_v=0$. This means that the only possible option of satisfying
+eqn \ref{eq:constantdensity_not_integrated_condition} is to have $b(r)=\mathcal{V}(r)$. This makes
+me think we might need to change our assumptions on the form of $h$ being independent of
+$\{\theta_i\}$.
+
+    
 
 
 
