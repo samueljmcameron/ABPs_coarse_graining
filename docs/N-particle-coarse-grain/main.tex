@@ -201,7 +201,7 @@ Finally, I get the desired result of the section, which is
 \end{align}
 
 
-\section{Deriving a one-particle density function.}
+\subsection{Algebraic conditions on steady states.}
 
 In this section, I am interested in determining the one particle density function, i.e. in
 terms of $\bm{r}_1$ (not the angular components). To start with, I will remind myself that
@@ -248,8 +248,6 @@ Finally, I can write the Fokker-Planck equation as
   \big[\beta^{-1}\nabla_{\bm{x}}P(\bm{x},t)+P(\bm{x},t)(\nabla_{\bm{x}}
   \mathcal{H}(\{\bm{r}_i\})-\bm{v}(\{\theta_i\}))\big]\big)
 \end{align}
-
-\subsection{Steady state calculation.}
 
 From \cite{liverpool2018nonequilibrium}, I then know that there exists a generalized steady
 state of the form
@@ -310,8 +308,35 @@ will choose the (repulsive) Weeks-Chandler-Anderson (WCA) interaction,
   \end{cases}
 \end{equation}
 
+\newpage
+\section{Coarse-graining the steady $h(\bm{x})$ function.}
 
-\subsection{Coarse-graining the steady $h(\bm{x})$ function.}
+In this section, I will try several variational guesses to approximate the steady-state $h$
+function.
+
+Generically, we expect that the microscopic $h$ function will be invariant under translations,
+so
+\begin{align}
+  h(\{\bm{r}_i+\bm{T}\},\{\theta_i\}) = h(\{\bm{r}_i\},\{\theta_i\}.
+\end{align}
+Further to this invariance, the system must also be invariant
+under full rotations, and so
+\begin{align}
+  h(\{\bm{Q}(\phi)\bm{r}_i\},\{\theta_i+\phi\})
+  =h(\{\bm{r}_i\},\{\theta_i\}).
+\end{align}
+
+And finally, interchanging particles should not vary the results, so swapping $\bm{r}_i,\theta_i$
+with $\bm{r}_j,\theta_j$ should leave $h$ invariant.
+
+The only way to generically have all of these features is to have
+\begin{align}
+  h(\{|\bm{r}_i-\bm{r}_j|\},\{|\theta_i-\theta_j|\},
+  \{(\bm{r}_i-\bm{r}_j)\cdot(\bm{u}_i-\bm{u}_j)\})
+\end{align}
+where $\bm{u}_i = (\cos\theta_i,\sin\theta_i)$.
+
+\subsection{Separable $h$ function.}
 
 To solve eqn \ref{eq:steadystatecondition}, I will start by writing a guess for $h(\bm{x})$, and I
 will take it to be of the form
@@ -320,28 +345,13 @@ will take it to be of the form
 \end{align}
 where $R(\{\bm{r}_i\})$ and $\Theta(\{\theta_i\})$ are functions which I will determine later.
 
-Now, I will assume that the system has translational symmetry, so
-\begin{align}\label{eq:Rtranssym}
-  R(\{\bm{r}_i+\bm{T}\}=R(\{\bm{r}_i\})
-\end{align}
-for any arbitrary translational vector $\bm{T}$. This justifies writing $h(\bm{x})$ as a separable
-function as in eqn \ref{eq:hgeneric}. I will also impose full rotational symmetry, so that
-\begin{align}\label{eq:hrotsymm}
-  R(\{\bm{Q}(\phi)\bm{r}_i\})=R(\{\bm{r}_i\}),
-\end{align}
-where $Q(\phi)$ is a tensor which rotates a vector by some arbitrary angle, $\phi$.
-
 \subsubsection{$R(\{\bm{r}_i\})$ function.}
 
-I will focus on $R(\{\bm{r}_i\})$ to start with. By eqn \ref{eq:Rtranssym}, I know that
-$a(\{\bm{r}_i\})=\mathrm{constant}$. From eqns \ref{eq:Rtranssym} and \ref{eq:hrotsymm}, I know
-that $b(\bm{r}_i,\bm{r}_j)=b(r_{ij})$. I can derive similar results for higher order
-terms, but will focus only on second order, and so
+I will focus on pairwise interactions, so
 \begin{align}
   R(\{\bm{r}_k\})= \sum_{i=1}^N\sum_{j=1}^{i-1}b(r_{ij})
 \end{align}
-
-I will take a variational guess to the form of $b(r_{ij})$, and just keep at as a standard
+A good variational guess to the form of $b(r_{ij})$ might be something like a standard
 Lennard-Jones effective potential
 \begin{align}
   b(r_{ij})\equiv 4\eta\bigg[\bigg(\frac{\delta}{r_{ij}}\bigg)^{12}-
@@ -352,20 +362,21 @@ $f_P=0$ (i.e. no activity), then $\eta=\epsilon$ and $\delta=\sigma$.
 
 \subsubsection{$\Theta(\{\theta_i\})$ function.}
 
-I will start with the assumption that $h(\{\bm{r}_i\},\theta_i)$ is a simple function of
-cosines and sines, so
+A good starting guess for $\Theta$ might be a simple function like
 \begin{align}
-  \Theta(\{\theta_i\})&=a_0\sum_i^N(\cos\theta_i+\sin\theta_i)
+  \Theta(\{\theta_i\})&=a_0\sum_{i=1}^N\sum_{j=1}^{i-1}(\cos(\theta_i-\theta_j)
 \end{align}
 
 \subsubsection{Generic N-particle case for variational form of $h$.}
-For the generic, $N$-particle case, the function $L_i(h)$ looks like this:
+For the generic, $N$-particle case, the first term in eqn \ref{eq:steadystatecondition} becomes
 \begin{align}\label{eq:genericNpartD_t}
-  L_i(h) =& \beta^{-1}\Theta(\{\theta_l\})^2\sum_{j\neq i}\sum_{k\neq i} b'(r_{ij})b'(r_{ik})
+  L_i(h) =& \beta^{-1}\Theta(\{\theta_l\})^2\sum_{j\neq i}
+            \sum_{k\neq i} b'(r_{ij})b'(r_{ik})
             \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}
             + \sum_{j\neq i}\bigg[\mathcal{V}''(r_{ij})
             +\frac{\mathcal{V}'(r_{ij})}{r_{ij}}\bigg]\nonumber\\
-          & - \Theta(\{\theta_l\})\sum_{j\neq i}\sum_{k\neq i}b'(r_{ij})\mathcal{V}'(r_{ik})
+          & - \Theta(\{\theta_l\})\sum_{j\neq i}\sum_{k\neq i}
+            b'(r_{ij})\mathcal{V}'(r_{ik})
             \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}
             +\Theta(\{\theta_l\})f^P(\cos\theta_i\hat{\bm{e}}_x+\sin\theta_i\hat{\bm{e}}_y)
             \sum_{j\neq i}b'(r_{ij})
@@ -373,41 +384,34 @@ For the generic, $N$-particle case, the function $L_i(h)$ looks like this:
           & - \beta^{-1}\Theta(\{\theta_l\})\sum_{j\neq i}\bigg[b''(r_{ij})
             +\frac{b'(r_{ij})}{r_{ij}}\bigg],\:\:\: i = 1,2,...,N
 \end{align}
-and
-\begin{align}\label{eq:genericNpartD_r}
-  (\partial_{\theta_i}h)^2-\partial_{\theta_i}^2h
-  =&R(\{\bm{r}_l\})^2a_0^2(1-\sin\theta_i\cos\theta_i)
-     +R(\{\bm{r}_l\})a_0(\cos\theta_i+\sin\theta_i),\:\:\: i = 1,2,...,N
-\end{align}
-            
+
 Here I have defined $\bm{r}_{ij}=(x_i-x_j)\hat{\bm{e}}_x+(y_i-y_j)\hat{\bm{e}}_y$ as the vector
 between particles $i$ and $j$. I have also just combined the first $2N$ indices into just $N$
 indices by using the unit vectors $\hat{\bm{e}}_x$ and $\hat{\bm{e}}_y$. Further, I have used the
 fact that $\partial_i v_i=0$ always, and $v_i$ is only non-zero for the position terms.
 
-Inserting eqns \ref{eq:genericNpartD_t} and \ref{eq:genericNpartD_r} into eqn
-\ref{eq:steadystatecondition} will give a method of solving for $a_0$ and $b(r)$ in terms
-of the prescribed $\mathcal{H}$ and the activity/diffusion parameters. The resulting equations are
-\begin{align}
+Inserting eqn \ref{eq:genericNpartD_t} into eqn \ref{eq:steadystatecondition} will give a method of
+determining $b(r)$ and $\Theta(\{\theta_l\})$ in terms of the microscopic parameters $D^r$, $D^t$,
+and $f^P$. The resulting equation is
+\begin{align}\label{eq:separable_h_algebraic}
   0
-  =&\sum_{i}\beta^{-1}a_0^2\sum_l\sum_m(\cos\theta_l\cos\theta_m
-     +\sin\theta_l\sin\theta_m+2\cos\theta_l\sin\theta_m)
+  =&\sum_{i}\beta^{-1}\Theta(\{\theta_l\})^2
      \sum_{j\neq i}\sum_{k\neq i} b'(r_{ij})b'(r_{ik})
-     \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}\nonumber\\
-   & + \sum_i\sum_{j\neq i}\bigg[\mathcal{V}''(r_{ij})
-     +\frac{\mathcal{V}'(r_{ij})}{r_{ij}}\bigg]
-     - a_0\sum_i\sum_l(\cos\theta_l+\sin\theta_l)\sum_{j\neq i}\sum_{k\neq i}
+     \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}
+     + \sum_i\sum_{j\neq i}\bigg[\mathcal{V}''(r_{ij})
+     +\frac{\mathcal{V}'(r_{ij})}{r_{ij}}\bigg]\nonumber\\
+   & - \sum_i\Theta(\{\theta_l\})\sum_{j\neq i}\sum_{k\neq i}
      b'(r_{ij})\mathcal{V}'(r_{ik})
-     \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}\nonumber\\
-   & +a_0\sum_i\sum_l(\cos\theta_l+\sin\theta_l)
+     \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}
+     +\sum_i\Theta(\{\theta_l\})
      f^P(\cos\theta_i\hat{\bm{e}}_x+\sin\theta_i\hat{\bm{e}}_y)
      \sum_{j\neq i}b'(r_{ij})
-     \frac{\bm{r}_{ij}}{r_{ij}}
-     - \beta^{-1}a_0\sum_i\sum_l(\cos\theta_l+\sin\theta_l)\sum_{j\neq i}\bigg[b''(r_{ij})
+     \frac{\bm{r}_{ij}}{r_{ij}}\nonumber\\
+   & - \beta^{-1}\sum_i\Theta(\{\theta_l\})\sum_{j\neq i}\bigg[b''(r_{ij})
      +\frac{b'(r_{ij})}{r_{ij}}\bigg]\nonumber\\
-   & +\frac{D^r}{D^t}\bigg(\sum_i\sum_{j\neq i}\sum_{k\neq i} b(r_{ij})b(r_{ik})
-     a_0^2(1-\sin\theta_i\cos\theta_i)
-     +\sum_i\sum_{j\neq i} b(r_{ij})a_0(\cos\theta_i+\sin\theta_i)\bigg)
+   & + \frac{D^r}{D^t}\sum_{i=1}^{N}\big[\sum_{j\neq i}\sum_{k\neq i} b(r_{ij})b(r_{ik})
+     (\partial_{\theta_i}\Theta)^2
+     -\sum_{j\neq i}b(r_{ij})\partial_{\theta_i}^2\Theta\big]
 \end{align}
   
 
@@ -425,27 +429,77 @@ I can re-write sums
 \begin{align}
   \sum_i f(\bm{r}_i,\theta_i) = \int d^2rd\theta\hat{\rho}(\bm{r},\theta)f(\bm{r},\theta)
 \end{align}
-and so get
+
+For any distribution function $\rho(\bm{r},\theta)$ which is independent in of $\theta$, the
+activity parameter $f^P$ of eqn \ref{eq:separable_h_algebraic} will drop out as the integrals
+over $\cos\theta$ and $\sin\theta$ (for the sum with dummy index $i$) will be zero. So a
+separable guess to $h$ may not be viable.
+
+\subsection{First variational guess for coupled $h$ function.}
+
+In this section, I will take
 \begin{align}
+  h = \sum_{i=1}^N\sum_{j=1}^{i-1}b(r_{ij})\cos(\theta_{ij})
+\end{align}
+
+Then, the derivatives become
+\begin{align}\label{eq:partial_i_h}
+  \nabla_{\bm{r}_{\alpha}}h
+  &=\sum_{i\neq\alpha}^Nb^{\prime}
+    (r_{\alpha i})\frac{\bm{r}_{\alpha i}}{r_{\alpha i}}\cos(\theta_{\alpha i}),
+    \:\:\:\alpha=1,2,...,N,
+\end{align}
+\begin{align}\label{eq:partialsq_i_h}
+  \nabla_{\bm{r}_{\alpha}}^2h
+  &=\sum_{i\neq\alpha}^N\bigg[\frac{b^{\prime}(r_{\alpha i})}{r_{\alpha i}}
+    +b^{\prime\prime}(r_{\alpha i})\bigg]\cos(\theta_{\alpha i}),
+    \:\:\:\alpha=1,2,...,N,
+\end{align}
+\begin{align}
+  \partial_{\theta_{\alpha}}h
+  &=-\sum_{i\neq\alpha}^Nb(r_{\alpha i})\sin\theta_{\alpha i},
+\end{align}
+\begin{align}
+  \partial_{\theta_{\alpha}}^2h
+  &=-\sum_{i\neq\alpha}^Nb(r_{\alpha i})\cos\theta_{\alpha i}.
+\end{align}
+
+Inserting these into eqn \ref{eq:steadystatecondition} gives
+\begin{align}\label{eq:easiest_non_separable}
   0
-  =&\sum_{i}\beta^{-1}a_0^2\sum_l\sum_m(\cos\theta_l\cos\theta_m
-     +\sin\theta_l\sin\theta_m+2\cos\theta_l\sin\theta_m)
-     \sum_{j\neq i}\sum_{k\neq i} b'(r_{ij})b'(r_{ik})
-     \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}\nonumber\\
-   & + \sum_i\sum_{j\neq i}\bigg[\mathcal{V}''(r_{ij})
-     +\frac{\mathcal{V}'(r_{ij})}{r_{ij}}\bigg]
-     - a_0\sum_i\sum_l(\cos\theta_l+\sin\theta_l)\sum_{j\neq i}\sum_{k\neq i}
-     b'(r_{ij})\mathcal{V}'(r_{ik})
-     \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}\nonumber\\
-   & +a_0\sum_i\sum_l(\cos\theta_l+\sin\theta_l)
+  =&\sum_{i}\beta^{-1}\sum_{j\neq i}\sum_{k\neq i} b'(r_{ij})b'(r_{ik})
+     \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}\cos\theta_{ij}\cos\theta_{ik}
+     + \sum_i\sum_{j\neq i}\bigg[\mathcal{V}''(r_{ij})
+     +\frac{\mathcal{V}'(r_{ij})}{r_{ij}}\bigg]\nonumber\\
+   & - \sum_i\sum_{j\neq i}\sum_{k\neq i}
+     b'(r_{ij})\cos\theta_{ij}\mathcal{V}'(r_{ik})
+     \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}
+     +\sum_i
      f^P(\cos\theta_i\hat{\bm{e}}_x+\sin\theta_i\hat{\bm{e}}_y)
-     \sum_{j\neq i}b'(r_{ij})
-     \frac{\bm{r}_{ij}}{r_{ij}}
-     - \beta^{-1}a_0\sum_i\sum_l(\cos\theta_l+\sin\theta_l)\sum_{j\neq i}\bigg[b''(r_{ij})
+     \sum_{j\neq i}b'(r_{ij})\cos(\theta_{ij})
+     \frac{\bm{r}_{ij}}{r_{ij}}\nonumber\\
+   & - \beta^{-1}\sum_i\sum_{j\neq i}\cos\theta_{ij}\bigg[b''(r_{ij})
      +\frac{b'(r_{ij})}{r_{ij}}\bigg]\nonumber\\
-   & +\frac{D^r}{D^t}\bigg(\sum_i\sum_{j\neq i}\sum_{k\neq i} b(r_{ij})b(r_{ik})
-     a_0^2(1-\sin\theta_i\cos\theta_i)
-     +\sum_i\sum_{j\neq i} b(r_{ij})a_0(\cos\theta_i+\sin\theta_i)\bigg)
+   & + \frac{D^r}{D^t}\sum_i\sum_{j\neq i}\sum_{k\neq i} b(r_{ij})b(r_{ik})
+     \sin\theta_{ij}\sin\theta_{ik}
+     +\frac{D^r}{D^t}\sum_i\sum_{j\neq i}b(r_{ij})\cos\theta_{ij}
+\end{align}
+
+However, because of the identity
+\begin{align}
+  \cos(\theta_{ij})=\cos\theta_i\cos\theta_j+\sin\theta_i\sin\theta_j,
+\end{align}
+the issue of $f^P$ dropping out still occurs for isotropic distribution functions.
+
+\subsection{Second variational guess for coupled $h$ function.}
+
+This time, I will take
+\begin{align}
+  h = \sum_{i=1}^N\sum_{j=1}^{i-1}b(r_{ij})
+  \big[1-q_0\cos(\theta_{ij}+\zeta)\cos(\theta_{ij}+\zeta)\big].
+\end{align}
+
+
 
 \subsubsection{Isotropic distribution function.}
 
