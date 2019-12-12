@@ -9,21 +9,13 @@
 
 \title{calculation: coarse-graining active brownian particles}
 \author{Sam Cameron}
-\date{October 2019}
+\date{\today}
 
 \begin{document}
 
 \maketitle
 
-\section{To get source code for this.}
-
-This is an old version of the document, look for the git commit which says:
-``Just did calculation which showed that h needs to be a function of the $\theta_i$'s as well
-as the $\bm{r}_i$'s to get any sort of activity.''
-
 \section{Writing the active brownian particles equations of motion into the correct form}
-
-
 
 The equations of motion for active brownian particles are:
 
@@ -128,11 +120,11 @@ as $\Delta t\to0$. Then, since
 \end{align}
 this can be written as
 \begin{align}
-  <u_{\beta}(t)\exp(-ik_jr_j(t)>=&\bigg<u_{\beta}(t)\exp\bigg[-ik_jr_j(t-\Delta t)-ik_j
-                                   \int_{t-\Delta t}^tdt_1(F_j(\bm{r}(t_1)
-                                   +v_j{\bm{r}(t_1)}\nonumber\\
-                                 &+\sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}
-                                   (t_1))\bigg]\bigg>\nonumber\\
+  <u_{\beta}(t)\exp(-ik_jr_j(t))>=&\bigg<u_{\beta}(t)\exp\bigg[-ik_jr_j(t-\Delta t)-ik_j
+                                    \int_{t-\Delta t}^tdt_1(F_j(\bm{r}(t_1)
+                                    +v_j{\bm{r}(t_1)}\nonumber\\
+                                  &+\sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}
+                                    (t_1))\bigg]\bigg>\nonumber\\
   =&\bigg<u_{\beta}(t)\exp(-ik_jr_j(t-\Delta t))
      \bigg[1-ik_j\int_{t-\Delta t}^tdt_1
      \sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>+O(\Delta t).
@@ -142,31 +134,31 @@ Next, since $t-\Delta t<t_1,t$, there won't be any correlations between the
 fluctuations at earlier times and those at $t$, so using the fact that for uncorrelated
 functions $<AB>=<A><B>$, I get
 \begin{align}
-  <u_{\beta}(t)\exp(-ik_jr_j(t)>&=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
-                                  \bigg<u_{\beta}(t)\bigg[1-ik_j\int_{t-\Delta t}^tdt_1
-                                  \sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>
-                                  +O(\Delta t)\nonumber\\
-                                &=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
-                                  \bigg(<u_{\beta}(t)>
-                                  -\bigg<ik_j\int_{t-\Delta t}^tdt_1
-                                  \sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}(t_1)
-                                  u_{\beta}(t)\bigg]\bigg>\bigg)
-                                  +O(\Delta t)\nonumber\\
-                                &=-\bigg<ik_j\sqrt{2\tilde{D}_{j\gamma}}\int_{t-\Delta t}^tdt_1
-                                  \delta_{\beta \gamma}\delta(t-t_1)\bigg]\bigg>
-                                  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
-                                  +O(\Delta t)\nonumber\\
-                                &=-\bigg<ik_j\sqrt{2\tilde{D}_{j\beta}}\int_{t-\Delta t}^tdt_1
-                                  \delta(t-t_1)\bigg>
-                                  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
-                                  +O(\Delta t)\nonumber\\
-                                &=-\bigg<ik_j\sqrt{2\tilde{D}_{j\beta}}\int_0^{\Delta t}du
-                                  \delta(u)\bigg>
-                                  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
-                                  +O(\Delta t)\nonumber\\
-                                &=-\frac{1}{2}ik_j\sqrt{2\tilde{D}_{j\beta}}
-                                  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
-                                  +O(\Delta t)\nonumber\\.
+  <u_{\beta}(t)\exp(-ik_jr_j(t))>&=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+                                   \bigg<u_{\beta}(t)\bigg[1-ik_j\int_{t-\Delta t}^tdt_1
+                                   \sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>
+                                   +O(\Delta t)\nonumber\\
+                                 &=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+                                   \bigg(<u_{\beta}(t)>
+                                   -\bigg<ik_j\int_{t-\Delta t}^tdt_1
+                                   \sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}(t_1)
+                                   u_{\beta}(t)\bigg>\bigg)
+                                   +O(\Delta t)\nonumber\\
+                                 &=-\bigg<ik_j\sqrt{2\tilde{D}_{j\gamma}}\int_{t-\Delta t}^tdt_1
+                                   \delta_{\beta \gamma}\delta(t-t_1)\bigg>
+                                   \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+                                   +O(\Delta t)\nonumber\\
+                                 &=-\bigg<ik_j\sqrt{2\tilde{D}_{j\beta}}\int_{t-\Delta t}^tdt_1
+                                   \delta(t-t_1)\bigg>
+                                   \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+                                   +O(\Delta t)\nonumber\\
+                                 &=-\bigg<ik_j\sqrt{2\tilde{D}_{j\beta}}\int_0^{\Delta t}du
+                                   \delta(u)\bigg>
+                                   \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+                                   +O(\Delta t)\nonumber\\
+                                 &=-\frac{1}{2}ik_j\sqrt{2\tilde{D}_{j\beta}}
+                                   \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+                                   +O(\Delta t)\nonumber\\.
 \end{align}
 Taking the limit as $\Delta t\to0$, this becomes
 \begin{align}
@@ -317,7 +309,7 @@ function.
 Generically, we expect that the microscopic $h$ function will be invariant under translations,
 so
 \begin{align}
-  h(\{\bm{r}_i+\bm{T}\},\{\theta_i\}) = h(\{\bm{r}_i\},\{\theta_i\}.
+  h(\{\bm{r}_i+\bm{T}\},\{\theta_i\}) = h(\{\bm{r}_i\},\{\theta_i\}).
 \end{align}
 Further to this invariance, the system must also be invariant
 under full rotations, and so
@@ -335,7 +327,7 @@ The only way to generically have all of these features is to have
   \{(\bm{r}_i-\bm{r}_j)\cdot(\bm{u}_i-\bm{u}_j)\})
 \end{align}
 where $\bm{u}_i = (\cos\theta_i,\sin\theta_i)$.
-
+\begin{comment}
 \subsection{Separable $h$ function.}
 
 To solve eqn \ref{eq:steadystatecondition}, I will start by writing a guess for $h(\bm{x})$, and I
@@ -364,7 +356,7 @@ $f_P=0$ (i.e. no activity), then $\eta=\epsilon$ and $\delta=\sigma$.
 
 A good starting guess for $\Theta$ might be a simple function like
 \begin{align}
-  \Theta(\{\theta_i\})&=a_0\sum_{i=1}^N\sum_{j=1}^{i-1}(\cos(\theta_i-\theta_j)
+  \Theta(\{\theta_i\})&=a_0\sum_{i=1}^N\sum_{j=1}^{i-1}(\cos(\theta_i-\theta_j))
 \end{align}
 
 \subsubsection{Generic N-particle case for variational form of $h$.}
@@ -498,9 +490,161 @@ This time, I will take
   h = \sum_{i=1}^N\sum_{j=1}^{i-1}b(r_{ij})
   \big[1-q_0\cos(\theta_{ij}+\zeta)\cos(\theta_{ij}+\zeta)\big].
 \end{align}
+\end{comment}
 
+\subsection{Variational guess for coupled $h$ function.}
 
+Before doing this calculation, I will write everything in dimensionless form, so
+\begin{align}\label{eq:dim_ss}
+  \sum_{i=1}^N\big[\mathcal{L}_i^{(0)}(h)+ \frac{f^P\sigma}{\beta^{-1}}
+  \mathcal{L}_i^{(1)}(h)\big] = 0
+\end{align}
+where
+\begin{align}
+  L_i^{(0)}(h)=(\nabla_i h)^2 + \nabla_i^2\mathcal{H}
+  -\nabla_i\mathcal{H}\cdot\nabla_ih-\nabla_i^2h +\frac{D^r\sigma^2}{D^t}
+  \big[(\partial_{\theta_i}h)^2-\partial_{\theta_i}^2h\big],
+\end{align}
+and
+\begin{align}
+  L_i^{(1)}(h)=\bm{u}_i\cdot\nabla_ih.
+\end{align}
+Here, $\sigma$ is some microscopic length scale defined the Hamiltonian
+$\mathcal{H}$, and everything is dimensionless. When $f^P=0$, the solution
+is just $h=\mathcal{H}$ as expected.
 
+I will take a perturbative guess to the solution, with $\epsilon=f^P\sigma\beta$
+as my perturbation parameter. So, my guess will be
+\begin{align}
+  h(\epsilon) = \mathcal{H}
+  + \epsilon\frac{\partial h}{\partial \epsilon}\bigg|_{\epsilon=0}.
+\end{align}
+
+Differentiating eqn \ref{eq:dim_ss} with respect to $\epsilon$ gives
+\begin{align}\label{eq:first_perturb_DE}
+  0
+  &=\sum_{i=1}^N\big\{\partial_{\epsilon}\mathcal{L}_i^{(0)}(h)
+    + \mathcal{L}_i^{(1)}(h(0))
+    +\epsilon\partial_{\epsilon}\mathcal{L}_i^{(1)}
+    (h)\big\}\bigg|_{\epsilon=0}\nonumber\\
+  &=\sum_{i=1}^N\big\{2\nabla_i \mathcal{H}\cdot\nabla_i\zeta
+    - \nabla_i\mathcal{H}\cdot\nabla_i\zeta
+    -\nabla_i^2\zeta+\frac{D^r\sigma^2}{D^t}
+    \big[2\partial_{\theta_i}\mathcal{H}\partial_{\theta_i}\zeta
+    -\partial_{\theta_i}^2\zeta\big]
+    + \bm{u}_i\cdot\nabla_i\mathcal{H}
+    +(0)\bm{u}_i\cdot\nabla_i\zeta\big\}\nonumber\\
+  &=\sum_{i=1}^N\big[\nabla_i \mathcal{H}\cdot\nabla_i\zeta
+    -\nabla_i^2\zeta - \frac{D^r\sigma^2}{D^t}
+    \partial_{\theta_i}^2\zeta
+    + \bm{u}_i\cdot\nabla_i\mathcal{H}\big]
+\end{align}
+where $\zeta\equiv\partial_{\epsilon}h|_{\epsilon=0}$.
+
+\subsection{Indistinguishable particles.}
+
+I will take a guess for the solution of the form,
+\begin{align}
+  \zeta &= -\sum_{i=1}^N\sum_{j=1}^{i-1}
+      W(r_{ij})\bm{r}_{ij}\cdot\bm{u}_{ij}.
+\end{align}
+
+Since, for $i\neq j$,
+\begin{align}
+  \nabla_i(\bm{r}_{ij}\cdot\bm{u}_{ij}) &= \bm{u}_{ij},\\
+  \nabla_j(\bm{r}_{ij}\cdot\bm{u}_{ij}) &= -\bm{u}_{ij},\\
+  \nabla_i r_{ij} &=\frac{\bm{r}_{ij}}{r_{ij}},\\
+  \nabla_j r_{ij} &=-\frac{\bm{r}_{ij}}{r_{ij}},\\
+  \partial_{\theta_i}^2(\bm{u}_{ij}\cdot\bm{r}_{ij})&=-\bm{u}_i\cdot\bm{r}_{ij},\\
+  \partial_{\theta_i}^2(\bm{u}_{ji}\cdot\bm{r}_{ji})&=\bm{u}_i\cdot\bm{r}_{ji},
+\end{align}
+the terms are
+\begin{align}
+  \nabla_{i}\zeta = -\sum_{j\neq i}^N \bigg[W'(r_{ij})
+  (\bm{u}_{ij}\cdot\bm{r}_{ij})\frac{\bm{r}_{ij}}{r_{ij}}
+  +W(r_{ij})\bm{u}_{ij}\bigg],
+\end{align}
+
+\begin{align}
+  \nabla_i^2\zeta=-\sum_{j\neq i}^N\bigg[W''(r_{ij})
+  +3\frac{W'(r_{ij})}{r_{ij}}\bigg](\bm{u}_{ij}\cdot\bm{r}_{ij}).
+\end{align}
+
+\begin{align}
+  \partial_{\theta_i}^2\zeta=\sum_{j\neq i}W(r_{ij})\bm{u}_i\cdot\bm{r}_{ij}
+\end{align}
+
+Inserting these into eqn \ref{eq:first_perturb_DE}
+\begin{align}
+  0=
+  &-\sum_{i=1}^N\sum_{j\neq i}^N\sum_{k\neq i}^N
+    \mathcal{V}^{\prime}(r_{ij})\frac{\bm{r}_{ij}}{r_{ij}}
+    \cdot\bigg[W'(r_{ik})
+    (\bm{u}_{ik}\cdot\bm{r}_{ik})\frac{\bm{r}_{ik}}{r_{ik}}
+    +W(r_{ik})\bm{u}_{ik}\bigg]
+    +\sum_{i=1}^N\sum_{j\neq i}^N\bigg[W''(r_{ij})
+    +3\frac{W'(r_{ij})}{r_{ij}}\bigg](\bm{u}_{ij}\cdot\bm{r}_{ij})\nonumber\\
+  &-\frac{D^r\sigma^2}{D^t}\sum_{i=1}^N\sum_{j\neq i}^NW(r_{ij})\bm{u}_i\cdot\bm{r}_{ij}
+   +\sum_{i=1}^N\sum_{j\neq i}^N 
+    \mathcal{V}^{\prime}(r_{ij})\frac{\bm{u}_i\cdot\bm{r}_{ij}}{r_{ij}}
+\end{align}
+
+You can factor this equation a bit, using the result that
+\begin{align}
+  \sum_{i=1}^N\sum_{j\neq i}f(r_{ij}) \bm{u}_i\cdot\bm{r}_{ij}
+  =\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}f(r_{ji})\bm{u}_{ij}\cdot\bm{r}_{ij}
+\end{align}
+  to get
+\begin{align}\label{eq:WODE_exact}
+  0&=
+     \sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\bigg\{\sum_{k\neq i}^N\bigg[
+     -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}
+     W'(r_{ij})
+     \cdot\frac{\bm{r}_{ik}\cdot\bm{r}_{ij}}{r_{ij}}\bm{u}_{ij}
+     -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W(r_{ik})\bm{u}_{ik}\bigg]
+     +\bigg[W''(r_{ij})
+     +3\frac{W'(r_{ij})}{r_{ij}}\bigg]\bm{u}_{ij}\nonumber\\
+   &\hphantom{=}-\frac{D^r\sigma^2}{2D^t}W(r_{ij})\bm{u}_{ij}
+     +\mathcal{V}^{\prime}(r_{ij})\frac{\bm{u}_{ij}}{2r_{ij}}\bigg\}\nonumber\\
+   &=\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\bm{u}_{ij}
+     \bigg\{\sum_{k\neq i}^N\bigg[
+     -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}
+     W'(r_{ij})
+     \cdot\frac{\bm{r}_{ik}\cdot\bm{r}_{ij}}{r_{ij}}\bigg]
+     +W''(r_{ij})+3\frac{W'(r_{ij})}{r_{ij}}\nonumber\\
+   &\hphantom{=}-\frac{D^r\sigma^2}{2D^t}W(r_{ij})
+     +\frac{\mathcal{V}^{\prime}(r_{ij})}{2r_{ij}}\bigg\}
+     -\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\bm{u}_{ik}
+     \sum_{k\neq i}^N\bigg[
+     \frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W(r_{ik})\bigg]
+\end{align}
+
+So far, the approximations we have made in calculating $h$ are that for small activity,
+$h$ is perturbatively close to $\mathcal{H}$, and we have taken a variational guess in
+what this perturbative term is, in terms of some arbitrary function $W(r_{ij})$. Now, to
+be able to get some sort of solution for eqn \ref{eq:WODE_exact}, we need to make some
+further approximation. There are two routes. The first route is to say that terms which
+involve the product $\nabla_i\mathcal{H}\cdot\nabla_i \zeta$ are small, in which case eqn
+\ref{eq:WODE_exact} is then reducible to
+\begin{align}
+  W''(r)+3\frac{W'(r)}{r}-\lambda W(r)+\frac{\mathcal{V}'(r)}{2r}=0
+\end{align}
+where $\lambda=D^r\sigma^2/(2D^t)$.
+
+The second option is to say that, within the sum over the index $k$ in eqn
+\ref{eq:WODE_exact}, the terms are essentially averaging out to zero unless $k=j$,
+so
+\begin{align}
+  \bm{r}_{ik}\cdot\bm{u}_{ij}&\approx\delta_{jk}\bm{r}_{ik}\cdot\bm{u}_{ij},\\
+  \bm{r}_{ik}\cdot\bm{r}_{ik}&\approx\delta_{jk}\bm{r}_{ik}\cdot\bm{r}_{ij}.
+\end{align}
+Inserting this approximation into eqn \ref{eq:WODE_exact} then yields
+\begin{align}
+  W''(r)+W'(r)\bigg(\frac{3}{r}-\mathcal{V}'(r)\bigg)-\bigg(\lambda
+  + \frac{\mathcal{V}'(r)}{r}\bigg) W(r)+\frac{\mathcal{V}'(r)}{2r}=0.
+\end{align}
+
+\begin{comment}
 \subsubsection{Isotropic distribution function.}
 
 I will constrain $\hat{\rho}(\bm{x},\theta)$ to be independent of $\theta$, corresponding to
@@ -686,7 +830,7 @@ since $\int_0^{2\pi} \cos\phi_v d\phi_v=0$. This means that the only possible op
 eqn \ref{eq:constantdensity_not_integrated_condition} is to have $b(r)=\mathcal{V}(r)$. This makes
 me think we might need to change our assumptions on the form of $h$ being independent of
 $\{\theta_i\}$.
-
+\end{comment}
     
 
 
