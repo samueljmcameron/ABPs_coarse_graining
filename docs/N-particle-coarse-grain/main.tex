@@ -495,17 +495,42 @@ be zero by symmetry. With this in mind, I can see from both three-sum terms in e
 \ref{eq:WODE_exact} that both have vector functions which are spherically symmetric, the
 first being 
 \begin{align}
-  \frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W'(r_{ij})\frac{\bm{r}_{ik},
+  \frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W'(r_{ij})\bm{r}_{ik},
 \end{align}
 and the second simply $\bm{r}_{ij}$. 
-    
 
-\ref{eq:WODE_exact} is then reducible to
-\begin{align}
+Eqn \ref{eq:WODE_exact} is then reducible to
+\begin{align}\label{eq:WODE_isotropic}
   W''(r)+3\frac{W'(r)}{r}-\lambda W(r)+\frac{\mathcal{V}'(r)}{2r}=0
 \end{align}
-where $\lambda=D^r\sigma^2/(2D^t)$.
+where $\lambda=D^r\sigma^2/(2D^t)$. The solution to the homogeneous part of this equation
+is
+\begin{align}
+  W_h(r)=a_1\frac{J_1(i\sqrt{\lambda}r)}{r}+a_2\frac{Y_1(-i\sqrt{\lambda}r)}{r},
+\end{align}
+where
+\begin{align}
+  J_1(z) =& \frac{1}{\pi}\int_0^{\pi}\cos(z\sin\theta-\theta)d\theta,\\
+  Y_1(z) =& \frac{1}{\pi}\int_0^{\pi}\sin(z\sin\theta-\theta)d\theta\nonumber\\
+          &-\frac{1}{\pi}\int_0^{\pi}\cos(t)\exp(-z\sinh t)dt,\:\:Re(z)>0.\\
+\end{align}
+I can re-write this in terms of the modified bessel functions of the first and second kinds,
+using
+\begin{align}
+  J_1(ix) &= i I_1(x),\\
+  Y_1(ix) &= \frac{2i}{\pi}K_1(x)-I_1(x).
+\end{align}
+Therefore, the homogeneous solution of eqn \ref{eq:WODE_isotropic} can be written as
+\begin{align}
+  W_h(r) = c_1\frac{I_1(\sqrt{\lambda}r)}{r} + c_2\frac{K_1(-\sqrt{\lambda}r)}{r}.
+\end{align}
 
+  
+  
+
+
+
+\begin{comment}
 The second option is to say that, within the sum over the index $k$ in eqn
 \ref{eq:WODE_exact}, the terms are essentially averaging out to zero unless $k=j$,
 so
@@ -518,6 +543,7 @@ Inserting this approximation into eqn \ref{eq:WODE_exact} then yields
   W''(r)+W'(r)\bigg(\frac{3}{r}-\mathcal{V}'(r)\bigg)-\bigg(\lambda
   + \frac{\mathcal{V}'(r)}{r}\bigg) W(r)+\frac{\mathcal{V}'(r)}{2r}=0.
 \end{align}
+\end{comment}
 
 \subsection{Initial conditions: Minimum distance of interaction}
 

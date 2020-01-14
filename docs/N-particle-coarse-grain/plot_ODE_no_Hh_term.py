@@ -2,9 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
         
 
-def f(t,y,l0,cutoff):
+def f(t,y,l0,usepotential):
 
-    if t < cutoff:
+    cutoff = 2**(1/6)
+    
+    if t < cutoff and usepotential:
         v0 = 4*(1/t**12-1/t**6)+1
     else:
         v0 = 0
@@ -20,28 +22,39 @@ from scipy.integrate import ode
 
 
 
-t0 = 0.5
+t0 = 1
 tf = 1000
-dt = 0.5
-
-l0 = 1.0
-cutoff = 2**(1/6)
-
+num = 5000
 
 r = ode(f,jac).set_integrator('vode',method='bdf',with_jacobian=True)
 
-def evaluate_ode(y0,l0,cutoff):
+def evaluate_ode(y0,l0,usepotential):
 
-    r.set_initial_value(y0,t0).set_f_params(l0,cutoff).set_jac_params(l0)
+    r.set_initial_value(y0,t0).set_f_params(l0,usepotential).set_jac_params(l0)
 
-    while r.successful() and r.t > tf:
+    dt = (tf-t0)/num
+    
+    y = np.empty([num,2],float)
+
+    count = 0
+    
+    y[count,:] = y0
+    
+    
+    while r.successful() and r.t < tf:
         
         r.integrate(r.t+dt)
 
-    return r.y
+        y[count,:] = r.y
+        
+
+    return y
 
 if __name__=="__main__":
 
+
+    y0 = 
+    y = evaluate_ode(
     
     
     fig,axarr = plt.subplots(2)
