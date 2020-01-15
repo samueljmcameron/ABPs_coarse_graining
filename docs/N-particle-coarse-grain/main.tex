@@ -303,9 +303,6 @@ will choose the (repulsive) Weeks-Chandler-Anderson (WCA) interaction,
 \newpage
 \section{Coarse-graining the steady $h(\bm{x})$ function.}
 
-In this section, I will try several variational guesses to approximate the steady-state $h$
-function.
-
 Generically, we expect that the microscopic $h$ function will be invariant under translations,
 so
 \begin{align}
@@ -328,7 +325,7 @@ The only way to generically have all of these features is to have
 \end{align}
 where $\bm{u}_i = (\cos\theta_i,\sin\theta_i)$.
 
-\subsection{Perturbative guess for coupled $h$ function.}
+\subsection{Non-dimensionalisation.}
 
 Before doing this calculation, I will write everything in dimensionless form, so
 \begin{align}\label{eq:dim_ss}
@@ -349,33 +346,50 @@ Here, $\sigma$ is some microscopic length scale defined the Hamiltonian
 $\mathcal{H}$, and everything is dimensionless. When $f^P=0$, the solution
 is just $h=\mathcal{H}$ as expected.
 
-I will take a perturbative guess to the solution, with $\epsilon=f^P\sigma\beta$
-as my perturbation parameter. So, my guess will be
-\begin{align}\label{eq:hperturb}
-  h(\epsilon) = \mathcal{H}
-  + \epsilon\frac{\partial h}{\partial \epsilon}\bigg|_{\epsilon=0}.
+If $\tilde{x}$ are the dimensional variables, then
+\begin{align}
+  \tilde{\mathcal{H}} &= \beta^{-1}\mathcal{H},\\
+  \tilde{h} &= h,\\
+  \tilde{\bm{r}} &= \sigma\bm{r}.
 \end{align}
 
-Differentiating eqn \ref{eq:dim_ss} with respect to $\epsilon$ gives
+I will also define
+\begin{align}
+  \Pi &= D^r\sigma^2/(2D^t),\\
+  \lambda &= f^P\sigma\beta.
+\end{align}
+  
+                        
+
+\subsection{Perturbative guess for coupled $h$ function.}
+
+I will take a perturbative guess to the solution, with $\lambda=f^P\sigma\beta$
+as my perturbation parameter. So, my guess will be
+\begin{align}\label{eq:hperturb}
+  h(\lambda) = \mathcal{H}
+  + \lambda\frac{\partial h}{\partial \lambda}\bigg|_{\lambda=0}.
+\end{align}
+
+Differentiating eqn \ref{eq:dim_ss} with respect to $\lambda$ gives
 \begin{align}\label{eq:first_perturb_DE}
   0
-  &=\sum_{i=1}^N\big\{\partial_{\epsilon}\mathcal{L}_i^{(0)}(h)
+  &=\sum_{i=1}^N\big\{\partial_{\lambda}\mathcal{L}_i^{(0)}(h)
     + \mathcal{L}_i^{(1)}(h(0))
-    +\epsilon\partial_{\epsilon}\mathcal{L}_i^{(1)}
-    (h)\big\}\bigg|_{\epsilon=0}\nonumber\\
+    +\lambda\partial_{\lambda}\mathcal{L}_i^{(1)}
+    (h)\big\}\bigg|_{\lambda=0}\nonumber\\
   &=\sum_{i=1}^N\big\{2\nabla_i \mathcal{H}\cdot\nabla_i\zeta
     - \nabla_i\mathcal{H}\cdot\nabla_i\zeta
-    -\nabla_i^2\zeta+\frac{D^r\sigma^2}{D^t}
+    -\nabla_i^2\zeta+2\Pi
     \big[2\partial_{\theta_i}\mathcal{H}\partial_{\theta_i}\zeta
     -\partial_{\theta_i}^2\zeta\big]
     + \bm{u}_i\cdot\nabla_i\mathcal{H}
     +(0)\bm{u}_i\cdot\nabla_i\zeta\big\}\nonumber\\
   &=\sum_{i=1}^N\big[\nabla_i \mathcal{H}\cdot\nabla_i\zeta
-    -\nabla_i^2\zeta - \frac{D^r\sigma^2}{D^t}
+    -\nabla_i^2\zeta - 2\Pi
     \partial_{\theta_i}^2\zeta
     + \bm{u}_i\cdot\nabla_i\mathcal{H}\big]
 \end{align}
-where $\zeta\equiv\partial_{\epsilon}h|_{\epsilon=0}$.
+where $\zeta\equiv\partial_{\lambda}h|_{\lambda=0}$.
 
 \subsection{Indistinguishable particles.}
 
@@ -420,7 +434,7 @@ Inserting these into eqn \ref{eq:first_perturb_DE}
     +W(r_{ik})\bm{u}_{ik}\bigg]
     +\sum_{i=1}^N\sum_{j\neq i}^N\bigg[W''(r_{ij})
     +3\frac{W'(r_{ij})}{r_{ij}}\bigg](\bm{u}_{ij}\cdot\bm{r}_{ij})\nonumber\\
-  &-\frac{D^r\sigma^2}{D^t}\sum_{i=1}^N\sum_{j\neq i}^NW(r_{ij})\bm{u}_i\cdot\bm{r}_{ij}
+  &-2\Pi\sum_{i=1}^N\sum_{j\neq i}^NW(r_{ij})\bm{u}_i\cdot\bm{r}_{ij}
    +\sum_{i=1}^N\sum_{j\neq i}^N 
     \mathcal{V}^{\prime}(r_{ij})\frac{\bm{u}_i\cdot\bm{r}_{ij}}{r_{ij}}
 \end{align}
@@ -440,14 +454,14 @@ You can factor this equation a bit, using the result that
      -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W(r_{ik})\bm{u}_{ik}\bigg]
      +\bigg[W''(r_{ij})
      +3\frac{W'(r_{ij})}{r_{ij}}\bigg]\bm{u}_{ij}\nonumber\\
-   &\hphantom{=}-\frac{D^r\sigma^2}{2D^t}W(r_{ij})\bm{u}_{ij}
+   &\hphantom{=}-\Pi W(r_{ij})\bm{u}_{ij}
      +\mathcal{V}^{\prime}(r_{ij})\frac{\bm{u}_{ij}}{2r_{ij}}\bigg\}\nonumber\\
    &=\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\bm{u}_{ij}
      \bigg\{\sum_{k\neq i}^N\bigg[
      -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}
      W'(r_{ij})\frac{\bm{r}_{ik}\cdot\bm{r}_{ij}}{r_{ij}}\bigg]
      +W''(r_{ij})+3\frac{W'(r_{ij})}{r_{ij}}\nonumber\\
-   &\hphantom{=}-\frac{D^r\sigma^2}{2D^t}W(r_{ij})
+   &\hphantom{=}-\Pi W(r_{ij})
      +\frac{\mathcal{V}^{\prime}(r_{ij})}{2r_{ij}}\bigg\}
      -\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\sum_{k\neq i}^N
      \bm{u}_{ik}\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W(r_{ik})
@@ -501,19 +515,24 @@ and the second simply $\bm{r}_{ij}$.
 
 Eqn \ref{eq:WODE_exact} is then reducible to
 \begin{align}\label{eq:WODE_isotropic}
-  W''(r)+3\frac{W'(r)}{r}-\lambda W(r)+\frac{\mathcal{V}'(r)}{2r}=0
+  W''(r)+3\frac{W'(r)}{r}-\Pi W(r)+\frac{\mathcal{V}'(r)}{2r}=0.
 \end{align}
-where $\lambda=D^r\sigma^2/(2D^t)$. The solution to the homogeneous part of this equation
+The solution to the homogeneous part of this equation
 is
 \begin{align}
-  W_h(r)=a_1\frac{J_1(i\sqrt{\lambda}r)}{r}+a_2\frac{Y_1(-i\sqrt{\lambda}r)}{r},
+  W_h(r)=a_1\frac{J_1(i\sqrt{\Pi}r)}{r}-a_2\frac{Y_1(-i\sqrt{\Pi}r)}{r},
 \end{align}
 where
 \begin{align}
-  J_1(z) =& \frac{1}{\pi}\int_0^{\pi}\cos(z\sin\theta-\theta)d\theta,\\
-  Y_1(z) =& \frac{1}{\pi}\int_0^{\pi}\sin(z\sin\theta-\theta)d\theta\nonumber\\
-          &-\frac{1}{\pi}\int_0^{\pi}\cos(t)\exp(-z\sinh t)dt,\:\:Re(z)>0.\\
+  J_n(z) =& \frac{1}{\pi}\int_0^{\pi}\cos(z\sin\theta-n\theta)d\theta,\\
+  Y_n(z) =& -\frac{2\bigg(\frac{1}{2}z\bigg)^{-n}}{\sqrt{\pi}\Gamma\bigg(\frac{1}{2}-n\bigg)}
+            \int_1^{\infty}\frac{\cos(zt)}{(t^2-1)^{n+1/2}}dt.
 \end{align}
+From the latter equation, I can see that $Y(-i\sqrt{\Pi}r)=-Y(i\sqrt{\Pi}r)$, and so
+\begin{align}
+  W_h(r)=a_1\frac{J_1(i\sqrt{\Pi}r)}{r}+a_2\frac{Y_1(i\sqrt{\Pi}r)}{r}.
+\end{align}
+
 I can re-write this in terms of the modified bessel functions of the first and second kinds,
 using
 \begin{align}
@@ -522,13 +541,15 @@ using
 \end{align}
 Therefore, the homogeneous solution of eqn \ref{eq:WODE_isotropic} can be written as
 \begin{align}
-  W_h(r) = c_1\frac{I_1(\sqrt{\lambda}r)}{r} + c_2\frac{K_1(-\sqrt{\lambda}r)}{r}.
+  W_h(r) = c_1\frac{I_1(\sqrt{\Pi}r)}{r} + c_2\frac{K_1(\sqrt{\Pi}r)}{r}.
 \end{align}
-
+Now, I want $W_h(r\to\infty)\to0$, so $c_1=0$. This leaves
+\begin{align}\label{eq:Whomo}
+  W_h(r) = c_2\frac{K_1(\sqrt{\Pi}r)}{r}.
+\end{align}
   
-  
 
-
+%%%% short comment %%%%%%
 
 \begin{comment}
 The second option is to say that, within the sum over the index $k$ in eqn
@@ -540,10 +561,12 @@ so
 \end{align}
 Inserting this approximation into eqn \ref{eq:WODE_exact} then yields
 \begin{align}
-  W''(r)+W'(r)\bigg(\frac{3}{r}-\mathcal{V}'(r)\bigg)-\bigg(\lambda
+  W''(r)+W'(r)\bigg(\frac{3}{r}-\mathcal{V}'(r)\bigg)-\bigg(\Pi
   + \frac{\mathcal{V}'(r)}{r}\bigg) W(r)+\frac{\mathcal{V}'(r)}{2r}=0.
 \end{align}
 \end{comment}
+
+%%%% end short comment %%%%%%
 
 \subsection{Initial conditions: Minimum distance of interaction}
 
@@ -555,10 +578,10 @@ between particles.
 Consider three particles which are all moving toward a single, central point at the origin.
 The (dimensionless) velocity of each particle is
 \begin{align}
-  \bm{v}_i&=\nabla h -\nabla_i\mathcal{H} + \epsilon \bm{\hat{u}}_i\nonumber\\
-          &=\epsilon \bigg(\bm{\hat{u}}_i-\nabla_i\sum_{j=1}^N\sum_{k=1}^{j-1}W(r_{jk})
+  \bm{v}_i&=\nabla h -\nabla_i\mathcal{H} + \lambda \bm{\hat{u}}_i\nonumber\\
+          &=\lambda \bigg(\bm{\hat{u}}_i-\nabla_i\sum_{j=1}^N\sum_{k=1}^{j-1}W(r_{jk})
             \bm{r}_{jk}\cdot\bm{u}_{jk}\bigg)\nonumber\\
-          &=\epsilon \bigg(\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[W'(r_{ij})
+          &=\lambda \bigg(\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[W'(r_{ij})
             (\bm{u}_{ij}\cdot\bm{r}_{ij})\frac{\bm{r}_{ij}}{r_{ij}}
             +W(r_{ij})\bm{u}_{ij}\bigg]\bigg),
 \end{align}
@@ -570,7 +593,16 @@ at $r_0$ is
   1-3W'(r_0)r_0-3W(r_0)=0,
 \end{align}
 which can be checked for any of the two particle pairs (e.g. $\bm{v}_1-\bm{v}_2$, see file
-''3-hard-spheres-BC.png'' in \textit{ipadCalcs} folder).
+''3-hard-spheres-BC.png'' in \textit{ipadCalcs} folder). Now, in dimensionless variables,
+we can set $r_0=1$.
+
+Thus, inserting eqn \ref{eq:Whomo} into the boundary condition, $c_2$ is uniquely determined
+as
+\begin{align}
+  c_2 &= \frac{1}{3}\frac{1}{\sqrt{\Pi}K_1'(\sqrt{\Pi})}\nonumber\\
+      &= \frac{-1}{3\sqrt{\Pi}(K_0(\sqrt{\Pi})
+        +(\sqrt{\Pi})^{-1}K_1(\sqrt{\Pi}))}.
+\end{align}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Below are old calculations. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
