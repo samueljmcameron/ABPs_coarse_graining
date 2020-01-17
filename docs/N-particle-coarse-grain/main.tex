@@ -1,30 +1,40 @@
-\documentclass{article}
-\usepackage[hmargin=1.25cm,vmargin=2.5cm]{geometry}
+\documentclass[twocolumn,amsmath,amssymb,aps]{revtex4-1}%{article}
+%\usepackage[hmargin=1.25cm,vmargin=2.5cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{bm}
-\usepackage{amsmath}
-\usepackage{amssymb}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
 \usepackage{comment}
 \usepackage{graphicx}
-
-\title{calculation: coarse-graining active brownian particles}
-\author{Sam Cameron}
-\date{\today}
+\usepackage{dcolumn}
+\usepackage{subfig}
 
 \begin{document}
 
+\title{calculation: coarse-graining active brownian particles}
+\author{Sam Cameron}
+\affiliation{%
+  University of Bristol}%
+\date{\today}
+
+\begin{abstract}
+\end{abstract}
+
 \maketitle
 
-\section{Writing the active brownian particles equations of motion into the correct form}
+\section{Writing the active brownian particles equations of motion into
+  the correct form}
 
 The equations of motion for active brownian particles are:
-
-\begin{align}
-  \frac{d\bm{r}_i}{dt}&=\frac{D^t}{k_BT}\big(\bm{F}_i
-                        +f^P\bm{P}_i\big)
-                        +\sqrt{2D^t}\tilde{\bm{u}}_i^t,\label{eq:micro_pos}\\
+\begin{subequations}
+  \label{eqs:basicABPsODEs}
+  \begin{align}
+    \frac{d\bm{r}_i}{dt}&=\beta D^t\big(\bm{F}_i
+    +f^P\bm{P}_i\big)
+    +\sqrt{2D^t}\tilde{\bm{u}}_i,\label{eq:micro_pos}\\
     \frac{d\theta_i}{dt}&=\sqrt{2D^r}w_i.\label{eq:micro_theta}
-\end{align}
+  \end{align}
+\end{subequations}
 where $\bm{r}_i=(x_i,y_i)$ are the particle positions,
 $\bm{P}_i=(\cos\theta_i,\sin\theta_i)$ are the particle orientations,
 and $\tilde{\bm{u}}_i=(\tilde{u}_i,v_i)$, $w_i$ are Gaussian white noise
@@ -35,331 +45,157 @@ $\bm{s}=(u_i,v_i,w_i)$,
   \delta_{ij}\delta(t-t^{\prime}).
 \end{align}.
 
-Now, I can define a vector of length $3N$ with components
-\begin{align}
-  \bm{r}=(\bm{r}^{(1)},\bm{r}^{(2)},\cdots,\bm{r}^{(N)},\theta_1,\theta_2,\cdots,
-  \theta_N).
-\end{align}
-
-This will then give the differential equation
-\begin{align}
-  \frac{d\bm{r}}{dt}=\bm{F}(\bm{r})+\bm{v}(\bm{r})
-  +\sqrt{2\tilde{D}_{\alpha\beta}}u_{\beta}(t),
-\end{align}
-where $\tilde{D}_{\alpha\beta}$ is diagonal, and the values of the diagonal are
-$D^t$ for the first $2N$ terms, and $D^r$ for the last $N$ terms.
-
-Next, I will define
-\begin{align}
-  \bm{x}&\equiv(x_1,x_2,\cdots,x_{3N}),\\
-  \nabla&\equiv(\partial_1,\partial_2,\cdots,\partial_{3N}).
-\end{align}
-
-as well as the stochastic probability density operator
-\begin{align}
-  \hat{\rho}(\bm{x},t)=\delta(\bm{x}-\bm{r}(t)).
-\end{align}
-
-Taking the partial derivative of this with respect to time gives
-\begin{align}
-  \frac{\partial\hat{\rho}}{\partial t}&=-(\nabla_{\bm{x}}\delta(\bm{x}-\bm{r}(t))
-                                         \cdot\frac{d\bm{r}}{dt}\nonumber\\
-                                       &=-\nabla_{\bm{x}}\cdot\bigg(\frac{d\bm{r}}{dt}
-                                         \delta(\bm{x}-\bm{r}(t)\bigg)\nonumber\\
-                                       &=-\nabla_{\bm{x}}\cdot\hat{\bm{j}}(\bm{x},t),
-\end{align}
-where I have defined the stochastic current operator
-\begin{align}
-  \hat{\bm{j}}(\bm{x},t)&\equiv\bm{F}(\bm{x})\delta(\bm{x}-\bm{r}(t))
-                          +\bm{v}(\bm{x})\delta(\bm{x}-\bm{r}(t))
-                          +\sqrt{2\tilde{D}_{\alpha\beta}}u_{\beta}(t)
-                          \delta(\bm{x}-\bm{r}(t))\nonumber\\
-                        &=\bm{F}(\bm{x})\hat{\rho}(\bm{x},t)
-                          +\bm{v}(\bm{x})\hat{\rho}(\bm{x},t)
-                          +\sqrt{2\tilde{D}_{\alpha\beta}}u_{\beta}(t)\hat{\rho}(\bm{x},t).
-\end{align}
-
-You can average $\hat{\rho}(\bm{x},t)$ over the fluctuations $\bm{u}(t)$, and get the
-resulting density
-\begin{align}
-  P(\bm{x},t)=<\hat{\rho}(\bm{x},t)>,
-\end{align}
-where I have used the definition that for some observable $\hat{\mathcal{O}}$,
-\begin{align}
-  <\hat{\mathcal{O}}(\bm{u}(t))>=\frac{1}{Z}\int\mathcal{D}\bm{u}
-  \hat{\mathcal{O}}(\bm{u}(t))\exp\bigg(-\frac{1}{2}\int_0^Tdt(\bm{u}(t))^2\bigg).
-\end{align}
-From this, I can calculate that noise-averaged current as
-\begin{align}
-  \bm{J}(\bm{x},t)=\bm{F}(\bm{x})P(\bm{x},t)+\bm{v}(\bm{x})P(\bm{x},t)
-  +\sqrt{2\tilde{D}_{\alpha\beta}}<u_{\beta}(t)\hat{\rho}(\bm{x},t)>.
-\end{align}
-
-In order to write the noise term above in terms of $P(\bm{x},t)$, I will use the properties
-of the Dirac-delta function, namely,
-\begin{align}
-  \delta(\bm{x})=\int\frac{d^dk}{(2\pi)^d}\exp(-ik_jx_j),
-\end{align}
-to write
-\begin{align}
-  <u_{\beta}\hat{\rho}(\bm{x},t)>=\int\frac{d^dk}{(2\pi)^d}u_{\beta}(t)
-  \exp(-ik_j(x_j-r_j(t))).
-\end{align}
-
-Since correlations between the noise
-$<u_{\alpha}(t)u_{\beta}(t)>=\delta_{\alpha\beta}\delta(t-t^{\prime})$ only occur for
-fluctuations happening at the same time, we can write
-\begin{align}
-  \bm{r}(t)=\bm{r}(t-\Delta t)+\int_{t-\Delta t}^tdt_1[\bm{F}(\bm{r}(t_1))
-  +\bm{v}{\bm{r}(t_1)}+\sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}(t_1)]
-\end{align}
-as $\Delta t\to0$. Then, since
-\begin{align}
-  \exp\bigg[\int_{t-\Delta t}^tdt_1(\bm{F}(\bm{r}(t_1)
-  +\bm{v}({\bm{r}(t_1)})\bigg]=1+O(\Delta t),
-\end{align}
-this can be written as
-\begin{align}
-  <u_{\beta}(t)\exp(-ik_jr_j(t))>=&\bigg<u_{\beta}(t)\exp\bigg[-ik_jr_j(t-\Delta t)-ik_j
-                                    \int_{t-\Delta t}^tdt_1(F_j(\bm{r}(t_1)
-                                    +v_j{\bm{r}(t_1)}\nonumber\\
-                                  &+\sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}
-                                    (t_1))\bigg]\bigg>\nonumber\\
-  =&\bigg<u_{\beta}(t)\exp(-ik_jr_j(t-\Delta t))
-     \bigg[1-ik_j\int_{t-\Delta t}^tdt_1
-     \sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>+O(\Delta t).
-\end{align}
-
-Next, since $t-\Delta t<t_1,t$, there won't be any correlations between the
-fluctuations at earlier times and those at $t$, so using the fact that for uncorrelated
-functions $<AB>=<A><B>$, I get
-\begin{align}
-  <u_{\beta}(t)\exp(-ik_jr_j(t))>&=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
-                                   \bigg<u_{\beta}(t)\bigg[1-ik_j\int_{t-\Delta t}^tdt_1
-                                   \sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>
-                                   +O(\Delta t)\nonumber\\
-                                 &=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
-                                   \bigg(<u_{\beta}(t)>
-                                   -\bigg<ik_j\int_{t-\Delta t}^tdt_1
-                                   \sqrt{2\tilde{D}_{j\gamma}}u_{\gamma}(t_1)
-                                   u_{\beta}(t)\bigg>\bigg)
-                                   +O(\Delta t)\nonumber\\
-                                 &=-\bigg<ik_j\sqrt{2\tilde{D}_{j\gamma}}\int_{t-\Delta t}^tdt_1
-                                   \delta_{\beta \gamma}\delta(t-t_1)\bigg>
-                                   \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
-                                   +O(\Delta t)\nonumber\\
-                                 &=-\bigg<ik_j\sqrt{2\tilde{D}_{j\beta}}\int_{t-\Delta t}^tdt_1
-                                   \delta(t-t_1)\bigg>
-                                   \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
-                                   +O(\Delta t)\nonumber\\
-                                 &=-\bigg<ik_j\sqrt{2\tilde{D}_{j\beta}}\int_0^{\Delta t}du
-                                   \delta(u)\bigg>
-                                   \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
-                                   +O(\Delta t)\nonumber\\
-                                 &=-\frac{1}{2}ik_j\sqrt{2\tilde{D}_{j\beta}}
-                                   \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
-                                   +O(\Delta t)\nonumber\\.
-\end{align}
-Taking the limit as $\Delta t\to0$, this becomes
-\begin{align}
-  <u_{\beta}(t)\exp(-ik_jr_j(t)>=-\frac{1}{2}ik_j\sqrt{2\tilde{D}_{j\beta}}
-  \bigg<\exp(-ik_jr_j(t))\bigg>.
-\end{align}
-Taking the inverse Fourier transform then gives
-\begin{align}
-  <u_{\beta}(t)\hat{\rho}(\bm{x},t)>=-\frac{1}{2}\sqrt{2\tilde{D}_{j\beta}}
-  \partial_jP(\bm{x},t).
-\end{align}
-Finally, inserting this into the current I get
-\begin{align}
-  J_{\alpha}(\bm{x},t)&=F_{\alpha}(\bm{x})P(\bm{x},t)+v_{\alpha}(\bm{x})P(\bm{x},t)
-                        +\sqrt{2\tilde{D}_{\alpha\beta}}(-\frac{1}{2}\sqrt{2\tilde{D}_{j\beta}}
-                        \partial_jP(\bm{x},t))\nonumber\\
-                      &=F_{\alpha}(\bm{x})P(\bm{x},t)+v_{\alpha}(\bm{x})P(\bm{x},t)
-                        -\sqrt{\tilde{D}_{\alpha\beta}\tilde{D}_{j\beta}}
-                        \partial_jP(\bm{x},t))
-\end{align}
-
-Since in our case, $\tilde{D}_{\alpha\beta}$ is diagonal, this just becomes
-\begin{align}\label{eq:Nparticlecurrent}
-  \bm{J}(\bm{x},t)&=\bm{F}(\bm{x})P(\bm{x},t)+\bm{v}(\bm{x})P(\bm{x},t)
-                    -\bm{\tilde{D}}\cdot\nabla P(\bm{x},t).
-\end{align}
-
-Finally, I get the desired result of the section, which is
+This is equivalent to a Fokker-Planck equation for the $N$-body Fokker-Planck
+equation (see appendix \ref{app:fokkerplanck})
 \begin{align}\label{eq:NparticleFP}
-  \frac{\partial P}{\partial t} + \nabla_{\bm{x}}\cdot\big(\bm{F}(\bm{x})P(\bm{x},t)
-  +\bm{v}(\bm{x})P(\bm{x},t)-\bm{\tilde{D}}\cdot\nabla P(\bm{x},t)\big)=0
+  \frac{\partial P}{\partial t} +
+  \nabla_{\bm{x}}\cdot\bm{J}=0.
 \end{align}
-
-
-\subsection{Algebraic conditions on steady states.}
-
-In this section, I am interested in determining the one particle density function, i.e. in
-terms of $\bm{r}_1$ (not the angular components). To start with, I will remind myself that
-\begin{align}
-  P(\bm{x},t)\equiv P(\bm{r}_1,\bm{r}_2,\cdots,\bm{r}_N,\theta_1,\theta_2,\cdots,\theta_N,t)
+The current $\bm{J}$ is
+\begin{align}\label{eq:Nparticlecurrent}
+  \bm{J}(\bm{x},t)=
+  &\bm{D}\cdot(\beta\bm{F}(\bm{x})P(\bm{x},t)
+  +\beta\bm{v}(\bm{x})P(\bm{x},t)\nonumber\\
+  &-\nabla P(\bm{x},t)).
 \end{align}
-
-I will then split the the current of eqn \ref{eq:Nparticlecurrent} into two parts, a part which
-cannot be written as a gradient term, and a part that can. The part that cannot be written as
-a gradient term is just
-\begin{align}\label{eq:dissipative_force}
-  \bm{v}(\bm{x})&=\frac{D^t}{k_BT}f^P(\cos\theta_1,\sin\theta_1,\cos\theta_2,
-                  \sin\theta_2,\cdots,\cos\theta_N,\sin\theta_N,0,0,\dots,0)^T\nonumber\\
-                &=\frac{1}{k_BT}\bm{\tilde{D}}\cdot \bm{u}(\{\theta_i\})
-\end{align}
-
-Before writing out the gradient term, I will first note that I am considering just two-body
-interactions,
+where $\bm{D}$ is a diagonal, and equal to $D^t$ for the first $2N$ components,
+and equal to $D^r$ for the last $N$.
+The vector $\bm{F}$ is for simplicity just two-body interactions, and so is a
+concatenation of the two-component vectors $\bm{F}_i$ from eqn
+\ref{eq:micro_pos} along with a final $N$ components all equal to zero (so the
+total number of components of $\bm{F}$ is $3N$, but only the first $2N$ are
+non-zero). The two body interactions will be written as
 \begin{align}\label{eq:general_conservative_force}
-  \bm{F}(\bm{x})&=-\nabla_{\bm{x}}\mathcal{H}(\bm{x})\nonumber\\
-                &=-\nabla_{\bm{x}}\sum_{i<j}^N\mathcal{V}(r_{ij}),
+  \bm{F}_i&=-\nabla_{i}\mathcal{H}(\bm{x})\nonumber\\
+                &=-\nabla_{i}\sum_{j<k}^N\mathcal{V}(r_{jk}),
 \end{align}
 where $r_{ij}=|\bm{r}_i-\bm{r}_j|$.
-
-Then, I can re-write eqn \ref{eq:Nparticlecurrent} as
-\begin{align}\label{eq:Nparticlewithpotential}
-  \bm{J}(\bm{x},t)&=-\bm{\tilde{D}}
-                    \cdot\big(\nabla_{\bm{x}}(\frac{1}{k_BT}\mathcal{H}(\{\bm{r}_i\})
-                    P(\bm{x},t)
-                    +P(\bm{x},t))
-                    -\frac{1}{k_BT}\bm{u}(\{\theta_i\})P(\bm{x},t)\big).
+The vector $\bm{v}$ cannot be represented
+as the gradient of a scalar, and is explicitly given by a concatenation of two-
+component vectors $\bm{v}_i$, and then a final $N$ zeros added on. The
+$\bm{v}_i$ take the form
+\begin{align}\label{eq:dissipative_force}
+  \bm{v}_i =f^P\bm{u}(\theta_i)
 \end{align}
+where $\bm{u}(\theta)=(\cos\theta,\sin\theta)$.
 
-I will now redefine
+It can be shown \cite{liverpool2018nonequilibrium} that there exists a
+generalized steady state of the form
 \begin{align}
-  \bm{D}=\beta\bm{\tilde{D}},
+  P_{ss}=\exp(-h(\bm{x})).
 \end{align}
-where $\beta^{-1}=k_BT$.
-
-
-Finally, I can write the Fokker-Planck equation as
-\begin{align}
-  \frac{\partial P}{\partial t}=\nabla_{\bm{x}}\cdot\big(\bm{D}
-  \big[\beta^{-1}\nabla_{\bm{x}}P(\bm{x},t)+P(\bm{x},t)(\nabla_{\bm{x}}
-  \mathcal{H}(\{\bm{r}_i\})-\bm{v}(\{\theta_i\}))\big]\big)
+For ABPs, $h(\bm{x})$ satisfies the equation
+\begin{align}\label{eq:steadystatecondition}
+  D^t\beta\sum_{i=1}^{N}L_i(h)
+  +D^r\sum_{i=1}^{N}\big[(\partial_{\theta_i}h)^2
+  -\partial_{\theta_i}^2h\big]=0
 \end{align}
-
-From \cite{liverpool2018nonequilibrium}, I then know that there exists a generalized steady
-state of the form
-\begin{align}
-  P_{ss}=\exp(-h(\bm{x}))
-\end{align}
-where $h(\bm{x})$ satisfies the equation
-\begin{align}\label{eq:ss_condition}
-  \sum_{i=1}^{3N}D_iL_i(h)=\bm{0},
-\end{align}
-where $D_i$ are the (diagonal) components of $\bm{D}$,
-\begin{align}
-  D_i =
-  \begin{cases}
-    D^t\beta,&i\leq 2N,\\
-    D^r\beta,&i>2N
-  \end{cases}
-\end{align}
-and
+where
 \begin{align}\label{eq:L_i}
-  L_i(h) = \beta^{-1}(\partial_ih)^2+\partial_i^2\mathcal{H}
-  +(v_i-\partial_i\mathcal{H})\partial_ih-\beta^{-1}\partial_i^2h-\partial_iv_i.
+  L_i(h) =& \beta^{-1}(\nabla_ih)^2+\nabla_i^2\mathcal{H}
+  +(\bm{v}_i-\nabla_i\mathcal{H})\cdot\nabla_ih\nonumber\\
+  &-\beta^{-1}\nabla_i^2h-\nabla_i\cdot\bm{v}_i.
 \end{align}
 
-I can explicitly calculate the terms not involving $h$ in eqn \ref{eq:L_i}, using eqns
-\ref{eq:general_conservative_force} and eqn \ref{eq:dissipative_force}. I do this now:
+I can explicitly calculate the terms not involving $h$ in eqn \ref{eq:L_i}
+using eqn \ref{eq:general_conservative_force}, which gives the relevant
+derivatives of $\mathcal{H}$ and $\bm{v}_i$,
 \begin{subequations}
   \label{eqs:partials_of_L_i}
   \begin{align}
     \nabla_{\alpha}\mathcal{H}
     &=\sum_{i\neq\alpha}^N\mathcal{V}^{\prime}
-      (r_{\alpha i})\frac{\bm{r}_{\alpha i}}{r_{\alpha i}},
-      \:\:\:\alpha=1,2,...,N\label{eq:partial_H_of_L_i}\\
+    (r_{\alpha i})\frac{\bm{r}_{\alpha i}}{r_{\alpha i}},
+    \label{eq:partial_H_of_L_i}\\
     \nabla_{\alpha}^2\mathcal{H}
-    &=\sum_{i\neq\alpha}^N\bigg[\frac{\mathcal{V}^{\prime}(r_{\alpha i})}{r_{\alpha i}}
+    &=\sum_{i\neq\alpha}^N\bigg[\frac{\mathcal{V}^{\prime}
+        (r_{\alpha i})}{r_{\alpha i}}
       +\mathcal{V}^{\prime\prime}(r_{\alpha i})\bigg],
-      \:\:\:\alpha=1,2,...,N\label{eq:partialsq_H_of_L_i}\\
-    \partial_i v_i
-    &= 0\label{eq:partial_v_of_L_i}
+    \label{eq:partialsq_H_of_L_i}\\
+    \nabla_i\cdot \bm{v}_i
+    &= 0.\label{eq:partial_v_of_L_i}
   \end{align}
 \end{subequations}
 
-From these results I can see immediately that eqn \ref{eq:ss_condition} simplifies to
-\begin{align}\label{eq:steadystatecondition}
-  D^t\beta\sum_{i=1}^{2N}L_i(h)+D^r\sum_{i=1}^{N}\big[(\partial_{\theta_i}h)^2
-  -\partial_{\theta_i}^2h\big]=0
-\end{align}
-
-To actually do any calculations, an interaction form for $\mathcal{H}$ must be chosen. Since we
-are interested in capturing motility induced phase separation (MIPS) in the simplest form, I
-will choose the (repulsive) Weeks-Chandler-Anderson (WCA) interaction,
+To actually do any calculations, an interaction form for $\mathcal{H}$ must
+be chosen. Since we are interested in capturing motility induced phase
+separation (MIPS) in the simplest form, I will choose the (repulsive)
+Weeks-Chandler-Anderson (WCA) interaction,
 \begin{equation}\label{eq:WCAapprox}
   \mathcal{V}_{ij} =
   \begin{cases}
     4\epsilon\bigg[\bigg(\frac{\sigma}{r^{ij}}\bigg)^{12}
-    -\bigg(\frac{\sigma}{r^{ij}}\bigg)^6\bigg]+\epsilon, & r<2^{\frac{1}{6}}\sigma \\
+      -\bigg(\frac{\sigma}{r^{ij}}\bigg)^6\bigg]+\epsilon,
+    & r<2^{\frac{1}{6}}\sigma \\
     0, & \mathrm{otherwise}.
   \end{cases}
 \end{equation}
 
-\newpage
-\section{Coarse-graining the steady $h(\bm{x})$ function.}
+\section{Computing the steady $h(\bm{x})$ function.}
 
-Generically, we expect that the microscopic $h$ function will be invariant under translations,
-so
+Generically, we expect that the microscopic $h$ function will be invariant
+under translations, so
 \begin{align}
   h(\{\bm{r}_i+\bm{T}\},\{\theta_i\}) = h(\{\bm{r}_i\},\{\theta_i\}).
 \end{align}
 Further to this invariance, the system must also be invariant
-under full rotations, and so
+under arbitrary rotations, and so
 \begin{align}
   h(\{\bm{Q}(\phi)\bm{r}_i\},\{\theta_i+\phi\})
   =h(\{\bm{r}_i\},\{\theta_i\}).
 \end{align}
-
-And finally, interchanging particles should not vary the results, so swapping $\bm{r}_i,\theta_i$
-with $\bm{r}_j,\theta_j$ should leave $h$ invariant.
-
-The only way to generically have all of these features is to have
+The system should also have periodic rotational invariance, so
 \begin{align}
-  h(\{|\bm{r}_i-\bm{r}_j|\},\{|\theta_i-\theta_j|\},
-  \{(\bm{r}_i-\bm{r}_j)\cdot(\bm{u}_i-\bm{u}_j)\})
+  h(\{\bm{r}_i\},\{\theta_i+2\pi\})
+    =h(\{\bm{r}_i\},\{\theta_i\}).
 \end{align}
-where $\bm{u}_i = (\cos\theta_i,\sin\theta_i)$.
+And finally, interchanging particles should not vary the results, so swapping
+$\bm{r}_i,\theta_i$ with $\bm{r}_j,\theta_j$ should leave $h$ invariant.
+
+To generically have all of these features, we require
+\begin{align}
+  h(\{r_{ij}\},\{\bm{\hat{u}}_{ij}\cdot\bm{\hat{u}}_{kl}\},
+  \{\bm{r}_{ij}\cdot\bm{\hat{u}}_{kl}\})
+\end{align}
+where $\bm{\hat{u}}_i = (\cos\theta_i,\sin\theta_i)$.
 
 \subsection{Non-dimensionalisation.}
 
-Before doing this calculation, I will write everything in dimensionless form, so
-\begin{align}\label{eq:dim_ss}
-  \sum_{i=1}^N\big[\mathcal{L}_i^{(0)}(h)+ \frac{f^P\sigma}{\beta^{-1}}
-  \mathcal{L}_i^{(1)}(h)\big] = 0
-\end{align}
-where
-\begin{align}
-  L_i^{(0)}(h)=(\nabla_i h)^2 + \nabla_i^2\mathcal{H}
-  -\nabla_i\mathcal{H}\cdot\nabla_ih-\nabla_i^2h +\frac{D^r\sigma^2}{D^t}
-  \big[(\partial_{\theta_i}h)^2-\partial_{\theta_i}^2h\big],
-\end{align}
-and
-\begin{align}
-  L_i^{(1)}(h)=\bm{u}_i\cdot\nabla_ih.
-\end{align}
-Here, $\sigma$ is some microscopic length scale defined the Hamiltonian
-$\mathcal{H}$, and everything is dimensionless. When $f^P=0$, the solution
-is just $h=\mathcal{H}$ as expected.
-
+Before doing this calculation, I will write everything in dimensionless form.
 If $\tilde{x}$ are the dimensional variables, then
 \begin{align}
   \tilde{\mathcal{H}} &= \beta^{-1}\mathcal{H},\\
   \tilde{h} &= h,\\
-  \tilde{\bm{r}} &= \sigma\bm{r}.
+  \tilde{\bm{r}} &= \sigma\bm{r},\\
+  \tilde{\nabla} &= \sigma^{-1}\nabla.
 \end{align}
-
-I will also define
+Here, $\sigma$ is some microscopic length scale defined in the Hamiltonian
+$\mathcal{H}$. I will also define
 \begin{align}
   \Pi &= D^r\sigma^2/(2D^t),\\
   \lambda &= f^P\sigma\beta.
 \end{align}
-  
-                        
+From this point forward, all variables will be held in their dimensionless
+forms.
+
+
+Then, I can re-write eqn \ref{eq:steadystatecondition} as a sum of terms
+linear and non-linear in $\mathrm{h}$,
+\begin{align}\label{eq:dim_ss}
+  \sum_{i=1}^N\big[\mathcal{L}_i^{(0)}(h)
+    +\lambda\mathcal{L}_i^{(1)}(h)\big] = 0
+\end{align}
+where
+\begin{align}
+  \mathcal{L}_i^{(0)}(h)=&(\nabla_i h)^2 + \nabla_i^2\mathcal{H}
+  -\nabla_i\mathcal{H}\cdot\nabla_ih-\nabla_i^2h\nonumber\\
+  &+\Pi\big[(\partial_{\theta_i}h)^2-\partial_{\theta_i}^2h\big],
+\end{align}
+and
+\begin{align}
+  \mathcal{L}_i^{(1)}(h)=\bm{u}_i\cdot\nabla_ih.
+\end{align}
+When $\lambda = 0$ ($f^P=0$), the solution is just $h=\mathcal{H}$ as expected.
 
 \subsection{Perturbative guess for coupled $h$ function.}
 
@@ -373,31 +209,33 @@ as my perturbation parameter. So, my guess will be
 Differentiating eqn \ref{eq:dim_ss} with respect to $\lambda$ gives
 \begin{align}\label{eq:first_perturb_DE}
   0
-  &=\sum_{i=1}^N\big\{\partial_{\lambda}\mathcal{L}_i^{(0)}(h)
+  =&\sum_{i=1}^N\big\{\partial_{\lambda}\mathcal{L}_i^{(0)}(h)
     + \mathcal{L}_i^{(1)}(h(0))
     +\lambda\partial_{\lambda}\mathcal{L}_i^{(1)}
     (h)\big\}\bigg|_{\lambda=0}\nonumber\\
-  &=\sum_{i=1}^N\big\{2\nabla_i \mathcal{H}\cdot\nabla_i\zeta
+  =&\sum_{i=1}^N\big\{2\nabla_i \mathcal{H}\cdot\nabla_i\zeta
     - \nabla_i\mathcal{H}\cdot\nabla_i\zeta
-    -\nabla_i^2\zeta+2\Pi
-    \big[2\partial_{\theta_i}\mathcal{H}\partial_{\theta_i}\zeta
+    -\nabla_i^2\zeta\nonumber\\
+    &+2\Pi\big[2\partial_{\theta_i}\mathcal{H}\partial_{\theta_i}\zeta
     -\partial_{\theta_i}^2\zeta\big]
     + \bm{u}_i\cdot\nabla_i\mathcal{H}
     +(0)\bm{u}_i\cdot\nabla_i\zeta\big\}\nonumber\\
-  &=\sum_{i=1}^N\big[\nabla_i \mathcal{H}\cdot\nabla_i\zeta
+  =&\sum_{i=1}^N\big[\nabla_i \mathcal{H}\cdot\nabla_i\zeta
     -\nabla_i^2\zeta - 2\Pi
     \partial_{\theta_i}^2\zeta
     + \bm{u}_i\cdot\nabla_i\mathcal{H}\big]
 \end{align}
 where $\zeta\equiv\partial_{\lambda}h|_{\lambda=0}$.
 
-\subsection{Indistinguishable particles.}
-
-I will take a guess for the solution of the form,
+Assuming $h$ is analytic in its variables, I will Taylor expand it to
+first order as
 \begin{align}\label{eq:zetaform}
   \zeta &= -\sum_{i=1}^N\sum_{j=1}^{i-1}
       W(r_{ij})\bm{r}_{ij}\cdot\bm{u}_{ij}.
 \end{align}
+Here, I am neglecting terms of the form $\bm{u}_{ij}\cdot\bm{u}_{ij}$
+\footnote{Still unsure why this represents a non-polar approximation.}.
+
 
 Since, for $i\neq j$,
 \begin{align}
@@ -405,8 +243,10 @@ Since, for $i\neq j$,
   \nabla_j(\bm{r}_{ij}\cdot\bm{u}_{ij}) &= -\bm{u}_{ij},\\
   \nabla_i r_{ij} &=\frac{\bm{r}_{ij}}{r_{ij}},\\
   \nabla_j r_{ij} &=-\frac{\bm{r}_{ij}}{r_{ij}},\\
-  \partial_{\theta_i}^2(\bm{u}_{ij}\cdot\bm{r}_{ij})&=-\bm{u}_i\cdot\bm{r}_{ij},\\
-  \partial_{\theta_i}^2(\bm{u}_{ji}\cdot\bm{r}_{ji})&=\bm{u}_i\cdot\bm{r}_{ji},
+  \partial_{\theta_i}^2(\bm{u}_{ij}\cdot\bm{r}_{ij})
+  &=-\bm{u}_i\cdot\bm{r}_{ij},\\
+  \partial_{\theta_i}^2(\bm{u}_{ji}\cdot\bm{r}_{ji})
+  &=\bm{u}_i\cdot\bm{r}_{ji},
 \end{align}
 the terms are
 \begin{align}
@@ -425,54 +265,58 @@ the terms are
 \end{align}
 
 Inserting these into eqn \ref{eq:first_perturb_DE}
+\begin{widetext}
 \begin{align}
   0=
   &-\sum_{i=1}^N\sum_{j\neq i}^N\sum_{k\neq i}^N
-    \mathcal{V}^{\prime}(r_{ij})\frac{\bm{r}_{ij}}{r_{ij}}
-    \cdot\bigg[W'(r_{ik})
+  \mathcal{V}^{\prime}(r_{ij})\frac{\bm{r}_{ij}}{r_{ij}}
+  \cdot\bigg[W'(r_{ik})
     (\bm{u}_{ik}\cdot\bm{r}_{ik})\frac{\bm{r}_{ik}}{r_{ik}}
     +W(r_{ik})\bm{u}_{ik}\bigg]
-    +\sum_{i=1}^N\sum_{j\neq i}^N\bigg[W''(r_{ij})
+  +\sum_{i=1}^N\sum_{j\neq i}^N\bigg[W''(r_{ij})
     +3\frac{W'(r_{ij})}{r_{ij}}\bigg](\bm{u}_{ij}\cdot\bm{r}_{ij})\nonumber\\
   &-2\Pi\sum_{i=1}^N\sum_{j\neq i}^NW(r_{ij})\bm{u}_i\cdot\bm{r}_{ij}
-   +\sum_{i=1}^N\sum_{j\neq i}^N 
-    \mathcal{V}^{\prime}(r_{ij})\frac{\bm{u}_i\cdot\bm{r}_{ij}}{r_{ij}}
+  +\sum_{i=1}^N\sum_{j\neq i}^N 
+  \mathcal{V}^{\prime}(r_{ij})\frac{\bm{u}_i\cdot\bm{r}_{ij}}{r_{ij}}
 \end{align}
+\end{widetext}
 
 You can factor this equation a bit, using the result that
 \begin{align}
   \sum_{i=1}^N\sum_{j\neq i}f(r_{ij}) \bm{u}_i\cdot\bm{r}_{ij}
   =\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}f(r_{ji})\bm{u}_{ij}\cdot\bm{r}_{ij}
 \end{align}
-  to get
+to get
+\begin{widetext}
 \begin{align}\label{eq:WODE_exact}
-  0&=
-     \sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\bigg\{\sum_{k\neq i}^N\bigg[
-     -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}
-     W'(r_{ij})
-     \cdot\frac{\bm{r}_{ik}\cdot\bm{r}_{ij}}{r_{ij}}\bm{u}_{ij}
-     -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W(r_{ik})\bm{u}_{ik}\bigg]
-     +\bigg[W''(r_{ij})
-     +3\frac{W'(r_{ij})}{r_{ij}}\bigg]\bm{u}_{ij}\nonumber\\
-   &\hphantom{=}-\Pi W(r_{ij})\bm{u}_{ij}
-     +\mathcal{V}^{\prime}(r_{ij})\frac{\bm{u}_{ij}}{2r_{ij}}\bigg\}\nonumber\\
-   &=\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\bm{u}_{ij}
-     \bigg\{\sum_{k\neq i}^N\bigg[
-     -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}
-     W'(r_{ij})\frac{\bm{r}_{ik}\cdot\bm{r}_{ij}}{r_{ij}}\bigg]
-     +W''(r_{ij})+3\frac{W'(r_{ij})}{r_{ij}}\nonumber\\
-   &\hphantom{=}-\Pi W(r_{ij})
-     +\frac{\mathcal{V}^{\prime}(r_{ij})}{2r_{ij}}\bigg\}
-     -\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\sum_{k\neq i}^N
-     \bm{u}_{ik}\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W(r_{ik})
+  0=
+  &\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\bigg\{\sum_{k\neq i}^N\bigg[
+    -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}
+    W'(r_{ij})
+    \cdot\frac{\bm{r}_{ik}\cdot\bm{r}_{ij}}{r_{ij}}\bm{u}_{ij}
+    -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W(r_{ik})\bm{u}_{ik}\bigg]
+  +\bigg[W''(r_{ij})
+    +3\frac{W'(r_{ij})}{r_{ij}}\bigg]\bm{u}_{ij}\nonumber\\
+  &-\Pi W(r_{ij})\bm{u}_{ij}
+  +\mathcal{V}^{\prime}(r_{ij})\frac{\bm{u}_{ij}}{2r_{ij}}\bigg\}\nonumber\\
+  =&\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\bm{u}_{ij}
+  \bigg\{\sum_{k\neq i}^N\bigg[
+    -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}
+    W'(r_{ij})\frac{\bm{r}_{ik}\cdot\bm{r}_{ij}}{r_{ij}}\bigg]
+  +W''(r_{ij})+3\frac{W'(r_{ij})}{r_{ij}}\nonumber\\
+  &-\Pi W(r_{ij})
+  +\frac{\mathcal{V}^{\prime}(r_{ij})}{2r_{ij}}\bigg\}
+  -\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\sum_{k\neq i}^N
+  \bm{u}_{ik}\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W(r_{ik})
 \end{align}
-
-So far, the approximations we have made in calculating $h$ are that for small activity,
-$h$ is perturbatively close to $\mathcal{H}$, and we have taken a lowest order guess in
-what this perturbative term is, in terms of some arbitrary function $W(r_{ij})$. Now, to
-be able to get some sort of solution for eqn \ref{eq:WODE_exact}, we need to make some
-further approximation. The way forward is to assume that the system has translational and
-rotational invariance in its pairwise-correlation function.
+\end{widetext}
+So far, the approximations we have made in calculating $h$ are that for
+small activity, $h$ is perturbatively close to $\mathcal{H}$, and we have
+taken a lowest order guess in what this perturbative term is, in terms of some
+arbitrary function $W(r_{ij})$. Now, to be able to get some sort of solution
+for eqn \ref{eq:WODE_exact}, we need to make some further approximation. The
+way forward is to assume that the system has translational and rotational
+invariance in its pairwise-correlation function.
 
 The standard definition of the pairwise-correlation operator is
 \begin{align}
@@ -481,33 +325,36 @@ The standard definition of the pairwise-correlation operator is
     \delta(\bm{x}_2-\bm{r}_j).
 \end{align}
 
-If the system is translationally invariant, then $\bm{r}=\bm{x}_1-\bm{x}_2$ and
+If the system is translationally invariant, then $\bm{r}=\bm{x}_1-\bm{x}_2$
+and
 \begin{align}
   \hat{g}_2(\bm{x}_1,\bm{x}_2)
   &=\hat{g}_2(\bm{r})\nonumber\\
   &=\frac{1}{n^2}\sum_{i=1}^N\sum_{j\neq i}^N\delta(\bm{r}+\bm{x}_2-\bm{r}_i)
-    \delta(\bm{x}_2-\bm{r}_j)\nonumber\\
+  \delta(\bm{x}_2-\bm{r}_j)\nonumber\\
   &=\frac{1}{n^2}\frac{1}{V}\int d^2x_2 \sum_{i=1}^N\sum_{j\neq i}^N
-    \delta(\bm{r}+\bm{x}_2-\bm{r}_i)\delta(\bm{x}_2-\bm{r}_j)\nonumber\\
-  &=\frac{V}{N^2}\sum_{i=1}^N\sum_{j\neq i}\delta(\bm{r}-\bm{r}_{ij})\nonumber\\
+  \delta(\bm{r}+\bm{x}_2-\bm{r}_i)\delta(\bm{x}_2-\bm{r}_j)\nonumber\\
+  &=\frac{V}{N^2}\sum_{i=1}^N\sum_{j\neq i}
+  \delta(\bm{r}-\bm{r}_{ij})\nonumber\\
   &=\frac{V}{N}\sum_{j=1,j\neq i}^N\delta(\bm{r}-\bm{r}_{ij})\nonumber\\
 \end{align}
-where in the last line I have used the fact that the sum over $j$ runs over all possible
-values of the difference $\bm{r}_i-\bm{r}_j$, and so each of the $N-1\approx N$ terms are
-identical.
+where in the last line I have used the fact that the sum over $j$ runs over
+all possible values of the difference $\bm{r}_i-\bm{r}_j$, and so each of the
+$N-1\approx N$ terms are identical.
 
 Then, any term of the form
 \begin{align}
   \sum_{j\neq i} \bm{f}(\bm{r}_{ij})
-  &= \sum_{j\neq i}\int \delta(\bm{r}+\bm{r}_{ij})\bm{f}(-\bm{r}) d^2r\nonumber\\
+  &= \sum_{j\neq i}\int \delta(\bm{r}+\bm{r}_{ij})\bm{f}(-\bm{r})
+  d^2r\nonumber\\
   &=\frac{N}{V}\int\hat{g}_2(\bm{r})\bm{f}(-\bm{r})d^2r.
 \end{align}
 
-Now, for $g_2(r)=<\hat{g}_2(\bm{r})>$ is the average pair-correlation function, and is
-radially symmetric, any integrals over functions of the form $\bm{\hat{e}}_r f(r)$ will
-be zero by symmetry. With this in mind, I can see from both three-sum terms in eqn
-\ref{eq:WODE_exact} that both have vector functions which are spherically symmetric, the
-first being 
+Now, for $g_2(r)=<\hat{g}_2(\bm{r})>$ is the average pair-correlation function,
+and is radially symmetric, any integrals over functions of the form
+$\bm{\hat{e}}_r f(r)$ will be zero by symmetry. With this in mind, I can see
+from both three-sum terms in eqn \ref{eq:WODE_exact} that both have vector
+functions which are spherically symmetric, the first being 
 \begin{align}
   \frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W'(r_{ij})\bm{r}_{ik},
 \end{align}
@@ -517,29 +364,34 @@ Eqn \ref{eq:WODE_exact} is then reducible to
 \begin{align}\label{eq:WODE_isotropic}
   W''(r)+3\frac{W'(r)}{r}-\Pi W(r)+\frac{\mathcal{V}'(r)}{2r}=0.
 \end{align}
-The solution to the homogeneous part of this equation
-is
+\subsection{Hard-sphere result.}
+For the case of a hard sphere potential, the homogeneous solution to eqn
+\ref{eq:WODE_isotropic} (plus boundary conditions) gives the final solution.
+The homogeneous solution can be found analytically, and is
 \begin{align}
   W_h(r)=a_1\frac{J_1(i\sqrt{\Pi}r)}{r}-a_2\frac{Y_1(-i\sqrt{\Pi}r)}{r},
 \end{align}
 where
 \begin{align}
   J_n(z) =& \frac{1}{\pi}\int_0^{\pi}\cos(z\sin\theta-n\theta)d\theta,\\
-  Y_n(z) =& -\frac{2\bigg(\frac{1}{2}z\bigg)^{-n}}{\sqrt{\pi}\Gamma\bigg(\frac{1}{2}-n\bigg)}
-            \int_1^{\infty}\frac{\cos(zt)}{(t^2-1)^{n+1/2}}dt.
+  Y_n(z) =& -\frac{2\bigg(\frac{1}{2}z\bigg)^{-n}}{\sqrt{\pi}
+    \Gamma\bigg(\frac{1}{2}-n\bigg)}
+  \int_1^{\infty}\frac{\cos(zt)}{(t^2-1)^{n+1/2}}dt.
 \end{align}
-From the latter equation, I can see that $Y(-i\sqrt{\Pi}r)=-Y(i\sqrt{\Pi}r)$, and so
+From the latter equation, I can see that $Y(-i\sqrt{\Pi}r)=-Y(i\sqrt{\Pi}r)$,
+and so
 \begin{align}
   W_h(r)=a_1\frac{J_1(i\sqrt{\Pi}r)}{r}+a_2\frac{Y_1(i\sqrt{\Pi}r)}{r}.
 \end{align}
 
-I can re-write this in terms of the modified bessel functions of the first and second kinds,
-using
+I can re-write this in terms of the modified bessel functions of the first and
+second kinds, using
 \begin{align}
   J_1(ix) &= i I_1(x),\\
   Y_1(ix) &= \frac{2i}{\pi}K_1(x)-I_1(x).
 \end{align}
-Therefore, the homogeneous solution of eqn \ref{eq:WODE_isotropic} can be written as
+Therefore, the homogeneous solution of eqn \ref{eq:WODE_isotropic} can be
+written as
 \begin{align}
   W_h(r) = c_1\frac{I_1(\sqrt{\Pi}r)}{r} + c_2\frac{K_1(\sqrt{\Pi}r)}{r}.
 \end{align}
@@ -553,8 +405,8 @@ Now, I want $W_h(r\to\infty)\to0$, so $c_1=0$. This leaves
 
 \begin{comment}
 The second option is to say that, within the sum over the index $k$ in eqn
-\ref{eq:WODE_exact}, the terms are essentially averaging out to zero unless $k=j$,
-so
+\ref{eq:WODE_exact}, the terms are essentially averaging out to zero unless
+$k=j$, so
 \begin{align}
   \bm{r}_{ik}\cdot\bm{u}_{ij}&\approx\delta_{jk}\bm{r}_{ik}\cdot\bm{u}_{ij},\\
   \bm{r}_{ik}\cdot\bm{r}_{ik}&\approx\delta_{jk}\bm{r}_{ik}\cdot\bm{r}_{ij}.
@@ -568,442 +420,318 @@ Inserting this approximation into eqn \ref{eq:WODE_exact} then yields
 
 %%%% end short comment %%%%%%
 
-\subsection{Initial conditions: Minimum distance of interaction}
+To uniquely solve the ODE for $W(r)$, a second boundary conditions is required.
+One physically motivated option is considering the minimum distance of
+interaction between particles.
 
-To uniquely solve the ODE for $W(r)$, initial conditions are required. One obvious condition
-is that $W(r\to\infty)\to0$, but a second condition (near $r=0$) is not so obvious. One
-physical set of boundary conditions might be to consider a minimum distance of interaction
-between particles.
-
-Consider three particles which are all moving toward a single, central point at the origin.
+Consider three particles which are all moving toward a single, central point at
+the origin.
 The (dimensionless) velocity of each particle is
+\begin{align}\label{eq:3hardspherevelocities}
+  \bm{V}_i
+  &=\nabla h -\nabla_i\mathcal{H} + \lambda \bm{\hat{u}}_i\nonumber\\
+  &=\lambda \bigg(\bm{\hat{u}}_i-\nabla_i\sum_{j=1}^N\sum_{k=1}^{j-1}W(r_{jk})
+  \bm{r}_{jk}\cdot\bm{u}_{jk}\bigg)\nonumber\\
+  &=\lambda \bigg(\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[W'(r_{ij})
+    (\bm{u}_{ij}\cdot\bm{r}_{ij})\frac{\bm{r}_{ij}}{r_{ij}}
+    +W(r_{ij})\bm{u}_{ij}\bigg]\bigg),
+\end{align}
+where I have used eqns \ref{eq:hperturb} and \ref{eq:zetaform}. When all three
+particles are hitting each other simultaneously, they should all have zero
+relative velocity with respect to each other. Therefore, for this three
+particle system, the boundary condition on $W(r)$ at $r_0=1$ (see appendix
+\ref{app:hardsphereBC}) is
+\begin{align}\label{eq:hardsphereBC}
+  1-3W'(1)-3W(1)=0.
+\end{align}
+
+
+Thus, inserting eqn \ref{eq:Whomo} into the boundary condition, $c_2$ is
+uniquely determined and the resulting solution is
 \begin{align}
-  \bm{v}_i&=\nabla h -\nabla_i\mathcal{H} + \lambda \bm{\hat{u}}_i\nonumber\\
-          &=\lambda \bigg(\bm{\hat{u}}_i-\nabla_i\sum_{j=1}^N\sum_{k=1}^{j-1}W(r_{jk})
-            \bm{r}_{jk}\cdot\bm{u}_{jk}\bigg)\nonumber\\
-          &=\lambda \bigg(\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[W'(r_{ij})
-            (\bm{u}_{ij}\cdot\bm{r}_{ij})\frac{\bm{r}_{ij}}{r_{ij}}
-            +W(r_{ij})\bm{u}_{ij}\bigg]\bigg),
+  W_h(r) &= \frac{1}{3\sqrt{\Pi}K_1'(\sqrt{\Pi})}\frac{K_1(\sqrt{\Pi}r)}{r}.
 \end{align}
-where I have used eqns \ref{eq:hperturb} and \ref{eq:zetaform}. When all three particles are
-hitting each other simultaneously, they should all have zero relative velocity with respect
-to each other. Therefore, for this three particle system, the boundary condition on $W(r)$
-at $r_0$ is
+Since $K_1(x)>0$, $K_1'(x)<0$ for all $x>0$, this implies that $W_h(r)>0$
+for all $r>0$.
+
+Analytical and numerical solutions of eqn \ref{eq:Whomo} subject to eqn
+\ref{eq:hardsphereBC} are shown in Figure \ref{fig:1}.
+
+\begin{figure}[!t]
+  \subfloat{
+    \includegraphics[width=0.5\textwidth]{Figures/fig1.pdf}
+  \label{fig:1a}}
+  \subfloat{\label{fig:1b}}
+  \caption{\protect\subref{fig:1a} Effective potential $W_h$ and
+    \protect\subref{fig:1b} its gradient for hard-sphere interactions between
+    active brownian particles, with $\Pi=0.1$.}\label{fig:1}
+\end{figure}
+
+
+%%%%%%%%%%%% begin appendix %%%%%%%%%%%%%
+
+
+\appendix
+
+\section{Fokker-Planck equations\label{app:fokkerplanck}}
+
+Now, I can define a vector of length $3N$ with components
 \begin{align}
-  1-3W'(r_0)r_0-3W(r_0)=0,
+  \bm{r}=(\bm{r}^{(1)},\bm{r}^{(2)},\cdots,\bm{r}^{(N)},\theta_1,\theta_2,\cdots,
+  \theta_N).
 \end{align}
-which can be checked for any of the two particle pairs (e.g. $\bm{v}_1-\bm{v}_2$, see file
-''3-hard-spheres-BC.png'' in \textit{ipadCalcs} folder). Now, in dimensionless variables,
-we can set $r_0=1$.
 
-Thus, inserting eqn \ref{eq:Whomo} into the boundary condition, $c_2$ is uniquely determined
-as
+This will then give the differential equation
 \begin{align}
-  c_2 &= \frac{1}{3}\frac{1}{\sqrt{\Pi}K_1'(\sqrt{\Pi})}\nonumber\\
-      &= \frac{-1}{3\sqrt{\Pi}(K_0(\sqrt{\Pi})
-        +(\sqrt{\Pi})^{-1}K_1(\sqrt{\Pi}))}.
+  \frac{d\bm{r}}{dt}=\beta\bm{D}\cdot(\bm{F}(\bm{r})+\bm{v}(\bm{r}))
+  +\sqrt{2D_{\alpha\beta}}u_{\beta}(t),
 \end{align}
+where $D_{\alpha\beta}$ is diagonal, and the values of the diagonal are
+$D^t$ for the first $2N$ terms, and $D^r$ for the last $N$ terms.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Below are old calculations. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\begin{comment}
-\subsection{Separable $h$ function.}
-
-To solve eqn \ref{eq:steadystatecondition}, I will start by writing a guess for $h(\bm{x})$, and I
-will take it to be of the form
-\begin{align}\label{eq:hgeneric}
-  h(\bm{x})=R(\{\bm{r}_i\})\Theta(\{\theta_i\})
-\end{align}
-where $R(\{\bm{r}_i\})$ and $\Theta(\{\theta_i\})$ are functions which I will determine later.
-
-\subsubsection{$R(\{\bm{r}_i\})$ function.}
-
-I will focus on pairwise interactions, so
+Next, I will define
 \begin{align}
-  R(\{\bm{r}_k\})= \sum_{i=1}^N\sum_{j=1}^{i-1}b(r_{ij})
+  \bm{x}&\equiv(x_1,x_2,\cdots,x_{3N}),\\
+  \nabla&\equiv(\partial_{x_1},\partial_{x_2},\cdots,\partial_{x_{3N}}).
 \end{align}
-A good variational guess to the form of $b(r_{ij})$ might be something like a standard
-Lennard-Jones effective potential
+
+as well as the stochastic probability density operator
 \begin{align}
-  b(r_{ij})\equiv 4\eta\bigg[\bigg(\frac{\delta}{r_{ij}}\bigg)^{12}-
-  \bigg(\frac{\delta}{r_{ij}}\bigg)^6\bigg]
+  \hat{\rho}(\bm{x},t)=\delta(\bm{x}-\bm{r}(t)).
 \end{align}
-where $\eta$ and $\delta$ are effective parameters for the effective interaction. Note that if
-$f_P=0$ (i.e. no activity), then $\eta=\epsilon$ and $\delta=\sigma$.
 
-\subsubsection{$\Theta(\{\theta_i\})$ function.}
-
-A good starting guess for $\Theta$ might be a simple function like
+Taking the partial derivative of this with respect to time gives
 \begin{align}
-  \Theta(\{\theta_i\})&=a_0\sum_{i=1}^N\sum_{j=1}^{i-1}(\cos(\theta_i-\theta_j))
+  \frac{\partial\hat{\rho}}{\partial t}
+  &=-(\nabla_{\bm{x}}\delta(\bm{x}-\bm{r}(t))
+  \cdot\frac{d\bm{r}}{dt}\nonumber\\
+  &=-\nabla_{\bm{x}}\cdot\bigg(\frac{d\bm{r}}{dt}
+  \delta(\bm{x}-\bm{r}(t)\bigg)\nonumber\\
+  &=-\nabla_{\bm{x}}\cdot\hat{\bm{j}}(\bm{x},t),
 \end{align}
-
-\subsubsection{Generic N-particle case for variational form of $h$.}
-For the generic, $N$-particle case, the first term in eqn \ref{eq:steadystatecondition} becomes
-\begin{align}\label{eq:genericNpartD_t}
-  L_i(h) =& \beta^{-1}\Theta(\{\theta_l\})^2\sum_{j\neq i}
-            \sum_{k\neq i} b'(r_{ij})b'(r_{ik})
-            \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}
-            + \sum_{j\neq i}\bigg[\mathcal{V}''(r_{ij})
-            +\frac{\mathcal{V}'(r_{ij})}{r_{ij}}\bigg]\nonumber\\
-          & - \Theta(\{\theta_l\})\sum_{j\neq i}\sum_{k\neq i}
-            b'(r_{ij})\mathcal{V}'(r_{ik})
-            \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}
-            +\Theta(\{\theta_l\})f^P(\cos\theta_i\hat{\bm{e}}_x+\sin\theta_i\hat{\bm{e}}_y)
-            \sum_{j\neq i}b'(r_{ij})
-            \frac{\bm{r}_{ij}}{r_{ij}}\nonumber\\
-          & - \beta^{-1}\Theta(\{\theta_l\})\sum_{j\neq i}\bigg[b''(r_{ij})
-            +\frac{b'(r_{ij})}{r_{ij}}\bigg],\:\:\: i = 1,2,...,N
-\end{align}
-
-Here I have defined $\bm{r}_{ij}=(x_i-x_j)\hat{\bm{e}}_x+(y_i-y_j)\hat{\bm{e}}_y$ as the vector
-between particles $i$ and $j$. I have also just combined the first $2N$ indices into just $N$
-indices by using the unit vectors $\hat{\bm{e}}_x$ and $\hat{\bm{e}}_y$. Further, I have used the
-fact that $\partial_i v_i=0$ always, and $v_i$ is only non-zero for the position terms.
-
-Inserting eqn \ref{eq:genericNpartD_t} into eqn \ref{eq:steadystatecondition} will give a method of
-determining $b(r)$ and $\Theta(\{\theta_l\})$ in terms of the microscopic parameters $D^r$, $D^t$,
-and $f^P$. The resulting equation is
-\begin{align}\label{eq:separable_h_algebraic}
-  0
-  =&\sum_{i}\beta^{-1}\Theta(\{\theta_l\})^2
-     \sum_{j\neq i}\sum_{k\neq i} b'(r_{ij})b'(r_{ik})
-     \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}
-     + \sum_i\sum_{j\neq i}\bigg[\mathcal{V}''(r_{ij})
-     +\frac{\mathcal{V}'(r_{ij})}{r_{ij}}\bigg]\nonumber\\
-   & - \sum_i\Theta(\{\theta_l\})\sum_{j\neq i}\sum_{k\neq i}
-     b'(r_{ij})\mathcal{V}'(r_{ik})
-     \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}
-     +\sum_i\Theta(\{\theta_l\})
-     f^P(\cos\theta_i\hat{\bm{e}}_x+\sin\theta_i\hat{\bm{e}}_y)
-     \sum_{j\neq i}b'(r_{ij})
-     \frac{\bm{r}_{ij}}{r_{ij}}\nonumber\\
-   & - \beta^{-1}\sum_i\Theta(\{\theta_l\})\sum_{j\neq i}\bigg[b''(r_{ij})
-     +\frac{b'(r_{ij})}{r_{ij}}\bigg]\nonumber\\
-   & + \frac{D^r}{D^t}\sum_{i=1}^{N}\big[\sum_{j\neq i}\sum_{k\neq i} b(r_{ij})b(r_{ik})
-     (\partial_{\theta_i}\Theta)^2
-     -\sum_{j\neq i}b(r_{ij})\partial_{\theta_i}^2\Theta\big]
-\end{align}
-  
-
-In order to simplify things now, I will use the fact that
+where I have defined the stochastic current operator
 \begin{align}
-  f(x_i) = \int dx f(x)\delta(x-x_i),
+  \hat{\bm{j}}(\bm{x},t)\equiv
+  &\beta\bm{D}\cdot\bm{F}(\bm{x})\delta(\bm{x}-\bm{r}(t))
+  +\beta\bm{D}\bm{v}(\bm{x})\delta(\bm{x}-\bm{r}(t))\nonumber\\
+  &+\sqrt{2D_{\alpha\beta}}u_{\beta}(t)
+  \delta(\bm{x}-\bm{r}(t))\nonumber\\
+  =&\beta\bm{D}\cdot\bm{F}(\bm{x})\hat{\rho}(\bm{x},t)
+  +\beta\bm{D}\cdot\bm{v}(\bm{x})\hat{\rho}(\bm{x},t)\nonumber\\
+  &+\sqrt{2D_{\alpha\beta}}u_{\beta}(t)\hat{\rho}(\bm{x},t).
 \end{align}
-and so if I define
+
+You can average $\hat{\rho}(\bm{x},t)$ over the fluctuations $\bm{u}(t)$, and
+get the resulting density
 \begin{align}
-  \hat{\rho}(\bm{x},\theta) = \sum_j \delta^2(\bm{x}-\bm{r}_j)\delta(\theta-\theta_j)
+  P(\bm{x},t)=<\hat{\rho}(\bm{x},t)>,
 \end{align}
-I can coarse-grain the system. I will neglect any self-energy issues, as it will be evident
-soon that this can be accounted for by introducing a microscopic length scale.
-I can re-write sums
+where I have used the definition that for some observable $\hat{\mathcal{O}}$,
 \begin{align}
-  \sum_i f(\bm{r}_i,\theta_i) = \int d^2rd\theta\hat{\rho}(\bm{r},\theta)f(\bm{r},\theta)
+  <\hat{\mathcal{O}}(\bm{u}(t))>=\frac{1}{Z}\int\mathcal{D}\bm{u}
+  \hat{\mathcal{O}}(\bm{u}(t))
+  \exp\bigg(-\frac{1}{2}\int_0^Tdt(\bm{u}(t))^2\bigg).
 \end{align}
-
-For any distribution function $\rho(\bm{r},\theta)$ which is independent in of $\theta$, the
-activity parameter $f^P$ of eqn \ref{eq:separable_h_algebraic} will drop out as the integrals
-over $\cos\theta$ and $\sin\theta$ (for the sum with dummy index $i$) will be zero. So a
-separable guess to $h$ may not be viable.
-
-\subsection{First variational guess for coupled $h$ function.}
-
-In this section, I will take
+From this, I can calculate that noise-averaged current as
 \begin{align}
-  h = \sum_{i=1}^N\sum_{j=1}^{i-1}b(r_{ij})\cos(\theta_{ij})
+  \bm{J}(\bm{x},t)=
+  &\beta\bm{D}\cdot(\bm{F}(\bm{x})P(\bm{x},t)
+  +\bm{v}(\bm{x})P(\bm{x},t))\nonumber\\
+  &+\sqrt{2D_{\alpha\beta}}<u_{\beta}(t)\hat{\rho}(\bm{x},t)>.
 \end{align}
 
-Then, the derivatives become
-\begin{align}\label{eq:partial_i_h}
-  \nabla_{\bm{r}_{\alpha}}h
-  &=\sum_{i\neq\alpha}^Nb^{\prime}
-    (r_{\alpha i})\frac{\bm{r}_{\alpha i}}{r_{\alpha i}}\cos(\theta_{\alpha i}),
-    \:\:\:\alpha=1,2,...,N,
-\end{align}
-\begin{align}\label{eq:partialsq_i_h}
-  \nabla_{\bm{r}_{\alpha}}^2h
-  &=\sum_{i\neq\alpha}^N\bigg[\frac{b^{\prime}(r_{\alpha i})}{r_{\alpha i}}
-    +b^{\prime\prime}(r_{\alpha i})\bigg]\cos(\theta_{\alpha i}),
-    \:\:\:\alpha=1,2,...,N,
-\end{align}
+In order to write the noise term above in terms of $P(\bm{x},t)$, I will use
+the properties of the Dirac-delta function, namely,
 \begin{align}
-  \partial_{\theta_{\alpha}}h
-  &=-\sum_{i\neq\alpha}^Nb(r_{\alpha i})\sin\theta_{\alpha i},
+  \delta(\bm{x})=\int\frac{d^dk}{(2\pi)^d}\exp(-ik_jx_j),
 \end{align}
+to write
 \begin{align}
-  \partial_{\theta_{\alpha}}^2h
-  &=-\sum_{i\neq\alpha}^Nb(r_{\alpha i})\cos\theta_{\alpha i}.
+  <u_{\beta}\hat{\rho}(\bm{x},t)>=\int\frac{d^dk}{(2\pi)^d}u_{\beta}(t)
+  \exp(-ik_j(x_j-r_j(t))).
 \end{align}
 
-Inserting these into eqn \ref{eq:steadystatecondition} gives
-\begin{align}\label{eq:easiest_non_separable}
-  0
-  =&\sum_{i}\beta^{-1}\sum_{j\neq i}\sum_{k\neq i} b'(r_{ij})b'(r_{ik})
-     \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}\cos\theta_{ij}\cos\theta_{ik}
-     + \sum_i\sum_{j\neq i}\bigg[\mathcal{V}''(r_{ij})
-     +\frac{\mathcal{V}'(r_{ij})}{r_{ij}}\bigg]\nonumber\\
-   & - \sum_i\sum_{j\neq i}\sum_{k\neq i}
-     b'(r_{ij})\cos\theta_{ij}\mathcal{V}'(r_{ik})
-     \frac{\bm{r}_{ij}\cdot\bm{r}_{ik}}{r_{ij}r_{ik}}
-     +\sum_i
-     f^P(\cos\theta_i\hat{\bm{e}}_x+\sin\theta_i\hat{\bm{e}}_y)
-     \sum_{j\neq i}b'(r_{ij})\cos(\theta_{ij})
-     \frac{\bm{r}_{ij}}{r_{ij}}\nonumber\\
-   & - \beta^{-1}\sum_i\sum_{j\neq i}\cos\theta_{ij}\bigg[b''(r_{ij})
-     +\frac{b'(r_{ij})}{r_{ij}}\bigg]\nonumber\\
-   & + \frac{D^r}{D^t}\sum_i\sum_{j\neq i}\sum_{k\neq i} b(r_{ij})b(r_{ik})
-     \sin\theta_{ij}\sin\theta_{ik}
-     +\frac{D^r}{D^t}\sum_i\sum_{j\neq i}b(r_{ij})\cos\theta_{ij}
-\end{align}
-
-However, because of the identity
+Since correlations between the noise
+$<u_{\alpha}(t)u_{\beta}(t)>=\delta_{\alpha\beta}\delta(t-t^{\prime})$ only
+occur for fluctuations happening at the same time, we can write
 \begin{align}
-  \cos(\theta_{ij})=\cos\theta_i\cos\theta_j+\sin\theta_i\sin\theta_j,
+  \bm{r}(t)=
+  &\bm{r}(t-\Delta t)
+  +\int_{t-\Delta t}^tdt_1[\beta\bm{D}(\bm{F}(\bm{r}(t_1))
+    +\bm{v}(\bm{r}(t_1)))\nonumber\\
+    &+\sqrt{2D_{j\gamma}}u_{\gamma}(t_1)]
 \end{align}
-the issue of $f^P$ dropping out still occurs for isotropic distribution functions.
-
-\subsection{Second variational guess for coupled $h$ function.}
-
-This time, I will take
+as $\Delta t\to0$. Then, since
 \begin{align}
-  h = \sum_{i=1}^N\sum_{j=1}^{i-1}b(r_{ij})
-  \big[1-q_0\cos(\theta_{ij}+\zeta)\cos(\theta_{ij}+\zeta)\big].
+  \exp\bigg[\int_{t-\Delta t}^tdt_1(\bm{F}(\bm{r}(t_1)
+  +\bm{v}({\bm{r}(t_1)})\bigg]=1+O(\Delta t),
 \end{align}
-\end{comment}
-
-
-\begin{comment}
-\subsubsection{Isotropic distribution function.}
-
-I will constrain $\hat{\rho}(\bm{x},\theta)$ to be independent of $\theta$, corresponding to
-an isotropic distribution function. Then, I will redefine the distribution as
+this can be written as
+\begin{widetext}
+  \begin{align}
+    <u_{\beta}(t)\exp(-ik_jr_j(t))>=
+    &\bigg<u_{\beta}(t)\exp\bigg[-ik_jr_j(t-\Delta t)-ik_j
+      \int_{t-\Delta t}^tdt_1(F_j(\bm{r}(t_1)+v_j{\bm{r}(t_1)}
+      +\sqrt{2D_{j\gamma}}u_{\gamma}(t_1))\bigg]\bigg>\nonumber\\
+    =&\bigg<u_{\beta}(t)\exp(-ik_jr_j(t-\Delta t))
+    \bigg[1-ik_j\int_{t-\Delta t}^tdt_1
+      \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>+O(\Delta t).
+  \end{align}
+\end{widetext}
+Next, since $t-\Delta t<t_1,t$, there won't be any correlations between the
+fluctuations at earlier times and those at $t$, so using the fact that for uncorrelated
+functions $<AB>=<A><B>$, I get
+\begin{widetext}
 \begin{align}
-  \rho(\bm{x})&\equiv\int d\theta\hat{\rho}(\bm{x},\theta)\nonumber\\
+  <u_{\beta}(t)\exp(-ik_jr_j(t))>
+  &=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  \bigg<u_{\beta}(t)\bigg[1-ik_j\int_{t-\Delta t}^tdt_1
+    \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>
+  +O(\Delta t)\nonumber\\
+  &=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  \bigg(<u_{\beta}(t)>
+  -\bigg<ik_j\int_{t-\Delta t}^tdt_1
+  \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)
+  u_{\beta}(t)\bigg>\bigg)
+  +O(\Delta t)\nonumber\\
+  &=-\bigg<ik_j\sqrt{2D_{j\gamma}}\int_{t-\Delta t}^tdt_1
+  \delta_{\beta \gamma}\delta(t-t_1)\bigg>
+  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  +O(\Delta t)\nonumber\\
+  &=-\bigg<ik_j\sqrt{2D_{j\beta}}\int_{t-\Delta t}^tdt_1
+  \delta(t-t_1)\bigg>
+  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  +O(\Delta t)\nonumber\\
+  &=-\bigg<ik_j\sqrt{2D_{j\beta}}\int_0^{\Delta t}du
+  \delta(u)\bigg>
+  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  +O(\Delta t)\nonumber\\
+  &=-\frac{1}{2}ik_j\sqrt{2D_{j\beta}}
+  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  +O(\Delta t)\nonumber\\.
 \end{align}
-
-Adding all of these contributions, the sum of $L_i(h)$ over all $N$ is then
+\end{widetext}
+Taking the limit as $\Delta t\to0$, this becomes
 \begin{align}
-  \sum_i L_i(h)
-  &=\beta^{-1}\Theta_0^2\int d^2xd^2yd^2z\rho(\bm{x})\rho(\bm{y})
-    \rho(\bm{z})b'(|\bm{z}-\bm{x}|)b'(|\bm{z}-\bm{y}|)
-    \frac{(\bm{z}-\bm{x})\cdot(\bm{z}-\bm{y})}{|\bm{z}-\bm{x}||\bm{z}-\bm{y}|}\nonumber\\
-  &\phantom{=}-4\pi\beta^{-1}\Theta_0^2\int d^2xd^2y\rho(\bm{x})\rho(\bm{y})
-    b'(|\bm{y}-\bm{x}|)b'(0)\bm{q}(\bm{0})\cdot[\bm{y}-\bm{x}]\nonumber\\
-  &\phantom{=}+4\pi^2\beta^{-1}\Theta_0^2Nb'(0)^2(\bm{q}(\bm{0}))^2\nonumber\\
-  &\phantom{=}+\int d^2xd^2y\rho(\bm{y})\rho(\bm{x})
-    \bigg[\mathcal{V}''(|\bm{x}-\bm{y}|)
-    +\frac{\mathcal{V}'(|\bm{x}-\bm{y}|)}{|\bm{x}-\bm{y}|}\bigg]
-    -2\pi N[\mathcal{V}''(0)+s(0)]\nonumber\\
-  &\phantom{=}
-    -\Theta_0\int d^2xd^2yd^2z\rho(\bm{x})\rho(\bm{y})
-    \rho(\bm{z})b'(|\bm{z}-\bm{x}|)\mathcal{V}'(|\bm{z}-\bm{y}|)
-    \frac{(\bm{z}-\bm{x})\cdot(\bm{z}-\bm{y})}{|\bm{z}-\bm{x}||\bm{z}-\bm{y}|}\nonumber\\
-  &\phantom{=}+2\pi\Theta_0\int d^2xd^2y\rho(\bm{x})\rho(\bm{y})
-    \bigg[b'(|\bm{y}-\bm{x}|)\mathcal{V}'(0)+\mathcal{V}'(|\bm{y}-\bm{x}|)b'(0)\bigg]
-    \bm{q}(\bm{0})\cdot[\bm{y}-\bm{x}]\nonumber\\
-  &\phantom{=}-4\pi^2\Theta_0Nb'(0)\mathcal{V}'(0)(\bm{q}(\bm{0}))^2\nonumber\\
-  &\phantom{=}-\beta^{-1}\Theta_0\int d^2xd^2y\rho(\bm{y})\rho(\bm{x})
-    \bigg[b''(|\bm{x}-\bm{y}|)
-    +\frac{b'(|\bm{x}-\bm{y}|)}{|\bm{x}-\bm{y}|}\bigg]
-    +2\pi\beta^{-1}\Theta_0 N[b''(0)+t(0)].
+  <u_{\beta}(t)&\exp(-ik_jr_j(t)>=\nonumber\\
+  &-\frac{1}{2}ik_j\sqrt{2D_{j\beta}}\bigg<\exp(-ik_jr_j(t))\bigg>.
 \end{align}
-
-\subsection{Constant density calculation}
-If I take $\rho(\bm{x})=\rho_0$ as the average density, then
+Taking the inverse Fourier transform then gives
 \begin{align}
-  0
-  &=\beta^{-1}\Theta_0^2\rho_0^3\int d^2xd^2yd^2z
-    b'(|\bm{z}-\bm{x}|)b'(|\bm{z}-\bm{y}|)
-    \frac{(\bm{z}-\bm{x})\cdot(\bm{z}-\bm{y})}{|\bm{z}-\bm{x}||\bm{z}-\bm{y}|}\nonumber\\
-  &\phantom{=}-4\pi\beta^{-1}\Theta_0^2\rho_0^2\int d^2xd^2y
-    b'(|\bm{y}-\bm{x}|)b'(0)\bm{q}(\bm{0})\cdot[\bm{y}-\bm{x}]\nonumber\\
-  &\phantom{=}+4\pi^2\beta^{-1}\Theta_0^2Nb'(0)^2(\bm{q}(\bm{0}))^2\nonumber\\
-  &\phantom{=}+\rho_0^2\int d^2xd^2y
-    \bigg[\mathcal{V}''(|\bm{x}-\bm{y}|)
-    +\frac{\mathcal{V}'(|\bm{x}-\bm{y}|)}{|\bm{x}-\bm{y}|}\bigg]
-    -2\pi N[\mathcal{V}''(0)+s(0)]\nonumber\\
-  &\phantom{=}
-    -\Theta_0\rho_0^3\int d^2xd^2yd^2z
-    b'(|\bm{z}-\bm{x}|)\mathcal{V}'(|\bm{z}-\bm{y}|)
-    \frac{(\bm{z}-\bm{x})\cdot(\bm{z}-\bm{y})}{|\bm{z}-\bm{x}||\bm{z}-\bm{y}|}\nonumber\\
-  &\phantom{=}+2\pi\Theta_0\rho_0^2\int d^2xd^2y
-    \bigg[b'(|\bm{y}-\bm{x}|)\mathcal{V}'(0)+\mathcal{V}'(|\bm{y}-\bm{x}|)b'(0)\bigg]
-    \bm{q}(\bm{0})\cdot[\bm{y}-\bm{x}]\nonumber\\
-  &\phantom{=}-4\pi^2\Theta_0Nb'(0)\mathcal{V}'(0)(\bm{q}(\bm{0}))^2\nonumber\\
-  &\phantom{=}-\beta^{-1}\Theta_0\rho_0^2\int d^2xd^2y
-    \bigg[b''(|\bm{x}-\bm{y}|)
-    +\frac{b'(|\bm{x}-\bm{y}|)}{|\bm{x}-\bm{y}|}\bigg]
-    +2\pi\beta^{-1}\Theta_0 N[b''(0)+t(0)]\nonumber\\
-  &=\beta^{-1}\Theta_0^2\rho_0^3V\int d^2ud^2v
-    b'(|\bm{u}|)b'(|\bm{v}|)
-    \frac{\bm{u}\cdot\bm{v}}{|\bm{u}||\bm{v}|}\nonumber\\
-  &\phantom{=}-4\pi\beta^{-1}\Theta_0^2\rho_0^2V\int d^2u
-    b'(|\bm{u}|)b'(0)\bm{q}(\bm{0})\cdot\bm{u}\nonumber\\
-  &\phantom{=}+4\pi^2\beta^{-1}\Theta_0^2Nb'(0)^2(\bm{q}(\bm{0}))^2\nonumber\\
-  &\phantom{=}+\rho_0^2V\int d^2u
-    \bigg[\mathcal{V}''(|\bm{u}|)
-    +\frac{\mathcal{V}'(|\bm{u}|)}{|\bm{u}|}\bigg]
-    -2\pi N[\mathcal{V}''(0)+s(0)]\nonumber\\
-  &\phantom{=}
-    -\Theta_0\rho_0^3V\int d^2ud^2v
-    b'(|\bm{u}|)\mathcal{V}'(|\bm{v}|)
-    \frac{\bm{u}\cdot\bm{v}}{|\bm{u}||\bm{v}|}\nonumber\\
-  &\phantom{=}+2\pi\Theta_0\rho_0^2V\int d^2x
-    \bigg[b'(|\bm{u}|)\mathcal{V}'(0)+\mathcal{V}'(|\bm{u}|)b'(0)\bigg]
-    \bm{q}(\bm{0})\cdot\bm{u}\nonumber\\
-  &\phantom{=}-4\pi^2\Theta_0Nb'(0)\mathcal{V}'(0)(\bm{q}(\bm{0}))^2\nonumber\\
-  &\phantom{=}-\beta^{-1}\Theta_0\rho_0^2V\int d^2u
-    \bigg[b''(|\bm{u}|)
-    +\frac{b'(|\bm{u}|)}{|\bm{u}|}\bigg]
-    +2\pi\beta^{-1}\Theta_0 N[b''(0)+t(0)].
+  <u_{\beta}(t)\hat{\rho}(\bm{x},t)>=-\frac{1}{2}\sqrt{2D_{j\beta}}
+  \partial_jP(\bm{x},t).
 \end{align}
-
-If I just re-write the above equations with some molecular length scale cutoff, $a_0$, then
-the divergent terms go away (i.e. all terms with a $f(0)$ in them), and so
-\begin{align}\label{eq:constantdensity_not_integrated_condition}
-  0
-  &=\beta^{-1}\rho_0\int_{u>a_0,v>a_0} d^2ud^2v
-    b'(|\bm{u}|)b'(|\bm{v}|)
-    \frac{\bm{u}\cdot\bm{v}}{|\bm{u}||\bm{v}|}\nonumber\\
-  &\phantom{=}+\int_{u>a_0} d^2u
-    \bigg[\mathcal{V}''(|\bm{u}|)
-    +\frac{\mathcal{V}'(|\bm{u}|)}{|\bm{u}|}\bigg]\nonumber\\
-  &\phantom{=}
-    -\rho_0\int_{u>a_0,v>a_0} d^2ud^2v
-    b'(|\bm{u}|)\mathcal{V}'(|\bm{v}|)
-    \frac{\bm{u}\cdot\bm{v}}{|\bm{u}||\bm{v}|}\nonumber\\
-  &\phantom{=}-\beta^{-1}\int_{u>a_0} d^2u
-    \bigg[b''(|\bm{u}|)
-    +\frac{b'(|\bm{u}|)}{|\bm{u}|}\bigg]
-\end{align}
-where I have divided through by a factor of the density squared times the total
-volume $\rho_0^2V$ and set $\Theta_0=1$.
-
-For the WCA approximation of eqn \ref{eq:WCAapprox}, the purely $\mathcal{V}$ integrals are
-\begin{equation}
-  \int_{u>a_0} d^2u\mathcal{V}''(|\bm{u}|) =
-  \begin{cases}
-    8\pi\epsilon\bigg\{7\bigg[\frac{1}{2}-\bigg(\frac{\sigma}{a_0}\bigg)^6\bigg]
-    -13\bigg[\frac{1}{4}-\bigg(\frac{\sigma}{a_0}\bigg)^{12}\bigg]\bigg\},
-    &a_0<2^{\frac{1}{6}}\sigma,\\
-    0,&a_0\geq 2^{\frac{1}{6}}\sigma,
-  \end{cases}
-\end{equation}
-\begin{equation}
-  \int_{u>a_0} d^2u\frac{\mathcal{V}'(|\bm{u}|)}{|\bm{u}|} =
-  \begin{cases}
-    8\pi\epsilon\bigg\{\bigg[\frac{1}{4}-\bigg(\frac{\sigma}{a_0}\bigg)^{12}\bigg]
-    -\bigg[\frac{1}{2}-\bigg(\frac{\sigma}{a_0}\bigg)^6\bigg]\bigg\},
-    &a_0<2^{\frac{1}{6}}\sigma,\\
-    0,&a_0\geq 2^{\frac{1}{6}}\sigma,
-  \end{cases}
-\end{equation}
-and so the second term in eqn \ref{eq:constantdensity_not_integrated_condition} is
-\begin{align}\label{eq:constantdensity_only_V_integral}
-  \int_{u>a_0} d^2u\bigg[\mathcal{V}''(|\bm{u}|)
-  + \frac{\mathcal{V}'(|\bm{u}|)}{|\bm{u}|}\bigg]
-  = 48\pi\epsilon\bigg[2\bigg(\frac{\sigma}{a_0}\bigg)^{12}
-  -\bigg(\frac{\sigma}{a_0}\bigg)^6\bigg]>0.
-\end{align}
-I can see that eqn \ref{eq:constantdensity_only_V_integral} is greater than zero if I insert
-$a_0=2^{1/6}\sigma(1-\chi)$ with $0<\chi<1$. I then get
+Finally, inserting this into the current I get
 \begin{align}
-  24\pi\epsilon\bigg[\frac{1}{(1-\chi)^{12}}-\frac{1}{(1-\chi)^6}\bigg],
-\end{align}
-which is always greater than zero for $0<\chi<1$.
-
-\subsubsection{Choice of $b(r)$.}
-
-In order to go any further, I need to choose the form of $b(r)$. I will start with a basic square
-well,
-\begin{align}
-  b(r) =\infty-\infty H(r-a_0)+\alpha[H(r-(a_0+\beta))-H(r-a_0)]
-\end{align}
-where $H(x)$ is the heaviside function. 
-With this definition, the first derivative is
-\begin{align}
-  b'(r) = -\infty\delta(r-a_0)+\alpha[\delta(r-(a_0+\beta))-\delta(r-a_0)]
-\end{align}
-Then, I can write the integral
-\begin{align}
-  \int_{u>a_0} d^2ub''(|\bm{u}|)
-  &= 2\pi\int_{u>a_0} udub''(u)\nonumber\\
-  &=2\pi \int_{u>a_0} [(ub'(u))'-b'(u)]du\nonumber\\
-  &=\lim_{\Delta\to0+}2\pi[ub'(u)-b(u)]_{u=a_0+\Delta}^{u=\infty}\nonumber\\
-  &=2\pi\alpha.
-\end{align}
-Similarly, I can the integral
-\begin{align}
-  \int_{u>a_0} d^2u\frac{b'(|\bm{u}|)}{|\bm{u}|}
-  &=2\pi\int_{u>a_0} dub'(u)\nonumber\\
-  &=\lim_{\Delta\to0+}2\pi[b(u)]_{u=a_0+\Delta}^{u=\infty}\nonumber\\
-  &=-4\pi\alpha
-\end{align}
-and so
-\begin{align}
-  \int_{u>a_0} d^2u\bigg[b''(|\bm{u}|)+\frac{b'(|\bm{u}|)}{|\bm{u}|}\bigg]
-  = -2\pi\alpha.
+  J_{\alpha}(\bm{x},t)=
+  &\beta D_{\alpha\beta}F_{\beta}(\bm{x})P(\bm{x},t)
+  +\beta D_{\alpha\beta}v_{\beta}(\bm{x})P(\bm{x},t)\nonumber\\
+  &+\sqrt{2D_{\alpha\beta}}\bigg(-\frac{1}{2}\sqrt{2D_{j\beta}}
+  \partial_jP(\bm{x},t)\bigg)\nonumber\\
+  =&\beta D_{\alpha\beta}F_{\beta}(\bm{x})P(\bm{x},t)
+  +\beta D_{\alpha\beta}v_{\beta}(\bm{x})P(\bm{x},t)\nonumber\\
+  &-\sqrt{D_{\alpha\beta}D_{\gamma\beta}}
+  \partial_{\gamma}P(\bm{x},t))
 \end{align}
 
-For the remaining two integrals, I will use the fact that I can fix $\bm{u}=u \hat{\bm{e}}_x$
-for doing the inner $v$ integral, and then allow $\bm{u}$ to vary freely again for the outer
-$u$ integral. Then I can write $\bm{u}\cdot\bm{v}=\cos\phi_v$, and 
+Since in our case, $D_{\alpha\beta}$ is diagonal, this just gives eqn
+\ref{eq:Nparticlecurrent} as desired.
 
-\begin{align}
-  \int_{u>a_0,v>a_0} d^2ud^2vb'(|\bm{u}|)b'(|\bm{v}|)
-  \frac{\bm{u}\cdot\bm{v}}{|\bm{u}||\bm{v}|}
-  &=0,
-\end{align}
-since $\int_0^{2\pi} \cos\phi_v d\phi_v=0$. This means that the only possible option of satisfying
-eqn \ref{eq:constantdensity_not_integrated_condition} is to have $b(r)=\mathcal{V}(r)$. This makes
-me think we might need to change our assumptions on the form of $h$ being independent of
-$\{\theta_i\}$.
-\end{comment}
-    
+\section{Hard sphere boundary conditions \label{app:hardsphereBC}}
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Below this, I have an old calculation from before I really understood what to do... %
-%%%%%%%%%%%%%%%%%%%%%%%
-\begin{comment}
-Then, the full interaction potential is
-\begin{align}
-    \mathcal{H}=\sum_{\alpha=1}^N\sum_{\beta=1}^{\alpha-1}\mathcal{V}^{\alpha\beta},
-\end{align}
-where I am summing over the $N(N-1)/2$ different pairings of the positions.
-Noting that
-\begin{equation}\label{eq:dVij}
-    \frac{\partial \mathcal{V}^{\alpha\beta}}{\partial r^{\alpha\beta}}=
-    \begin{cases}
-    -24\epsilon\bigg[\bigg(\sigma^{12}(r^{\alpha\beta})^{-13}-\sigma^6(r^{\alpha\beta})^{-6}\bigg], & r^{\alpha\beta}<2^{\frac{1}{6}}\sigma \\
-    0, & \mathrm{otherwise},
-    \end{cases}
-\end{equation}
+Consider three interacting spheres, with their positions and orientations as
+\begin{subequations}
+  \label{eqs:3hardspherepositions}
+  \begin{align}
+    \bm{r}_1 &= \bm{0},\\
+    \bm{r}_2 &= r_0\bm{\hat{e}}_x,\\
+    \bm{r}_3 &= \frac{r_0}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),
+  \end{align}
+\end{subequations}
 and
-\begin{align}\label{eq:drij}
-    \frac{\partial r^{\alpha\beta}}{\partial x_k}&=\frac{(x_{\alpha}-x_{\beta})(\delta_{k\alpha}-\delta_{k\beta})}{r^{\alpha\beta}},
-\end{align}
-the gradient of the interaction potential is
-\begin{equation}
-    \frac{\partial}{\partial x_k}\mathcal{H}=
-    \begin{cases}
-    \sum\limits_{\substack{\beta=1\\ \beta\neq k}}^N Q_{k\beta}, &1\leq k \leq N,\\
-    \sum\limits_{\substack{\beta=N+1\\ \beta\neq k}}^{2N} Q_{k\beta}, &N+1\leq k \leq 2N,\\
-    0, & k > 2N
-    \end{cases}
-\end{equation}
-where I have defined $Q_{\alpha\beta}=-Q_{\beta\alpha}$ is
+\begin{subequations}
+  \label{eqs:3hardsphereorientations}
+  \begin{align}
+    \bm{u}_1 &= \frac{1}{2}(\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y),\\
+    \bm{u}_2 &= \frac{1}{2}(-\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y),\\
+    \bm{u}_3 &= -\bm{\hat{e}}_y,
+  \end{align}
+\end{subequations}
+respectively. Then, the differences in positions and orientations are
+\begin{subequations}
+  \label{eqs:3hardsphererelativepositions}
+  \begin{align}
+    \bm{r}_{12} &= \bm{0}-r_0\bm{\hat{e}}_x = -r_0\bm{\hat{e}}_x,\\
+    \bm{r}_{13} &= \bm{0}-\frac{r_0}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y)
+    = -\frac{r_0}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),\\
+    \bm{r}_{23} &= r_0\bm{\hat{e}}_x-\frac{r_0}{2}(\bm{\hat{e}}_x
+    +\sqrt{3}\bm{\hat{e}}_y)
+    =\frac{r_0}{2}(\bm{\hat{e}}_x-\sqrt{3}\bm{\hat{e}}_y),
+  \end{align}
+\end{subequations}
+and
+\begin{subequations}
+  \label{eqs:3hardsphererelativeorientations}
+  \begin{align}
+    \bm{u}_{12} &= \frac{1}{2}(\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y)
+    -\frac{1}{2}(-\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y)
+    = \sqrt{3}\bm{\hat{e}}_x,\\
+    \bm{u}_{13} &= \frac{1}{2}(\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y)
+    +\bm{\hat{e}}_y
+    = \sqrt{3}\frac{1}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),\\
+    \bm{u}_{23} &= \frac{1}{2}(-\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y)
+    +\bm{\hat{e}}_y,
+    = \sqrt{3}\frac{1}{2}(-\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),
+  \end{align}
+\end{subequations}
+respectively. Then, from eqns \ref{eqs:3hardsphererelativepositions}
+and \ref{eqs:3hardsphererelativeorientations}, one arrives at the generic
+relationships
 \begin{align}
-    Q_{\alpha\beta}=\frac{\partial\mathcal{V}^{\alpha\beta}}{\partial r^{\alpha\beta}}\times\frac{(x_{\alpha}-x_{\beta})}{r^{\alpha\beta}}
+  \bm{\hat{r}}_{ij} &= -\frac{\bm{u}_{ij}}{\sqrt{3}},\\
+  \bm{u}_{ij}\cdot\bm{r}_{ij} &= -\sqrt{3}r_0.
 \end{align}
+Inserting these into eqn \ref{eq:3hardspherevelocities}
+\begin{align}
+  \frac{\bm{V}_i}{\lambda}
+  &=\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[W'(r_{ij})
+    (\bm{u}_{ij}\cdot\bm{r}_{ij})\frac{\bm{r}_{ij}}{r_{ij}}
+    +W(r_{ij})\bm{u}_{ij}\bigg]\nonumber\\
+  &=\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[W'(r_0)
+    r_0\bm{u}_{ij}+W(r_0)\bm{u}_{ij}\bigg]
+\end{align}
+and then taking the difference of two (out of three) velocities
+\begin{align}
+  \frac{\bm{V}_i}{\lambda}-\frac{\bm{V}_j}{\lambda}
+  =&\bm{u}_{ij}-\sum_{k\neq i}^N \bigg[W'(r_0)
+    r_0\bm{u}_{ik}+W(r_0)\bm{u}_{ik}\bigg]\nonumber\\
+  &+\sum_{k\neq j}^N \bigg[W'(r_0)
+    r_0\bm{u}_{jk}+W(r_0)\bm{u}_{jk}\bigg].
+\end{align}
+Taking $i=1$ and $j=2$ gives
+\begin{align}
+  \frac{\bm{V}_1}{\lambda}-\frac{\bm{V}_2}{\lambda}
+  =&\bm{u}_{12}-W'(r_0)r_0\bm{u}_{12}-W(r_0)\bm{u}_{12}
+  \nonumber\\
+  &-W'(r_0)r_0\bm{u}_{13}-W(r_0)\bm{u}_{13}\nonumber\\
+  &+W'(r_0)r_0\bm{u}_{21}+W(r_0)\bm{u}_{21}\nonumber\\
+  &+W'(r_0)r_0\bm{u}_{23}+W(r_0)\bm{u}_{23}\nonumber\\
+  =&\bm{u}_{12}-2W'(r_0)r_0\bm{u}_{12}-2W(r_0)\bm{u}_{12}
+  \nonumber\\
+  &-(W'(r_0)r_0+W(r_0))(\bm{u}_{13}-\bm{u}_{23})\nonumber\\
+  =&\bm{u}_{12}\big[1-3W'(r_0)r_0-3W(r_0)\big].
+\end{align}
+Setting the lefthand side of the above equation then gives
+\ref{eq:hardsphereBC}. The same result occurs for any choices of $i\neq j$
+for $N=3$ particles in this trimer configuration. Since we are in
+dimensionless variables we can set $r_0=1$.
 
-\end{comment}
-
+Inserting the homogeneous solution, eqn \ref{eq:Whomo}, into eqn
+\ref{eq:hardsphereBC} gives the coeffiecient of $W(r)$ as
+\begin{align}
+  c_2 = \frac{1}{3\sqrt{\Pi}K'(\sqrt{\Pi})}.
+\end{align}
 \bibliographystyle{plain}
-\bibliography{bib}
+\bibliography{main}
 
 \end{document}
