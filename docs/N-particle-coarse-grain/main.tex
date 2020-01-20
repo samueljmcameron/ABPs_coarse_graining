@@ -10,7 +10,7 @@
 \usepackage{subfig}
 
 \begin{document}
-
+ 
 \title{calculation: coarse-graining active brownian particles}
 \author{Sam Cameron}
 \affiliation{%
@@ -67,9 +67,9 @@ total number of components of $\bm{F}$ is $3N$, but only the first $2N$ are
 non-zero). The two body interactions will be written as
 \begin{align}\label{eq:general_conservative_force}
   \bm{F}_i&=-\nabla_{i}\mathcal{H}(\bm{x})\nonumber\\
-                &=-\nabla_{i}\sum_{j<k}^N\mathcal{V}(r_{jk}),
+          &=-\nabla_{i}\sum_{j=1}^N\sum_{k=1}^{j-1}\mathcal{V}(r_{jk}),
 \end{align}
-where $r_{ij}=|\bm{r}_i-\bm{r}_j|$.
+where $\bm{r}_{ij}=\bm{r}_j-\bm{r}_i$.
 The vector $\bm{v}$ cannot be represented
 as the gradient of a scalar, and is explicitly given by a concatenation of two-
 component vectors $\bm{v}_i$, and then a final $N$ zeros added on. The
@@ -104,7 +104,7 @@ derivatives of $\mathcal{H}$ and $\bm{v}_i$,
   \label{eqs:partials_of_L_i}
   \begin{align}
     \nabla_{\alpha}\mathcal{H}
-    &=\sum_{i\neq\alpha}^N\mathcal{V}^{\prime}
+    &=-\sum_{i\neq\alpha}^N\mathcal{V}^{\prime}
     (r_{\alpha i})\frac{\bm{r}_{\alpha i}}{r_{\alpha i}},
     \label{eq:partial_H_of_L_i}\\
     \nabla_{\alpha}^2\mathcal{H}
@@ -116,20 +116,6 @@ derivatives of $\mathcal{H}$ and $\bm{v}_i$,
     &= 0.\label{eq:partial_v_of_L_i}
   \end{align}
 \end{subequations}
-
-To actually do any calculations, an interaction form for $\mathcal{H}$ must
-be chosen. Since we are interested in capturing motility induced phase
-separation (MIPS) in the simplest form, I will choose the (repulsive)
-Weeks-Chandler-Anderson (WCA) interaction,
-\begin{equation}\label{eq:WCAapprox}
-  \mathcal{V}_{ij} =
-  \begin{cases}
-    4\epsilon\bigg[\bigg(\frac{\sigma}{r^{ij}}\bigg)^{12}
-      -\bigg(\frac{\sigma}{r^{ij}}\bigg)^6\bigg]+\epsilon,
-    & r<2^{\frac{1}{6}}\sigma \\
-    0, & \mathrm{otherwise}.
-  \end{cases}
-\end{equation}
 
 \section{Computing the steady $h(\bm{x})$ function.}
 
@@ -189,7 +175,7 @@ where
 \begin{align}
   \mathcal{L}_i^{(0)}(h)=&(\nabla_i h)^2 + \nabla_i^2\mathcal{H}
   -\nabla_i\mathcal{H}\cdot\nabla_ih-\nabla_i^2h\nonumber\\
-  &+\Pi\big[(\partial_{\theta_i}h)^2-\partial_{\theta_i}^2h\big],
+  &+2\Pi\big[(\partial_{\theta_i}h)^2-\partial_{\theta_i}^2h\big],
 \end{align}
 and
 \begin{align}
@@ -230,8 +216,8 @@ where $\zeta\equiv\partial_{\lambda}h|_{\lambda=0}$.
 Assuming $h$ is analytic in its variables, I will Taylor expand it to
 first order as
 \begin{align}\label{eq:zetaform}
-  \zeta &= -\sum_{i=1}^N\sum_{j=1}^{i-1}
-      W(r_{ij})\bm{r}_{ij}\cdot\bm{u}_{ij}.
+  \zeta &= \sum_{i=1}^N\sum_{j=1}^{i-1}
+      w(r_{ij})\bm{r}_{ij}\cdot\bm{u}_{ij}.
 \end{align}
 Here, I am neglecting terms of the form $\bm{u}_{ij}\cdot\bm{u}_{ij}$
 \footnote{Still unsure why this represents a non-polar approximation.}.
@@ -239,44 +225,44 @@ Here, I am neglecting terms of the form $\bm{u}_{ij}\cdot\bm{u}_{ij}$
 
 Since, for $i\neq j$,
 \begin{align}
-  \nabla_i(\bm{r}_{ij}\cdot\bm{u}_{ij}) &= \bm{u}_{ij},\\
-  \nabla_j(\bm{r}_{ij}\cdot\bm{u}_{ij}) &= -\bm{u}_{ij},\\
-  \nabla_i r_{ij} &=\frac{\bm{r}_{ij}}{r_{ij}},\\
-  \nabla_j r_{ij} &=-\frac{\bm{r}_{ij}}{r_{ij}},\\
+  \nabla_i(\bm{r}_{jk}\cdot\bm{u}_{jk})
+  &= \bm{u}_{jk}(\delta_{ik}-\delta_{ij}),\\
+  \nabla_i r_{jk}
+  &=\frac{\bm{r}_{jk}}{r_{jk}}(\delta_{ik}-\delta_{ij}),\\
   \partial_{\theta_i}^2(\bm{u}_{ij}\cdot\bm{r}_{ij})
-  &=-\bm{u}_i\cdot\bm{r}_{ij},\\
-  \partial_{\theta_i}^2(\bm{u}_{ji}\cdot\bm{r}_{ji})
-  &=\bm{u}_i\cdot\bm{r}_{ji},
+  &=\bm{u}_i\cdot\bm{r}_{ij},\\
+  \partial_{\theta_j}^2(\bm{u}_{ij}\cdot\bm{r}_{ij})
+  &=-\bm{u}_j\cdot\bm{r}_{ij},
 \end{align}
 the terms are
 \begin{align}
-  \nabla_{i}\zeta = -\sum_{j\neq i}^N \bigg[W'(r_{ij})
+  \nabla_{i}\zeta = -\sum_{j\neq i}^N \bigg[w'(r_{ij})
   (\bm{u}_{ij}\cdot\bm{r}_{ij})\frac{\bm{r}_{ij}}{r_{ij}}
-  +W(r_{ij})\bm{u}_{ij}\bigg],
+  +w(r_{ij})\bm{u}_{ij}\bigg],
 \end{align}
 
 \begin{align}
-  \nabla_i^2\zeta=-\sum_{j\neq i}^N\bigg[W''(r_{ij})
-  +3\frac{W'(r_{ij})}{r_{ij}}\bigg](\bm{u}_{ij}\cdot\bm{r}_{ij}).
+  \nabla_i^2\zeta=\sum_{j\neq i}^N\bigg[w''(r_{ij})
+  +3\frac{w'(r_{ij})}{r_{ij}}\bigg](\bm{u}_{ij}\cdot\bm{r}_{ij}).
 \end{align}
 
 \begin{align}
-  \partial_{\theta_i}^2\zeta=\sum_{j\neq i}W(r_{ij})\bm{u}_i\cdot\bm{r}_{ij}
+  \partial_{\theta_i}^2\zeta=\sum_{j\neq i}w(r_{ij})\bm{u}_i\cdot\bm{r}_{ij}
 \end{align}
 
 Inserting these into eqn \ref{eq:first_perturb_DE}
 \begin{widetext}
 \begin{align}
   0=
-  &-\sum_{i=1}^N\sum_{j\neq i}^N\sum_{k\neq i}^N
+  &\sum_{i=1}^N\sum_{j\neq i}^N\sum_{k\neq i}^N
   \mathcal{V}^{\prime}(r_{ij})\frac{\bm{r}_{ij}}{r_{ij}}
-  \cdot\bigg[W'(r_{ik})
+  \cdot\bigg[w'(r_{ik})
     (\bm{u}_{ik}\cdot\bm{r}_{ik})\frac{\bm{r}_{ik}}{r_{ik}}
-    +W(r_{ik})\bm{u}_{ik}\bigg]
-  +\sum_{i=1}^N\sum_{j\neq i}^N\bigg[W''(r_{ij})
-    +3\frac{W'(r_{ij})}{r_{ij}}\bigg](\bm{u}_{ij}\cdot\bm{r}_{ij})\nonumber\\
-  &-2\Pi\sum_{i=1}^N\sum_{j\neq i}^NW(r_{ij})\bm{u}_i\cdot\bm{r}_{ij}
-  +\sum_{i=1}^N\sum_{j\neq i}^N 
+    +w(r_{ik})\bm{u}_{ik}\bigg]
+  -\sum_{i=1}^N\sum_{j\neq i}^N\bigg[w''(r_{ij})
+    +3\frac{w'(r_{ij})}{r_{ij}}\bigg](\bm{u}_{ij}\cdot\bm{r}_{ij})\nonumber\\
+  &-2\Pi\sum_{i=1}^N\sum_{j\neq i}^Nw(r_{ij})\bm{u}_i\cdot\bm{r}_{ij}
+  -\sum_{i=1}^N\sum_{j\neq i}^N 
   \mathcal{V}^{\prime}(r_{ij})\frac{\bm{u}_i\cdot\bm{r}_{ij}}{r_{ij}}
 \end{align}
 \end{widetext}
@@ -284,36 +270,36 @@ Inserting these into eqn \ref{eq:first_perturb_DE}
 You can factor this equation a bit, using the result that
 \begin{align}
   \sum_{i=1}^N\sum_{j\neq i}f(r_{ij}) \bm{u}_i\cdot\bm{r}_{ij}
-  =\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}f(r_{ji})\bm{u}_{ij}\cdot\bm{r}_{ij}
+  =-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}f(r_{ji})\bm{u}_{ij}\cdot\bm{r}_{ij}
 \end{align}
 to get
 \begin{widetext}
 \begin{align}\label{eq:WODE_exact}
   0=
   &\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\bigg\{\sum_{k\neq i}^N\bigg[
-    -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}
-    W'(r_{ij})
+    \frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}
+    w'(r_{ij})
     \cdot\frac{\bm{r}_{ik}\cdot\bm{r}_{ij}}{r_{ij}}\bm{u}_{ij}
-    -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W(r_{ik})\bm{u}_{ik}\bigg]
-  +\bigg[W''(r_{ij})
-    +3\frac{W'(r_{ij})}{r_{ij}}\bigg]\bm{u}_{ij}\nonumber\\
-  &-\Pi W(r_{ij})\bm{u}_{ij}
+    +\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}w(r_{ik})\bm{u}_{ik}\bigg]
+  -\bigg[w''(r_{ij})
+    +3\frac{w'(r_{ij})}{r_{ij}}\bigg]\bm{u}_{ij}\nonumber\\
+  &+\Pi w(r_{ij})\bm{u}_{ij}
   +\mathcal{V}^{\prime}(r_{ij})\frac{\bm{u}_{ij}}{2r_{ij}}\bigg\}\nonumber\\
   =&\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\bm{u}_{ij}
   \bigg\{\sum_{k\neq i}^N\bigg[
-    -\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}
-    W'(r_{ij})\frac{\bm{r}_{ik}\cdot\bm{r}_{ij}}{r_{ij}}\bigg]
-  +W''(r_{ij})+3\frac{W'(r_{ij})}{r_{ij}}\nonumber\\
-  &-\Pi W(r_{ij})
+    \frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}
+    w'(r_{ij})\frac{\bm{r}_{ik}\cdot\bm{r}_{ij}}{r_{ij}}\bigg]
+  -w''(r_{ij})-3\frac{w'(r_{ij})}{r_{ij}}\nonumber\\
+  &+\Pi w(r_{ij})
   +\frac{\mathcal{V}^{\prime}(r_{ij})}{2r_{ij}}\bigg\}
-  -\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\sum_{k\neq i}^N
-  \bm{u}_{ik}\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W(r_{ik})
+  +\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\sum_{k\neq i}^N
+  \bm{u}_{ik}\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}w(r_{ik})
 \end{align}
 \end{widetext}
 So far, the approximations we have made in calculating $h$ are that for
 small activity, $h$ is perturbatively close to $\mathcal{H}$, and we have
 taken a lowest order guess in what this perturbative term is, in terms of some
-arbitrary function $W(r_{ij})$. Now, to be able to get some sort of solution
+arbitrary function $w(r_{ij})$. Now, to be able to get some sort of solution
 for eqn \ref{eq:WODE_exact}, we need to make some further approximation. The
 way forward is to assume that the system has translational and rotational
 invariance in its pairwise-correlation function.
@@ -335,7 +321,7 @@ and
   &=\frac{1}{n^2}\frac{1}{V}\int d^2x_2 \sum_{i=1}^N\sum_{j\neq i}^N
   \delta(\bm{r}+\bm{x}_2-\bm{r}_i)\delta(\bm{x}_2-\bm{r}_j)\nonumber\\
   &=\frac{V}{N^2}\sum_{i=1}^N\sum_{j\neq i}
-  \delta(\bm{r}-\bm{r}_{ij})\nonumber\\
+  \delta(\bm{r}+\bm{r}_{ij})\nonumber\\
   &=\frac{V}{N}\sum_{j=1,j\neq i}^N\delta(\bm{r}-\bm{r}_{ij})\nonumber\\
 \end{align}
 where in the last line I have used the fact that the sum over $j$ runs over
@@ -356,20 +342,20 @@ $\bm{\hat{e}}_r f(r)$ will be zero by symmetry. With this in mind, I can see
 from both three-sum terms in eqn \ref{eq:WODE_exact} that both have vector
 functions which are spherically symmetric, the first being 
 \begin{align}
-  \frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}W'(r_{ij})\bm{r}_{ik},
+  \frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}w'(r_{ij})\bm{r}_{ik},
 \end{align}
 and the second simply $\bm{r}_{ij}$. 
 
 Eqn \ref{eq:WODE_exact} is then reducible to
 \begin{align}\label{eq:WODE_isotropic}
-  W''(r)+3\frac{W'(r)}{r}-\Pi W(r)+\frac{\mathcal{V}'(r)}{2r}=0.
+  w''(r)+3\frac{w'(r)}{r}-\Pi w(r)-\frac{\mathcal{V}'(r)}{2r}=0.
 \end{align}
 \subsection{Hard-sphere result.}
 For the case of a hard sphere potential, the homogeneous solution to eqn
 \ref{eq:WODE_isotropic} (plus boundary conditions) gives the final solution.
 The homogeneous solution can be found analytically, and is
 \begin{align}
-  W_h(r)=a_1\frac{J_1(i\sqrt{\Pi}r)}{r}-a_2\frac{Y_1(-i\sqrt{\Pi}r)}{r},
+  w_h(r)=a_1\frac{J_1(i\sqrt{\Pi}r)}{r}-a_2\frac{Y_1(-i\sqrt{\Pi}r)}{r},
 \end{align}
 where
 \begin{align}
@@ -381,7 +367,7 @@ where
 From the latter equation, I can see that $Y(-i\sqrt{\Pi}r)=-Y(i\sqrt{\Pi}r)$,
 and so
 \begin{align}
-  W_h(r)=a_1\frac{J_1(i\sqrt{\Pi}r)}{r}+a_2\frac{Y_1(i\sqrt{\Pi}r)}{r}.
+  w_h(r)=a_1\frac{J_1(i\sqrt{\Pi}r)}{r}+a_2\frac{Y_1(i\sqrt{\Pi}r)}{r}.
 \end{align}
 
 I can re-write this in terms of the modified bessel functions of the first and
@@ -393,34 +379,14 @@ second kinds, using
 Therefore, the homogeneous solution of eqn \ref{eq:WODE_isotropic} can be
 written as
 \begin{align}
-  W_h(r) = c_1\frac{I_1(\sqrt{\Pi}r)}{r} + c_2\frac{K_1(\sqrt{\Pi}r)}{r}.
+  w_h(r) = c_1\frac{I_1(\sqrt{\Pi}r)}{r} + c_2\frac{K_1(\sqrt{\Pi}r)}{r}.
 \end{align}
-Now, I want $W_h(r\to\infty)\to0$, so $c_1=0$. This leaves
+Now, I want $w_h(r\to\infty)\to0$, so $c_1=0$. This leaves
 \begin{align}\label{eq:Whomo}
-  W_h(r) = c_2\frac{K_1(\sqrt{\Pi}r)}{r}.
+  w_h(r) = c_2\frac{K_1(\sqrt{\Pi}r)}{r}.
 \end{align}
-  
 
-%%%% short comment %%%%%%
-
-\begin{comment}
-The second option is to say that, within the sum over the index $k$ in eqn
-\ref{eq:WODE_exact}, the terms are essentially averaging out to zero unless
-$k=j$, so
-\begin{align}
-  \bm{r}_{ik}\cdot\bm{u}_{ij}&\approx\delta_{jk}\bm{r}_{ik}\cdot\bm{u}_{ij},\\
-  \bm{r}_{ik}\cdot\bm{r}_{ik}&\approx\delta_{jk}\bm{r}_{ik}\cdot\bm{r}_{ij}.
-\end{align}
-Inserting this approximation into eqn \ref{eq:WODE_exact} then yields
-\begin{align}
-  W''(r)+W'(r)\bigg(\frac{3}{r}-\mathcal{V}'(r)\bigg)-\bigg(\Pi
-  + \frac{\mathcal{V}'(r)}{r}\bigg) W(r)+\frac{\mathcal{V}'(r)}{2r}=0.
-\end{align}
-\end{comment}
-
-%%%% end short comment %%%%%%
-
-To uniquely solve the ODE for $W(r)$, a second boundary conditions is required.
+To uniquely solve the ODE for $w(r)$, a second boundary conditions is required.
 One physically motivated option is considering the minimum distance of
 interaction between particles.
 
@@ -430,28 +396,28 @@ The (dimensionless) velocity of each particle is
 \begin{align}\label{eq:3hardspherevelocities}
   \bm{V}_i
   &=\nabla h -\nabla_i\mathcal{H} + \lambda \bm{\hat{u}}_i\nonumber\\
-  &=\lambda \bigg(\bm{\hat{u}}_i-\nabla_i\sum_{j=1}^N\sum_{k=1}^{j-1}W(r_{jk})
+  &=\lambda \bigg(\bm{\hat{u}}_i+\nabla_i\sum_{j=1}^N\sum_{k=1}^{j-1}w(r_{jk})
   \bm{r}_{jk}\cdot\bm{u}_{jk}\bigg)\nonumber\\
-  &=\lambda \bigg(\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[W'(r_{ij})
+  &=\lambda \bigg(\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[w'(r_{ij})
     (\bm{u}_{ij}\cdot\bm{r}_{ij})\frac{\bm{r}_{ij}}{r_{ij}}
-    +W(r_{ij})\bm{u}_{ij}\bigg]\bigg),
+    +w(r_{ij})\bm{u}_{ij}\bigg]\bigg),
 \end{align}
 where I have used eqns \ref{eq:hperturb} and \ref{eq:zetaform}. When all three
 particles are hitting each other simultaneously, they should all have zero
 relative velocity with respect to each other. Therefore, for this three
-particle system, the boundary condition on $W(r)$ at $r_0=1$ (see appendix
+particle system, the boundary condition on $w(r)$ at $r_0=1$ (see appendix
 \ref{app:hardsphereBC}) is
 \begin{align}\label{eq:hardsphereBC}
-  1-3W'(1)-3W(1)=0.
+  -1-3w'(1)-3w(1)=0.
 \end{align}
 
 
 Thus, inserting eqn \ref{eq:Whomo} into the boundary condition, $c_2$ is
 uniquely determined and the resulting solution is
 \begin{align}
-  W_h(r) &= \frac{1}{3\sqrt{\Pi}K_1'(\sqrt{\Pi})}\frac{K_1(\sqrt{\Pi}r)}{r}.
+  w_h(r) &= -\frac{1}{3\sqrt{\Pi}K_1'(\sqrt{\Pi})}\frac{K_1(\sqrt{\Pi}r)}{r}.
 \end{align}
-Since $K_1(x)>0$, $K_1'(x)<0$ for all $x>0$, this implies that $W_h(r)>0$
+Since $K_1(x)>0$, $K_1'(x)<0$ for all $x>0$, this implies that $w_h(r)>0$
 for all $r>0$.
 
 Analytical and numerical solutions of eqn \ref{eq:Whomo} subject to eqn
@@ -462,11 +428,147 @@ Analytical and numerical solutions of eqn \ref{eq:Whomo} subject to eqn
     \includegraphics[width=0.5\textwidth]{Figures/fig1.pdf}
   \label{fig:1a}}
   \subfloat{\label{fig:1b}}
-  \caption{\protect\subref{fig:1a} Effective potential $W_h$ and
+  \caption{\protect\subref{fig:1a} Effective potential $w_h$ and
     \protect\subref{fig:1b} its gradient for hard-sphere interactions between
     active brownian particles, with $\Pi=0.1$.}\label{fig:1}
 \end{figure}
 
+\subsection{Soft potential.}
+For a different, soft, two-body potential such as the Weeks-Chandler-Anderson
+(WCA) interaction in dimensionless form\footnote{With $\epsilon$ re-scaled
+  by temperature and length in terms of the potential minimum (\textbf{not}
+  the zero of the potential conventionally denoted by $\sigma$).}
+\begin{equation}\label{eq:WCAapprox}
+  \mathcal{V}^{WCA}_{ij} =
+  \begin{cases}
+    \epsilon[(r_{ij}^{-12}
+      -2r_{ij}^{-6})+1],
+    & r<1 \\
+    0, & \mathrm{otherwise},
+  \end{cases}
+\end{equation}
+there are two steps to computing the boundary condition. The first step is a
+generic force-balance, which gives the effective ``hard sphere'' minimum
+distance. Because of the more complicated nature of the interactions, this new
+minimum distance will not just be $r=1$, but will be on the same scale. A new
+energy scale (such as $\epsilon$ in eqn \ref{eq:WCAapprox}) will be introduced,
+completely decoupled from $k_BT$.
+
+\subsubsection{Force balance.}
+As with the hard-sphere case, we consider a trimer of converging interacting
+particles with coordinates as given in appendix \ref{app:hardsphereBC}. The
+external force on the $i^{th}$ particle is just given by
+$-\nabla_i\mathcal{H}$. This force must be matched by particle $i$'s active
+force, i.e.
+\begin{align}
+  0
+  &= \lambda\bm{u}_i-\nabla_i\mathcal{H}\nonumber\\
+  &= \lambda\bm{u}_i+\sum_{j\neq i}\mathcal{V}'(r_{ij})
+    \frac{\bm{r}_{ij}}{r_{ij}}.
+\end{align}
+For an isolated trimer, using the coordinates of appendix
+\ref{app:hardsphereBC} one arrives at the result
+\begin{align}\label{eq:genericsoftsphereforcebalance}
+  \lambda+\sqrt{3}\mathcal{V}'(r_0)=0.
+\end{align}
+If you specifically consider the WCA approximation of eqn \ref{eq:WCAapprox},
+you end up with
+\begin{align}\label{eq:WCAforcebalance}
+  \frac{\lambda}{12\sqrt{3}\epsilon}-r_0^{-13}+r_0^{-7}=0.
+\end{align}
+Now, when $\lambda\ll12\sqrt{3}\epsilon$, the minimum distance is
+\begin{align}\label{eq:softsphereforcebalancesmalllambda}
+  r_0\approx1-\frac{\lambda}{72\sqrt{3}\epsilon}
+\end{align}
+and when $\lambda\gg12\sqrt{3}\epsilon$, the repulsive force dominates and
+\begin{align}
+  r_0\approx \bigg(\frac{12\sqrt{3}\epsilon}{\lambda}\bigg)^{\frac{1}{13}}.
+\end{align}
+It would be good to solve eqn \ref{eq:WCAapprox} numerically to determine
+the functional form at all values of $\lambda/\epsilon$.
+
+\subsubsection{Matching conditions for $w(r)$.}
+To solve the full inhomogeneous ODE in eqn \ref{eq:WODE_isotropic}, one must
+match two solutions at $r=1$. The solution for $r>1$ is just the homogeneous
+form from eqn \ref{eq:Whomo}, and will be denoted by $w_{+}(r)$. The solution
+for $r<1$ is given through variation of parameters, denoted $w_{-}(r)$.
+
+We require the potential to be continuous and differentiable at $r=1$, finite
+at $r\to\infty$, and having zero relative velocity for a trimer in the stable
+configuration (the same one as discussed in appendix \ref{app:hardsphereBC}).
+This gives four conditions,
+\begin{subequations}
+  \label{eqs:genericmatchingconditions}
+  \begin{align}
+    &w_{+}(1)=w_{-}(1),\label{eq:match1}\\
+    &w_{+}'(1) = w_{-}'(1),\label{eq:match2}\\
+    &w_{+}(r\to\infty)=0,\label{eq:match3}\\
+    &w_{-}'(r_0)r_0+w_{-}(r_0)=-\frac{1}{3}\label{eq:match4}
+  \end{align}
+\end{subequations}
+
+\subsubsection{Variation of parameters to determine $w(r)$.}
+The general form of the solution to eqn \ref{eq:WODE_isotropic} for $r<1$ is
+\begin{align}
+  w_{-}(r) = \frac{I_1(\sqrt{\Pi}r)}{r}\nu_1(r)
+  +\frac{K_1(\sqrt{\Pi}r)}{r}\nu_2(r)
+\end{align}
+where, using eqn \ref{eq:wronskian},
+\begin{subequations}
+  \label{eqs:ODEcoefficientsVOP}
+  \begin{align}
+    \nu_1(r)
+    &= k_1 - \int_{r_0}^rds\frac{K_1(\sqrt{\Pi}s)}{s}
+      \frac{\mathcal{V}'(s)}{2s}W^{-1}(s)\nonumber\\
+    &= k_1 + \frac{1}{2}\int_{r_0}^rdsK_1(\sqrt{\Pi}s)
+      \mathcal{V}'(s)s,\nonumber\\
+    \nu_2(r)
+    &= k_2 + \int_{r_0}^rds\frac{I_1(\sqrt{\Pi}s)}{s}
+      \frac{\mathcal{V}'(s)}{2s}W^{-1}(s)\nonumber\\
+    &= k_2 - \frac{1}{2}\int_{r_0}^rdsI_1(\sqrt{\Pi}s)
+      \mathcal{V}'(s)s,
+  \end{align}
+\end{subequations}
+and we have just selected the lower limit of integration as $r_0$ for later
+convenience.
+
+Inserting this into the matching conditions allows us to determine $k_1$, and
+relates $k_2$ to $c_2$,
+\begin{subequations}
+  \label{eqs:specificmatching}
+  \begin{align}
+    0 &= k_1 + \frac{1}{2}\int_{r_0}^1dsK_1(\sqrt{\Pi}s)
+        \mathcal{V}'(s)s,\label{eq:specificmatch1}\\
+    c_2  &= k_2 - \frac{1}{2}\int_{r_0}^1dsI_1(\sqrt{\Pi}s)
+           \mathcal{V}'(s)s\label{eq:specificmatch2}.
+  \end{align}
+\end{subequations}
+Now, inserting eqns \ref{eqs:ODEcoefficientsVOP} into eqn \ref{eq:match4},
+\begin{align}
+  -\frac{1}{3}=
+  &r_0\bigg(-k_1\frac{I_1(\sqrt{\Pi}r_0)}{r_0^2}+k_1\sqrt{\Pi}
+    \frac{I_1'(\sqrt{\Pi}r_0)}{r_0}\nonumber\\
+  &-k_2\frac{K_1(\sqrt{\Pi}r_0)}{r_0^2}+k_2\sqrt{\Pi}
+    \frac{K_1'(\sqrt{\Pi}r_0)}{r_0}\bigg)\nonumber\\
+  & +k_1\frac{I_1(\sqrt{\Pi}r_0)}{r_0} + k_2\frac{K_1(\sqrt{\Pi}r_0)}{r_0}
+    \nonumber\\
+  =&\sqrt{\Pi}[k_1I_1'(\sqrt{\Pi}r_0)+k_2K_1'(\sqrt{\Pi}r_0)],
+\end{align}
+and so now $k_2$ is determined in terms of $k_1$. Since eqn
+\ref{eq:specificmatch2} relates $k_2$ to $c_2$, all of the coefficients are
+accounted for. Explicitly,
+\begin{align}
+  k_1 =& -\frac{1}{2}\int_{r_0}^1dsK_1(\sqrt{\Pi}s)
+         \mathcal{V}'(s)s,\label{eq:k1},\\
+  k_2 =& \frac{-\frac{1}{3\sqrt{\Pi}}+\frac{1}{2}\int_{r_0}^1ds
+         K_1(\sqrt{\Pi}s)\mathcal{V}'(s)sI_1'(\sqrt{\Pi}r_0)}
+         {K_1'(\sqrt{\Pi}r_0)}\label{eq:k2},\\
+  c_2 =& \frac{-\frac{1}{3\sqrt{\Pi}}+\frac{1}{2}\int_{r_0}^1ds
+         K_1(\sqrt{\Pi}s)\mathcal{V}'(s)sI_1'(\sqrt{\Pi}r_0)}
+         {K_1'(\sqrt{\Pi}r_0)}\nonumber\\
+       &-\frac{1}{2}\int_{r_0}^1dsI_1(\sqrt{\Pi}s)
+         \mathcal{V}'(s)s\label{eq:c2}.
+\end{align}
 
 %%%%%%%%%%%% begin appendix %%%%%%%%%%%%%
 
@@ -661,27 +763,27 @@ respectively. Then, the differences in positions and orientations are
 \begin{subequations}
   \label{eqs:3hardsphererelativepositions}
   \begin{align}
-    \bm{r}_{12} &= \bm{0}-r_0\bm{\hat{e}}_x = -r_0\bm{\hat{e}}_x,\\
-    \bm{r}_{13} &= \bm{0}-\frac{r_0}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y)
-    = -\frac{r_0}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),\\
-    \bm{r}_{23} &= r_0\bm{\hat{e}}_x-\frac{r_0}{2}(\bm{\hat{e}}_x
-    +\sqrt{3}\bm{\hat{e}}_y)
-    =\frac{r_0}{2}(\bm{\hat{e}}_x-\sqrt{3}\bm{\hat{e}}_y),
+    \bm{r}_{12} &= r_0\bm{\hat{e}}_x-\bm{0} = r_0\bm{\hat{e}}_x,\\
+    \bm{r}_{13} &= \frac{r_0}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y)-\bm{0}
+    = \frac{r_0}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),\\
+    \bm{r}_{23} &= \frac{r_0}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y)
+                  -r_0\bm{\hat{e}}_x
+    =\frac{r_0}{2}(-\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),
   \end{align}
 \end{subequations}
 and
 \begin{subequations}
   \label{eqs:3hardsphererelativeorientations}
   \begin{align}
-    \bm{u}_{12} &= \frac{1}{2}(\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y)
-    -\frac{1}{2}(-\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y)
-    = \sqrt{3}\bm{\hat{e}}_x,\\
-    \bm{u}_{13} &= \frac{1}{2}(\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y)
-    +\bm{\hat{e}}_y
-    = \sqrt{3}\frac{1}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),\\
-    \bm{u}_{23} &= \frac{1}{2}(-\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y)
-    +\bm{\hat{e}}_y,
-    = \sqrt{3}\frac{1}{2}(-\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),
+    \bm{u}_{12} &= \frac{1}{2}(-\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y)
+                  -\frac{1}{2}(\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y)
+    = -\sqrt{3}\bm{\hat{e}}_x,\\
+    \bm{u}_{13} &= -\bm{\hat{e}}_y-\frac{1}{2}(\sqrt{3}\bm{\hat{e}}_x
+                  +\bm{\hat{e}}_y)
+    = -\sqrt{3}\frac{1}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),\\
+    \bm{u}_{23} &=  \bm{\hat{e}}_y-\frac{1}{2}(-\sqrt{3}\bm{\hat{e}}_x
+                  +\bm{\hat{e}}_y)
+    = \sqrt{3}\frac{1}{2}(\bm{\hat{e}}_x-\sqrt{3}\bm{\hat{e}}_y),
   \end{align}
 \end{subequations}
 respectively. Then, from eqns \ref{eqs:3hardsphererelativepositions}
@@ -694,32 +796,32 @@ relationships
 Inserting these into eqn \ref{eq:3hardspherevelocities}
 \begin{align}
   \frac{\bm{V}_i}{\lambda}
-  &=\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[W'(r_{ij})
+  &=\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[w'(r_{ij})
     (\bm{u}_{ij}\cdot\bm{r}_{ij})\frac{\bm{r}_{ij}}{r_{ij}}
-    +W(r_{ij})\bm{u}_{ij}\bigg]\nonumber\\
-  &=\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[W'(r_0)
-    r_0\bm{u}_{ij}+W(r_0)\bm{u}_{ij}\bigg]
+    +w(r_{ij})\bm{u}_{ij}\bigg]\nonumber\\
+  &=\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[w'(r_0)
+    r_0\bm{u}_{ij}+w(r_0)\bm{u}_{ij}\bigg]
 \end{align}
 and then taking the difference of two (out of three) velocities
 \begin{align}
   \frac{\bm{V}_i}{\lambda}-\frac{\bm{V}_j}{\lambda}
-  =&\bm{u}_{ij}-\sum_{k\neq i}^N \bigg[W'(r_0)
-    r_0\bm{u}_{ik}+W(r_0)\bm{u}_{ik}\bigg]\nonumber\\
-  &+\sum_{k\neq j}^N \bigg[W'(r_0)
-    r_0\bm{u}_{jk}+W(r_0)\bm{u}_{jk}\bigg].
+  =&-\bm{u}_{ij}-\sum_{k\neq i}^N \bigg[w'(r_0)
+     r_0\bm{u}_{ik}+w(r_0)\bm{u}_{ik}\bigg]\nonumber\\
+   &+\sum_{k\neq j}^N \bigg[w'(r_0)
+     r_0\bm{u}_{jk}+w(r_0)\bm{u}_{jk}\bigg].
 \end{align}
 Taking $i=1$ and $j=2$ gives
 \begin{align}
   \frac{\bm{V}_1}{\lambda}-\frac{\bm{V}_2}{\lambda}
-  =&\bm{u}_{12}-W'(r_0)r_0\bm{u}_{12}-W(r_0)\bm{u}_{12}
+  =&-\bm{u}_{12}-w'(r_0)r_0\bm{u}_{12}-w(r_0)\bm{u}_{12}
   \nonumber\\
-  &-W'(r_0)r_0\bm{u}_{13}-W(r_0)\bm{u}_{13}\nonumber\\
-  &+W'(r_0)r_0\bm{u}_{21}+W(r_0)\bm{u}_{21}\nonumber\\
-  &+W'(r_0)r_0\bm{u}_{23}+W(r_0)\bm{u}_{23}\nonumber\\
-  =&\bm{u}_{12}-2W'(r_0)r_0\bm{u}_{12}-2W(r_0)\bm{u}_{12}
+  &-w'(r_0)r_0\bm{u}_{13}-w(r_0)\bm{u}_{13}\nonumber\\
+  &+w'(r_0)r_0\bm{u}_{21}+w(r_0)\bm{u}_{21}\nonumber\\
+  &+w'(r_0)r_0\bm{u}_{23}+w(r_0)\bm{u}_{23}\nonumber\\
+  =&-\bm{u}_{12}-2w'(r_0)r_0\bm{u}_{12}-2w(r_0)\bm{u}_{12}
   \nonumber\\
-  &-(W'(r_0)r_0+W(r_0))(\bm{u}_{13}-\bm{u}_{23})\nonumber\\
-  =&\bm{u}_{12}\big[1-3W'(r_0)r_0-3W(r_0)\big].
+  &-(w'(r_0)r_0+w(r_0))(\bm{u}_{13}-\bm{u}_{23})\nonumber\\
+  =&\bm{u}_{12}\big[-1-3w'(r_0)r_0-3w(r_0)\big].
 \end{align}
 Setting the lefthand side of the above equation then gives
 \ref{eq:hardsphereBC}. The same result occurs for any choices of $i\neq j$
@@ -727,10 +829,65 @@ for $N=3$ particles in this trimer configuration. Since we are in
 dimensionless variables we can set $r_0=1$.
 
 Inserting the homogeneous solution, eqn \ref{eq:Whomo}, into eqn
-\ref{eq:hardsphereBC} gives the coeffiecient of $W(r)$ as
+\ref{eq:hardsphereBC} gives the coeffiecient of $w(r)$ as
 \begin{align}
-  c_2 = \frac{1}{3\sqrt{\Pi}K'(\sqrt{\Pi})}.
+  c_2 = -\frac{1}{3\sqrt{\Pi}K'(\sqrt{\Pi})}>0.
 \end{align}
+     
+\section{Full solution to w(r). \label{app:fullWsolution}}
+The full solution to eqn \ref{eq:WODE_isotropic} can be solved using variation
+of parameters. To do this requires finding both the homogeneous solution
+as found in eqn \ref{eq:Whomo}, and additionally the particular solution.
+
+\subsection{Wronskian of homogeneous solution.}
+To use variation of parameters, the Wronskian of eqn \ref{eq:Whomo} must be
+calculated. he linearly independent solutions to the homogeneous equation are
+\begin{subequations}
+  \label{eqs:linindependentWhomo}
+  \begin{align}
+    w_1(r)&=\frac{I_1(\sqrt{\Pi}r)}{r},\\
+    w_2(r)&=\frac{K_1(\sqrt{\Pi}r)}{r}.
+  \end{align}
+\end{subequations}
+The $n^{th}$ order modified Bessel functions satisfy the ODE
+\begin{align}
+  y'=\frac{(x^2+n^2)y-x^2y''}{x}
+\end{align}
+and so the Wronskian of the modified Bessel functions satisfy the ODE
+\begin{align}
+  s_n(x)=
+  & I_n(x)K_n'(x)-K_n(x)I_n'(x)\nonumber\\
+  =& I_n(x)\frac{(x^2+n^2)K_n(x)-x^2K_n''(x)}{x}\nonumber\\
+  & -K_n(x)\frac{(x^2+n^2)I_n(x)-x^2I_n''(x)}{x}\nonumber\\
+  =& -x(I_n(x)K_n''(x)-K_n(x)I_n''(x))\nonumber\\
+  =& - x s_n'(x),
+\end{align}
+which has the solution
+\begin{align}
+  s_n(x)=-\frac{1}{x}
+\end{align}
+due to the asymptotics of $I_1(x)$ and $K_1(x)$, namely
+\begin{align}
+  I_n(z)&\sim\frac{e^z}{(2\pi z)^{\frac{1}{2}}},\\
+  K_n(z)&\sim\bigg(\frac{\pi}{(2 z)}\bigg)^{\frac{1}{2}}e^{-z},\\
+  I_n(z)&\sim\frac{e^z}{(2\pi z)^{\frac{1}{2}}},\\
+  K_n(z)&\sim-\bigg(\frac{\pi}{(2 z)}\bigg)^{\frac{1}{2}}e^{-z}.
+\end{align}
+Therefore, the Wronskian of eqns \ref{eqs:linindependentWhomo} is
+\begin{align}\label{eq:wronskian}
+  W(r)=
+  & \frac{I_1(\sqrt{\Pi}r)}{r}\bigg[-\frac{K_1(\sqrt{\Pi}r)}{r^2}
+    +\sqrt{\Pi}\frac{K_1'(\sqrt{\Pi}r)}{r}\bigg]\nonumber\\
+  &-\frac{K_1(\sqrt{\Pi}r)}{r}\bigg[-\frac{I_1(\sqrt{\Pi}r)}{r^2}
+    +\sqrt{\Pi}\frac{I_1'(\sqrt{\Pi}r)}{r}\bigg]\nonumber\\
+  =& \frac{\sqrt{\Pi}}{r^2}\bigg[I_1(\sqrt{\Pi}r)K_1'(\sqrt{\Pi}r)
+     - K_1(\sqrt{\Pi}r)I_1'(\sqrt{\Pi}r)\bigg]\nonumber\\
+  =& \frac{\sqrt{\Pi}}{r^2}\bigg(-\frac{1}{\sqrt{\Pi}r}\bigg)\nonumber\\
+  =& -\frac{1}{r^3}.
+\end{align}
+
+     
+     
 \bibliographystyle{plain}
 \bibliography{main}
 

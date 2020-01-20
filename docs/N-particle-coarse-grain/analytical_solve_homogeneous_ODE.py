@@ -7,7 +7,7 @@ def c_2(l0):
     K1prime = (-special.kn(0,np.sqrt(l0))
                -1/np.sqrt(l0)*special.kn(1,np.sqrt(l0)))
 
-    return 1/(3*np.sqrt(l0)*K1prime)
+    return -1/(3*np.sqrt(l0)*K1prime)
 
 def W0(x,l0):
 

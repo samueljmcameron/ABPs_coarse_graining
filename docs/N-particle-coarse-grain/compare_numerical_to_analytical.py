@@ -8,7 +8,7 @@ if __name__=="__main__":
 
     l0 = 0.1
     rf = 40
-    yp0 = 1.86e-9
+    yp0 = -1.86e-9
     ts,ys = evaluate_ode(yp0,l0,rf,False,f,jac)
 
     Ws = W(ts,l0)

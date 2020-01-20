@@ -11,7 +11,7 @@ def f(t,y,l0,usepotential):
     else:
         v0 = 0
 
-    return [y[1],-3*y[1]/t+l0*y[0]-v0/t]
+    return [y[1],-3*y[1]/t+l0*y[0]+v0/t]
 
 def jac(t,y,l0):
 
@@ -56,13 +56,13 @@ def evaluate_ode(yp0,l0,tf,usepotential,f,jac):
 
 def Wboundary(W,Wp):
 
-    return 1-3*Wp-3*W
+    return -1-3*Wp-3*W
 
 if __name__=="__main__":
 
 
     l0 = 0.1
-    yp0 = 1.86e-9
+    yp0 = -1.86e-9
     tf = 40
     ts,ys = evaluate_ode(yp0,l0,tf,False,f,jac)
 
