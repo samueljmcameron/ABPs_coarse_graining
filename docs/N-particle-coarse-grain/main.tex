@@ -7,7 +7,7 @@
 \usepackage{comment}
 \usepackage{graphicx}
 \usepackage{dcolumn}
-\usepackage{subfig}
+\usepackage[caption=false]{subfig}
 
 \begin{document}
  
@@ -430,7 +430,9 @@ Analytical and numerical solutions of eqn \ref{eq:Whomo} subject to eqn
   \subfloat{\label{fig:1b}}
   \caption{\protect\subref{fig:1a} Effective potential $w_h$ and
     \protect\subref{fig:1b} its gradient for hard-sphere interactions between
-    active brownian particles, with $\Pi=0.1$.}\label{fig:1}
+    active brownian particles, with $\Pi=0.1$. The numerical result has not
+    been fine-tuned as it only approximately solves the boundary conditions
+    (i.e. it was found by eye using a shooting method).}\label{fig:1}
 \end{figure}
 
 \subsection{Soft potential.}
@@ -474,19 +476,41 @@ For an isolated trimer, using the coordinates of appendix
 If you specifically consider the WCA approximation of eqn \ref{eq:WCAapprox},
 you end up with
 \begin{align}\label{eq:WCAforcebalance}
-  \frac{\lambda}{12\sqrt{3}\epsilon}-r_0^{-13}+r_0^{-7}=0.
+  \Omega-r_0^{-13}+r_0^{-7}=0.
 \end{align}
-Now, when $\lambda\ll12\sqrt{3}\epsilon$, the minimum distance is
+where $\Omega\equiv{\lambda}/{12\sqrt{3}\epsilon}$.
+Now, when $\Omega\ll 1$, the minimum distance is
 \begin{align}\label{eq:softsphereforcebalancesmalllambda}
-  r_0\approx1-\frac{\lambda}{72\sqrt{3}\epsilon}
+  r_0^{\Omega\ll 1} \approx1+\frac{1}{21}(1-\sqrt{1+7\Omega})
 \end{align}
-and when $\lambda\gg12\sqrt{3}\epsilon$, the repulsive force dominates and
-\begin{align}
-  r_0\approx \bigg(\frac{12\sqrt{3}\epsilon}{\lambda}\bigg)^{\frac{1}{13}}.
+and when $\Omega\gg 1$, the repulsive force dominates and
+\begin{align}\label{eq:softsphereforcebalancelargelambda}
+  r_0^{\Omega\gg 1}\approx
+  &\Omega^{-1/13}\bigg\{1
+    +\frac{1}{14}\frac{(13-7\Omega^{-6/13})}{(13-4\Omega^{-6/13})}\nonumber\\
+  &\times\bigg(1-\sqrt{1+28\Omega^{-6/13}\frac{(13-4\Omega^{-6/13})}
+    {(13-7\Omega^{-6/13})^2}}\bigg)\bigg\}.
 \end{align}
-It would be good to solve eqn \ref{eq:WCAapprox} numerically to determine
-the functional form at all values of $\lambda/\epsilon$.
+These approximate solutions are compared to exact (numerical
+\footnote{using secant-method of root finding in SciPy})
+solutions of eqn \ref{eq:WCAforcebalance} in Figure \ref{fig:2}.
 
+\begin{figure}[!t]
+  \subfloat{
+    \includegraphics[width=0.5\textwidth]{Figures/fig2.pdf}
+  \label{fig:2a}}
+  \subfloat{\label{fig:2b}}
+  \caption{\protect\subref{fig:2a} Exact (numerical) distance $r_0$ between
+    spheres in a trimer at zero force (from eqn \ref{eq:WCAforcebalance}).
+    \protect\subref{fig:2b} relative error between $r_0$ and its approximate
+    solutions at small and large $\Omega\equiv\lambda/(12\sqrt{3}\epsilon)$,
+    measured as $(r_0^{\Omega\ll1}-r_0)/r_0$ and
+    $(r_0^{\Omega\gg1}-r_0)/r_0$, respectively. The approximation
+    $r_0^{\Omega\gg1}$ becomes poor around $\Omega\approx0.5$, which is why
+    the green dash-dotted line in Note that these results are
+    independent of $\Pi$.}\label{fig:2}
+\end{figure}
+  
 \subsubsection{Matching conditions for $w(r)$.}
 To solve the full inhomogeneous ODE in eqn \ref{eq:WODE_isotropic}, one must
 match two solutions at $r=1$. The solution for $r>1$ is just the homogeneous
@@ -569,6 +593,9 @@ accounted for. Explicitly,
        &-\frac{1}{2}\int_{r_0}^1dsI_1(\sqrt{\Pi}s)
          \mathcal{V}'(s)s\label{eq:c2}.
 \end{align}
+
+The full solution of the potential $w(r)$ is shown in Figure \ref{fig:3}
+for several values of $\Pi$ and $\Omega$.
 
 %%%%%%%%%%%% begin appendix %%%%%%%%%%%%%
 

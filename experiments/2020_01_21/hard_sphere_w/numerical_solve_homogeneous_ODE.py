@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import ode        
 
-def f(t,y,l0,usepotential):
+def f(t,y,Pi,usepotential):
 
     cutoff = 2**(1/6)
     
@@ -11,16 +11,16 @@ def f(t,y,l0,usepotential):
     else:
         v0 = 0
 
-    return [y[1],-3*y[1]/t+l0*y[0]+v0/t]
+    return [y[1],-3*y[1]/t+Pi*y[0]+v0/t]
 
-def jac(t,y,l0):
+def jac(t,y,Pi):
 
-    return [[0,1],[l0,-3/t]]
+    return [[0,1],[Pi,-3/t]]
   
 
 
 
-def evaluate_ode(yp0,l0,tf,usepotential,f,jac):
+def evaluate_ode(yp0,Pi,tf,usepotential,f,jac):
 
     r = ode(f,jac).set_integrator('vode',method='bdf',with_jacobian=True)
     t0 = 1
@@ -28,7 +28,7 @@ def evaluate_ode(yp0,l0,tf,usepotential,f,jac):
 
     yf = [0,yp0]
     
-    r.set_initial_value(yf,tf).set_f_params(l0,usepotential).set_jac_params(l0)
+    r.set_initial_value(yf,tf).set_f_params(Pi,usepotential).set_jac_params(Pi)
 
     dt = (tf-t0)/(num-1)
     
@@ -61,10 +61,10 @@ def Wboundary(W,Wp):
 if __name__=="__main__":
 
 
-    l0 = 0.1
+    Pi = 0.1
     yp0 = -1.86e-9
     tf = 40
-    ts,ys = evaluate_ode(yp0,l0,tf,False,f,jac)
+    ts,ys = evaluate_ode(yp0,Pi,tf,False,f,jac)
 
     print(ys[0,0],ys[0,1],Wboundary(ys[0,0],ys[0,1]))
     
