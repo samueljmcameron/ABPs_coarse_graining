@@ -111,7 +111,11 @@ class SoftSphereBase:
 
 class SoftSphere(SoftSphereBase):
 
-    def __init__(self,l0,epsilon,Pi):
+    def __init__(self,Omega=None,l0=1,epsilon=1,Pi=1):
+
+        if Omega != None:
+            epsilon = 1
+            l0 = Omega*12*np.sqrt(3)*epsilon
 
         super().__init__(l0,epsilon,Pi)
 

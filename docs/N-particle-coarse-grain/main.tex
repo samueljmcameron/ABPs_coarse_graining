@@ -219,8 +219,9 @@ first order as
   \zeta &= \sum_{i=1}^N\sum_{j=1}^{i-1}
       w(r_{ij})\bm{r}_{ij}\cdot\bm{u}_{ij}.
 \end{align}
-Here, I am neglecting terms of the form $\bm{u}_{ij}\cdot\bm{u}_{ij}$
-\footnote{Still unsure why this represents a non-polar approximation.}.
+Here, I am neglecting terms of the form $\bm{u}_{ij}\cdot\bm{u}_{ij}$ as
+they will only be (on average) non-zero when a non-zero polarity is present
+in the system (and MIPS is not a polar phase).
 
 
 Since, for $i\neq j$,
@@ -268,7 +269,7 @@ Inserting these into eqn \ref{eq:first_perturb_DE}
 \end{widetext}
 
 You can factor this equation a bit, using the result that
-\begin{align}
+\begin{align}\label{eq:u_itou_ij}
   \sum_{i=1}^N\sum_{j\neq i}f(r_{ij}) \bm{u}_i\cdot\bm{r}_{ij}
   =-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}f(r_{ji})\bm{u}_{ij}\cdot\bm{r}_{ij}
 \end{align}
@@ -504,11 +505,12 @@ solutions of eqn \ref{eq:WCAforcebalance} in Figure \ref{fig:2}.
     spheres in a trimer at zero force (from eqn \ref{eq:WCAforcebalance}).
     \protect\subref{fig:2b} relative error between $r_0$ and its approximate
     solutions at small and large $\Omega\equiv\lambda/(12\sqrt{3}\epsilon)$,
-    measured as $(r_0^{\Omega\ll1}-r_0)/r_0$ and
-    $(r_0^{\Omega\gg1}-r_0)/r_0$, respectively. The approximation
-    $r_0^{\Omega\gg1}$ becomes poor around $\Omega\approx0.5$, which is why
-    the green dash-dotted line in Note that these results are
-    independent of $\Pi$.}\label{fig:2}
+    measured as $(r_0^{\Omega\ll1}-r_0)/r_0$ (orange dashed line) and
+    $(r_0^{\Omega\gg1}-r_0)/r_0$ (green dash-dotted line), respectively.
+    The approximation $r_0^{\Omega\gg1}$ becomes poor around
+    $\Omega\approx0.5$, which is why the green dash-dotted line in
+    \protect\subref{fig:2b} is cut off at $\Omega = 0.5$. Note that these
+    results are independent of $\Pi$.}\label{fig:2}
 \end{figure}
   
 \subsubsection{Matching conditions for $w(r)$.}
@@ -594,8 +596,129 @@ accounted for. Explicitly,
          \mathcal{V}'(s)s\label{eq:c2}.
 \end{align}
 
-The full solution of the potential $w(r)$ is shown in Figure \ref{fig:3}
-for several values of $\Pi$ and $\Omega$.
+The full solution of $w(r)$ is shown in Figure \ref{fig:3} for different
+values of $\Omega$ and $\Pi$, the only two free parameters which control
+$w(r)$.
+
+\begin{figure}[!t]
+  \subfloat{
+    \includegraphics[width=0.5\textwidth]{Figures/fig3.pdf}
+  \label{fig:3a}}
+  \subfloat{\label{fig:3b}}
+  \caption{Effective potential $w$ for WCA interactions with
+    \protect\subref{fig:3a} $\Pi=1$ held constant, and
+    \protect\subref{fig:3b} $\Omega=1$ held constant. The value of $r_0$,
+    when an isolated trimer experiences zero force, is shown in black dots
+    for each parameter set.
+  }\label{fig:3}
+\end{figure}
+
+Since the steady-state is given by $P_{ss}\propto\exp(-h)$, with
+\begin{align}\label{eq:specifichfunction}
+  h(\{\bm{r}_i\},\{\bm{u}_i\}) = \sum_{i=1}^N\sum_{j=1}^{i-1}\big(
+  \mathcal{V}(r_{ij})+\lambda w(r_{ij})\bm{r}_{ij}\cdot\bm{u}_{ij}\big),
+\end{align}
+the maximum in $w(r)$ only corresponds to a minimum probability state if
+$\bm{r}_{ij}\cdot\bm{u}_{ij}>0$, i.e. if the particles are moving away from
+each other. Therefore, $\mathrm{max}(w)>0$ corresponds to a \textit{maximum}
+probability state in our trimer configuration, since the particles are
+moving toward each other. We expect that in certain parameter regimes, 
+particles on average will tend to have $\bm{r}_{ij}\cdot\bm{u}_{ij}<0$ (as
+observed in MIPS), and so the maximum in $w(r)$ will correspond ot a
+maximum probability state.
+
+We can see from Figure \ref{fig:3a} that when either the activity, $\lambda$,
+is large with respect to the energy scale of the WCA potential, $\epsilon$,
+(i.e. small values of $\Omega=\lambda/(12\sqrt{3}\epsilon$), the maximum in
+$w(r)$ is pushed to smaller $r$ as the ABPs are able more effectively
+penetrate the potential. It seems reasonable that $\Omega$ is a measure of
+how ``soft'' the potential is, and not just the potential energy scale
+$\epsilon$.
+
+Similarly, larger values of $\Pi\propto D^r/D^t$ in Figure
+\ref{fig:3b} move the maximum in $w(r)$ to smaller $r$. This is slightly
+more difficult to interpret physically, as increasing rotational diffusion
+will in turn change the average behaviour of $\bm{r}_{ij}\cdot\bm{u}_{ij}$.
+Naively, one would think that increasing rotational diffusion would decrease
+the likelihood of becoming stuck in a potential well, but Figure \ref{fig:3b}
+appears to indicate that the potential becomes deeper and less wide as
+$Pi$ increases. A deeper look into how the statistical mechanics of the
+system, to determine how e.g. $\bm{u}_{ij}$ behaves on average, is required
+to understand macroscopic behaviour.
+
+\section{Statistical mechanics of Active Brownian particles.}
+
+The framework of the last section is in theory enough to compute $h$ for any
+system of ABPs. In this section, we compute some statistical properties of
+ABPs with $h$ having the form of eqn \ref{eq:specifichfunction}.
+The ``partition function'' of ABPS is then (see appendix \ref{app:statmech})
+\begin{align}\label{eq:partition}
+  Z =(2\pi)^N\int\prod_{i=1}^N\big(d^2r_iI_0(2\lambda b_i))
+  \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
+  \mathcal{V}(r_{ij})\bigg)
+\end{align}
+where we have defined
+\begin{align}\label{eq:b_i}
+  b_i = |\bm{b}_i|\equiv\bigg|\sum_{j\neq i}^Nw(r_{ij})
+  \bm{r}_{ij}\bigg|,
+\end{align}
+and the integral
+\begin{align}\label{eq:Iintegral}
+  I_0(x)\equiv\frac{1}{\pi}\int_0^{\pi}d\phi\exp(x\cos\phi)
+\end{align}
+is just the order zero modified Bessel function.
+
+From eqn \ref{eq:partition}, we can therefore express the steady-state of
+the system for $h$ via integrating out the angular dependence, yielding an
+effective potential. This steady state is
+\begin{align}
+  p(\{\bm{r}_i\})=\frac{1}{\tilde{Z}}\exp[-V_{\mathrm{eff}}
+  (\{\bm{r}_i\})]
+\end{align}
+where
+\begin{align}
+  V_{\mathrm{eff}}(\{\bm{r}_i\})
+  \equiv\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
+  \mathcal{V}(r_{ij})-\sum_{i=1}^N\ln I_0(2\lambda b_i).
+\end{align}
+and $\tilde{Z}$ is 
+\begin{align}
+  \tilde{Z}=\int\prod_{i=1}^N(d^2r_i)\exp[-V_{\mathrm{eff}}(\{\bm{r}_i\})].
+\end{align}
+This effective potential can be expanded as
+\begin{align}
+  V_{\mathrm{eff}}(\{\bm{r}_i\})
+  =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})\nonumber\\
+   &-\frac{1}{4}\sum_{i=1}^N\bigg(4\lambda^2b_i^2
+     -\frac{16\lambda^4}{16}b_i^4+\cdots\bigg)
+     \nonumber\\
+  \approx
+   &\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+     -\lambda^2\sum_{i=1}^Nb_i^2,
+\end{align}
+where I have taken $\lambda\ll 1$ (consistent with above solutions of
+$w(r)$). The sum over $b_i^2$ can be decomposed into a sum of two-body and
+three-body interactions,
+\begin{align}
+  \sum_{i=1}^Nb_i^2
+  =&\sum_{i=1}^N\sum_{j\neq i}^Nw^2(r_{ij})r_{ij}^2\nonumber\\
+   &+\sum_{i=1}^N\sum_{j\neq i}^N\sum_{\substack{k\neq i \\ k\neq j}}^N
+  w(r_{ij})w(r_{ik})\bm{r}_{ij}\cdot\bm{r}_{ik}.
+\end{align}
+This motivates the definitions
+\begin{subequations}
+  \label{eqs:2and3body}
+  \begin{align}
+    W_2(\bm{r}_1,\bm{r}_2)
+    &= \mathcal{V}(r_{12})
+      -2\lambda^2 r_{12}^2w^2(r_{12}),\label{eq:2body}\\
+    W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)
+    &= \lambda^2w(r_{12})w(r_{13})\bm{r}_{12}\cdot\bm{r}_{13}.
+      \label{eq:3body}
+  \end{align}
+\end{subequations}
+
+  
 
 %%%%%%%%%%%% begin appendix %%%%%%%%%%%%%
 
@@ -913,8 +1036,67 @@ Therefore, the Wronskian of eqns \ref{eqs:linindependentWhomo} is
   =& -\frac{1}{r^3}.
 \end{align}
 
-     
-     
+
+\section{Partition function of ABPs. \label{app:statmech}}
+The partition function of the steady state can be written as
+\begin{widetext}
+\begin{align}
+  Z =&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
+       \times\exp\bigg(-\sum_{i=1}^N\sum_{j=1}^{i-1}\big[
+       \mathcal{V}(r_{ij})+\lambda w(r_{ij})\bm{r}_{ij}
+       \cdot\bm{u}_{ij}\big]\bigg)\nonumber\\
+  =&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
+     \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
+     \mathcal{V}(r_{ij})
+     +2\lambda\sum_{i=1}^N\sum_{j\neq i}^N\bm{u}_{i}
+     \cdot w(r_{ij})\bm{r}_{ij}\bigg).
+\end{align}
+where we have used eqn \ref{eq:u_itou_ij}. With the definition of eqn
+\ref{eq:b_i}, this is re-written as
+\begin{align}
+  Z=&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
+     \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
+     \mathcal{V}(r_{ij})+2\lambda\sum_{i=1}^N\bm{u}_{i}
+     \cdot \bm{b}_{i}\bigg)\nonumber\\
+  =&\int\prod_{i=1}^N\big(d^2r_i)
+     \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
+     \mathcal{V}(r_{ij})\bigg)\int\prod_{i=1}^N\bigg[d\theta_i
+     \exp(2\lambda\bm{u}_{i}\cdot \bm{b}_{i})\bigg].
+\end{align}
+The angular integrals can be re-written as
+\begin{align}
+  \int_0^{2\pi} d\theta_u\exp(\bm{u}\cdot2\lambda\bm{b})
+  &=\int_0^{2\pi} d\theta_u\exp(|\bm{b}|\cos(\theta_b-\theta_u))
+    \nonumber\\
+  &=\int_{-\theta_b}^{2\pi-\theta_b} d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+    \nonumber\\
+  &=\bigg(\int_{-\theta_b}^0
+    +\int_0^{2\pi}
+    -\int_{2\pi-\theta_b}^{2\pi}\bigg)
+    d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+    \nonumber\\
+  &=\bigg(\int_{-\theta_b}^0
+    -\int_{2\pi-\theta_b}^{2\pi}\bigg)
+    d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+    +\int_0^{2\pi}d\phi\exp(|\bm{b}|\cos(\phi))
+    \nonumber\\
+    &=\int_{-\theta_b}^0d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+    -\int_{2\pi-\theta_b}^{2\pi}d\phi'\exp(2\lambda|\bm{b}|\cos(\phi'))
+    +\int_0^{2\pi}d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+    \nonumber\\
+  &=\int_{-\theta_b}^0d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+    +\int_{\theta_b}^{0}d\phi''\exp(2\lambda|\bm{b}|\cos(2\pi-\phi''))
+    +\int_0^{2\pi}d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+    \nonumber\\
+  &=\int_{-\theta_b}^0d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+    -\int_{-\theta_b}^{0}d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+    +\int_0^{2\pi}d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+    \nonumber\\
+  &=\int_0^{2\pi}d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+\end{align}
+\end{widetext}
+which is the definition of eqn \ref{eq:Iintegral}. Inserting these results
+back into the partition function gives eqn \ref{eq:partitionfunction}
 \bibliographystyle{plain}
 \bibliography{main}
 
