@@ -653,7 +653,7 @@ system of ABPs. In this section, we compute some statistical properties of
 ABPs with $h$ having the form of eqn \ref{eq:specifichfunction}.
 The ``partition function'' of ABPS is then (see appendix \ref{app:statmech})
 \begin{align}\label{eq:partition}
-  Z =(2\pi)^N\int\prod_{i=1}^N\big(d^2r_iI_0(2\lambda b_i))
+  Z =(2\pi)^N\int\prod_{i=1}^N\big(d^2r_iI_0(\lambda b_i))
   \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
   \mathcal{V}(r_{ij})\bigg)
 \end{align}
@@ -679,7 +679,7 @@ where
 \begin{align}
   V_{\mathrm{eff}}(\{\bm{r}_i\})
   \equiv\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
-  \mathcal{V}(r_{ij})-\sum_{i=1}^N\ln I_0(2\lambda b_i).
+  \mathcal{V}(r_{ij})-\sum_{i=1}^N\ln I_0(\lambda b_i).
 \end{align}
 and $\tilde{Z}$ is 
 \begin{align}
@@ -689,36 +689,50 @@ This effective potential can be expanded as
 \begin{align}
   V_{\mathrm{eff}}(\{\bm{r}_i\})
   =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})\nonumber\\
-   &-\frac{1}{4}\sum_{i=1}^N\bigg(4\lambda^2b_i^2
-     -\frac{16\lambda^4}{16}b_i^4+\cdots\bigg)
+   &-\frac{1}{4}\sum_{i=1}^N\bigg(\lambda^2b_i^2
+     -\frac{\lambda^4}{16}b_i^4+\cdots\bigg)
      \nonumber\\
-  \approx
-   &\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
-     -\lambda^2\sum_{i=1}^Nb_i^2,
+  =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+     -\frac{1}{4}\lambda^2\sum_{i=1}^Nb_i^2+\mathcal{O}(\lambda^4),
 \end{align}
-where I have taken $\lambda\ll 1$ (consistent with above solutions of
-$w(r)$). The sum over $b_i^2$ can be decomposed into a sum of two-body and
-three-body interactions,
+where, consistent with above solutions of $w(r)$, only the lowest order
+corrections in $\lambda$ are considered. The sum over $b_i^2$ can be
+decomposed into a sum of two-body and three-body interactions,
 \begin{align}
   \sum_{i=1}^Nb_i^2
   =&\sum_{i=1}^N\sum_{j\neq i}^Nw^2(r_{ij})r_{ij}^2\nonumber\\
    &+\sum_{i=1}^N\sum_{j\neq i}^N\sum_{\substack{k\neq i \\ k\neq j}}^N
   w(r_{ij})w(r_{ik})\bm{r}_{ij}\cdot\bm{r}_{ik}.
 \end{align}
-This motivates the definitions
+This motivates the definitions of effective two-body and three-body
+interactions,
 \begin{subequations}
   \label{eqs:2and3body}
   \begin{align}
     W_2(\bm{r}_1,\bm{r}_2)
     &= \mathcal{V}(r_{12})
-      -2\lambda^2 r_{12}^2w^2(r_{12}),\label{eq:2body}\\
+      -\frac{1}{2}\lambda^2 r_{12}^2w^2(r_{12}),\label{eq:2body}\\
     W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)
-    &= \lambda^2w(r_{12})w(r_{13})\bm{r}_{12}\cdot\bm{r}_{13}.
+    &= -\frac{1}{4}\lambda^2w(r_{12})w(r_{13})\bm{r}_{12}\cdot\bm{r}_{13},
       \label{eq:3body}
   \end{align}
 \end{subequations}
-
-  
+which allows us to write the effective potential as
+\begin{align}
+  V_{\mathrm{eff}}(\{\bm{r}_i\})
+  &=\frac{1}{2}\sum_{i,j;j\neq i}W_2(\bm{r}_i,\bm{r}_j)
+    +\sum_{\substack{i,j,k;j\neq i \\k\neq i k\neq j}}
+    W_3(\bm{r}_i,\bm{r}_j,\bm{r}_k)
+\end{align}
+The partition function can be written (to fourth order in $\lambda$) as
+\begin{widetext}
+  \begin{align}
+    \tilde{Z}=\int\prod_{i=1}^N(d^2r_i)
+    \exp\bigg[-\frac{1}{2}\sum_{i}\sum_{j\neq i}W_2(\bm{r}_i,\bm{r}_j)
+    -\sum_{i}\sum_{j\neq i}\sum_{\substack{k\neq i \\ k\neq j}}
+    W_3(\bm{r}_i,\bm{r}_j,\bm{r}_k)\bigg].
+  \end{align}
+\end{widetext}
 
 %%%%%%%%%%%% begin appendix %%%%%%%%%%%%%
 
@@ -1046,13 +1060,19 @@ The partition function of the steady state can be written as
        \mathcal{V}(r_{ij})+\lambda w(r_{ij})\bm{r}_{ij}
        \cdot\bm{u}_{ij}\big]\bigg)\nonumber\\
   =&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
+     \times\exp\bigg(-\frac{1}{2}\sum_{i,j;j\neq i}\big[
+     \mathcal{V}(r_{ij})+\lambda w(r_{ij})\bm{r}_{ij}
+     \cdot\bm{u}_{ij}\big]\bigg)\nonumber\\
+  =&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
      \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
      \mathcal{V}(r_{ij})
-     +2\lambda\sum_{i=1}^N\sum_{j\neq i}^N\bm{u}_{i}
+     +\lambda\sum_{i=1}^N\sum_{j\neq i}^N\bm{u}_{i}
      \cdot w(r_{ij})\bm{r}_{ij}\bigg).
 \end{align}
+\end{widetext}
 where we have used eqn \ref{eq:u_itou_ij}. With the definition of eqn
 \ref{eq:b_i}, this is re-written as
+\begin{widetext}
 \begin{align}
   Z=&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
      \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
@@ -1061,42 +1081,45 @@ where we have used eqn \ref{eq:u_itou_ij}. With the definition of eqn
   =&\int\prod_{i=1}^N\big(d^2r_i)
      \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
      \mathcal{V}(r_{ij})\bigg)\int\prod_{i=1}^N\bigg[d\theta_i
-     \exp(2\lambda\bm{u}_{i}\cdot \bm{b}_{i})\bigg].
+     \exp(\lambda\bm{u}_{i}\cdot \bm{b}_{i})\bigg].
 \end{align}
+\end{widetext}
 The angular integrals can be re-written as
+\begin{widetext}
 \begin{align}
-  \int_0^{2\pi} d\theta_u\exp(\bm{u}\cdot2\lambda\bm{b})
-  &=\int_0^{2\pi} d\theta_u\exp(|\bm{b}|\cos(\theta_b-\theta_u))
+  \int_0^{2\pi} d\theta_u\exp(\bm{u}\cdot\lambda\bm{b})
+  &=\int_0^{2\pi} d\theta_u\exp(\lambda|\bm{b}|\cos(\theta_b-\theta_u))
     \nonumber\\
-  &=\int_{-\theta_b}^{2\pi-\theta_b} d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+  &=\int_{-\theta_b}^{2\pi-\theta_b} d\phi\exp(\lambda|\bm{b}|\cos(\phi))
     \nonumber\\
   &=\bigg(\int_{-\theta_b}^0
     +\int_0^{2\pi}
     -\int_{2\pi-\theta_b}^{2\pi}\bigg)
-    d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+    d\phi\exp(\lambda|\bm{b}|\cos(\phi))
     \nonumber\\
   &=\bigg(\int_{-\theta_b}^0
     -\int_{2\pi-\theta_b}^{2\pi}\bigg)
-    d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+    d\phi\exp(\lambda|\bm{b}|\cos(\phi))
     +\int_0^{2\pi}d\phi\exp(|\bm{b}|\cos(\phi))
     \nonumber\\
-    &=\int_{-\theta_b}^0d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
-    -\int_{2\pi-\theta_b}^{2\pi}d\phi'\exp(2\lambda|\bm{b}|\cos(\phi'))
-    +\int_0^{2\pi}d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+    &=\int_{-\theta_b}^0d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    -\int_{2\pi-\theta_b}^{2\pi}d\phi'\exp(\lambda|\bm{b}|\cos(\phi'))
+    +\int_0^{2\pi}d\phi\exp(\lambda|\bm{b}|\cos(\phi))
     \nonumber\\
-  &=\int_{-\theta_b}^0d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
-    +\int_{\theta_b}^{0}d\phi''\exp(2\lambda|\bm{b}|\cos(2\pi-\phi''))
-    +\int_0^{2\pi}d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+  &=\int_{-\theta_b}^0d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    +\int_{\theta_b}^{0}d\phi''\exp(\lambda|\bm{b}|\cos(2\pi-\phi''))
+    +\int_0^{2\pi}d\phi\exp(\lambda|\bm{b}|\cos(\phi))
     \nonumber\\
-  &=\int_{-\theta_b}^0d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
-    -\int_{-\theta_b}^{0}d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
-    +\int_0^{2\pi}d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+  &=\int_{-\theta_b}^0d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    -\int_{-\theta_b}^{0}d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    +\int_0^{2\pi}d\phi\exp(\lambda|\bm{b}|\cos(\phi))
     \nonumber\\
-  &=\int_0^{2\pi}d\phi\exp(2\lambda|\bm{b}|\cos(\phi))
+  &=\int_0^{2\pi}d\phi\exp(\lambda|\bm{b}|\cos(\phi))
 \end{align}
 \end{widetext}
-which is the definition of eqn \ref{eq:Iintegral}. Inserting these results
-back into the partition function gives eqn \ref{eq:partitionfunction}
+which is $I_0(\lambda|b|)$ using the definition of eqn \ref{eq:Iintegral}.
+Inserting these results back into the partition function gives eqn
+\ref{eq:partitionfunction}.
 \bibliographystyle{plain}
 \bibliography{main}
 
