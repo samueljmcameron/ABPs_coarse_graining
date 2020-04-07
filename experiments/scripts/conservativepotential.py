@@ -5,15 +5,51 @@ import scipy.integrate as integrate
 import matplotlib.pyplot as plt
 import time
 from vectorquad import quadrature_vec
-from conservativepotential import WCApotential
 
-class SoftSphereBase(WCApotential):
+class WCApotential():
+
+    def __init__(self,epsilon=1):
+        
+        self.epsilon = epsilon
+
+        return
+
+    def V_WCA(self,r):
+
+        a = self.epsilon*(r**(-12)-2*r**(-6)+1)
+
+        return np.where(r<1,a,0*a)
+    
+    def limited_domain_WCA_deriv(self,r):
+
+        # this function is only valid when r <= 1 !!!
+        
+        return -12*self.epsilon*(r**(-13)-r**(-7))
+
+    def V_WCA_prime_scalar(self,r):
+
+        if r <= 1:
+            a = self.limited_domain_WCA_deriv(r)
+
+        else:
+            a = 0
+
+        return a
+    
+    def V_WCA_prime(self,r):
+
+        a = self.limited_domain_WCA_deriv(r)
+
+        return np.where(r<=1,a,a*0)
+
+    
+
+class SoftSphereBase:
 
     def __init__(self,l0,epsilon,Pi):
 
-        super().__init__(epsilon=epsilon)
-        
         self.l0 = l0
+        self.epsilon = epsilon
         self.Pi = Pi
 
         return
@@ -215,13 +251,6 @@ class SoftSphere(SoftSphereBase):
         
         return np.where(r>=1,self.w_plus(r),self.w_minus(r))
 
-    def w_prime_scalar(self,r):
-
-        if r <= 1:
-            a = self.w_plus_prime(r)
-        else:
-            a = self.w_minus_prime(r)
-    
     def w_prime(self,r):
 
         a = np.where(r>=1,self.w_plus_prime(r),

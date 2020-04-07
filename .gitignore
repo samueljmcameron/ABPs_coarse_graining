@@ -18,4 +18,16 @@
 *.png
 *.txt
 *.jpg
+**/raw_data/*
+**/data*
 *#
+*.ipynb
+*.pkl
+*.rdf
+*.lammpstrj
+*.lammps.util
+*.lammps.log
+*.lammps
+*.fixprint
+*lmp.pll
+*lmp.serial

@@ -651,26 +651,33 @@ to understand macroscopic behaviour.
 The framework of the last section is in theory enough to compute $h$ for any
 system of ABPs. In this section, we compute some statistical properties of
 ABPs with $h$ having the form of eqn \ref{eq:specifichfunction}.
-The ``partition function'' of ABPS is then (see appendix \ref{app:statmech})
-\begin{align}\label{eq:partition}
-  Z =(2\pi)^N\int\prod_{i=1}^N\big(d^2r_iI_0(\lambda b_i))
-  \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
-  \mathcal{V}(r_{ij})\bigg)
-\end{align}
-where we have defined
-\begin{align}\label{eq:b_i}
-  b_i = |\bm{b}_i|\equiv\bigg|\sum_{j\neq i}^Nw(r_{ij})
-  \bm{r}_{ij}\bigg|,
-\end{align}
+The ``characteristic function'' of ABPs is then (see appendix
+\ref{app:statmech})
+\begin{widetext}
+  \begin{align}\label{eq:partition}
+    Z(J) =(2\pi)^N\int\prod_{i=1}^N\big(d^2r_iI_0(\lambda \tilde{b}_i(J)))
+    \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
+    \mathcal{V}(r_{ij})\bigg)
+  \end{align}
+  where we have defined
+  \begin{align}\label{eq:b_i2}
+    \tilde{b}_i^2(J)
+    =&\sum_{i=1}^N\sum_{j\neq i}^N(w(r_{ij})+J)^2r_{ij}^2
+    +\sum_{i=1}^N\sum_{j\neq i}^N\sum_{\substack{k\neq i \\ k\neq j}}^N
+    (w(r_{ij})+J)(w(r_{ik})+J)\bm{r}_{ij}\cdot\bm{r}_{ik},
+  \end{align}
+\end{widetext}
 and the integral
 \begin{align}\label{eq:Iintegral}
   I_0(x)\equiv\frac{1}{\pi}\int_0^{\pi}d\phi\exp(x\cos\phi)
 \end{align}
-is just the order zero modified Bessel function.
+is just the order zero modified Bessel function. The partition function
+is just $Z(J=0)$, and so we will take $J=0$ for the remainder of this
+section, defining $b_i\equiv \tilde{b}_i(J=0)$.
 
-From eqn \ref{eq:partition}, we can therefore express the steady-state of
-the system for $h$ via integrating out the angular dependence, yielding an
-effective potential. This steady state is
+From eqn \ref{eq:partition} with $J=0$, we can therefore express the
+steady-state of the system for $h$ via integrating out the angular
+dependence, yielding an effective potential. This steady state is
 \begin{align}
   p(\{\bm{r}_i\})=\frac{1}{\tilde{Z}}\exp[-V_{\mathrm{eff}}
   (\{\bm{r}_i\})]
@@ -685,54 +692,90 @@ and $\tilde{Z}$ is
 \begin{align}
   \tilde{Z}=\int\prod_{i=1}^N(d^2r_i)\exp[-V_{\mathrm{eff}}(\{\bm{r}_i\})].
 \end{align}
-This effective potential can be expanded as
+\subsection{Small $\lambda$ approximation to the effective potential.}
+This effective potential can be expanded for small $\lambda$ as
 \begin{align}
   V_{\mathrm{eff}}(\{\bm{r}_i\})
-  =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})\nonumber\\
-   &-\frac{1}{4}\sum_{i=1}^N\bigg(\lambda^2b_i^2
-     -\frac{\lambda^4}{16}b_i^4+\cdots\bigg)
-     \nonumber\\
+  =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})%\nonumber\\
+  -\sum_{i=1}^N\ln(I_0(\lambda b_i))
+  \nonumber\\
+  =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})%\nonumber\\
+  -\frac{1}{4}\sum_{i=1}^N\bigg(\lambda^2b_i^2
+  -\frac{\lambda^4}{16}b_i^4+\cdots\bigg)
+  \nonumber\\
   =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
-     -\frac{1}{4}\lambda^2\sum_{i=1}^Nb_i^2+\mathcal{O}(\lambda^4),
+  -\frac{1}{4}\lambda^2\sum_{i=1}^Nb_i^2+\mathcal{O}(\lambda^4),
 \end{align}
 where, consistent with above solutions of $w(r)$, only the lowest order
-corrections in $\lambda$ are considered. The sum over $b_i^2$ can be
-decomposed into a sum of two-body and three-body interactions,
-\begin{align}
-  \sum_{i=1}^Nb_i^2
-  =&\sum_{i=1}^N\sum_{j\neq i}^Nw^2(r_{ij})r_{ij}^2\nonumber\\
-   &+\sum_{i=1}^N\sum_{j\neq i}^N\sum_{\substack{k\neq i \\ k\neq j}}^N
-  w(r_{ij})w(r_{ik})\bm{r}_{ij}\cdot\bm{r}_{ik}.
-\end{align}
-This motivates the definitions of effective two-body and three-body
-interactions,
+corrections in $\lambda$ are considered. Inserting the expression for
+$b_i^2$ into this expansion motivates the definitions of effective
+two-body and three-body interactions,
 \begin{subequations}
   \label{eqs:2and3body}
   \begin{align}
-    W_2(\bm{r}_1,\bm{r}_2)
+    W_2(\bm{r}_1,\bm{r}_2;\lambda)
     &= \mathcal{V}(r_{12})
       -\frac{1}{2}\lambda^2 r_{12}^2w^2(r_{12}),\label{eq:2body}\\
-    W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)
-    &= -\frac{1}{4}\lambda^2w(r_{12})w(r_{13})\bm{r}_{12}\cdot\bm{r}_{13},
+    W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3;\lambda)
+    &= -\frac{3!}{4}\lambda^2w(r_{12})w(r_{13})\bm{r}_{12}\cdot\bm{r}_{13},
       \label{eq:3body}
   \end{align}
 \end{subequations}
-which allows us to write the effective potential as
-\begin{align}
-  V_{\mathrm{eff}}(\{\bm{r}_i\})
+which allow us to write the effective potential as
+\begin{align}\label{eq:Vthreebody}
+  V_{\mathrm{eff}}(\{\bm{r}_i\};\lambda)
   &=\frac{1}{2}\sum_{i,j;j\neq i}W_2(\bm{r}_i,\bm{r}_j)
-    +\sum_{\substack{i,j,k;j\neq i \\k\neq i k\neq j}}
+    +\frac{1}{3!}\sum_{\substack{i,j,k;j\neq i \\k\neq i k\neq j}}
+    W_3(\bm{r}_i,\bm{r}_j,\bm{r}_k)\nonumber\\
+  &=\sum_{j<i}W_2(\bm{r}_i,\bm{r}_j)
+    +\sum_{k<j<i}
     W_3(\bm{r}_i,\bm{r}_j,\bm{r}_k)
 \end{align}
-The partition function can be written (to fourth order in $\lambda$) as
-\begin{widetext}
-  \begin{align}
-    \tilde{Z}=\int\prod_{i=1}^N(d^2r_i)
-    \exp\bigg[-\frac{1}{2}\sum_{i}\sum_{j\neq i}W_2(\bm{r}_i,\bm{r}_j)
-    -\sum_{i}\sum_{j\neq i}\sum_{\substack{k\neq i \\ k\neq j}}
-    W_3(\bm{r}_i,\bm{r}_j,\bm{r}_k)\bigg].
-  \end{align}
-\end{widetext}
+
+\subsection{Two-body approximation to potential.}
+If one instead assumes that only two-body interactions are important for
+measuring thermodynamic quantities, i.e. only the pair correlation function
+\footnote{also known as the radial distribution function} contributes, then
+the effective potential can instead by written as (see appendix
+\ref{app:onlytwobody})
+\begin{align}
+  V_{\mathrm{eff}}(\{\bm{r}_i\})
+  =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+  -\sum_{i=1}^N\sum_{j\neq i}^N\ln(I_0(\lambda w(r_{ij})r_{ij}))
+\end{align}
+which now motivates a second effective two body interaction,
+\begin{align}\label{eq:Vfulltwobody}
+  \chi_2(r_{12};\lambda)
+  &= \mathcal{V}(r_{12})-2\ln(I_0(\lambda w(r_{12})r_{12})).
+\end{align}
+
+\subsection{Pressure calculations.}
+
+\subsubsection{Two-body pressure.}
+In order to check whether the two-body corrections are accurate, one can
+compute the pressure $P$ (see appendix \ref{app:pressure}) using the pair
+correlation function (obtained via simulation), 
+\begin{align}
+  \beta P
+  =& \frac{N}{A}
+  -\frac{\pi N^2}{2A^2}
+  \int_0^{\infty} du V_{2body}'(u)u^2 g^{(2)}(u),
+\end{align}
+where $V_{2body}$ is either the two body interaction $W_2$ defined in
+eqn \ref{eq:2body} or $\chi_2$ defined in eqn \ref{eq:Vfulltwobody}.
+
+\subsection{Correlation functions.}
+
+\subsubsection{Global correlation functions.}
+
+We can compute the global correlation function
+\begin{align}
+  \bigg<\sum_{i,j;j\neq i} \bm{u}_{ij}\cdot\bm{r}_{ij}
+  \bigg>,
+\end{align}
+by first noting that the characteristic function defined in eqn
+\ref{eq:partition} generates the moments of
+$\bm{u}_{ij}\cdot\bm{r}_{ij}$ (see appendix \ref{app:statmech})
 
 %%%%%%%%%%%% begin appendix %%%%%%%%%%%%%
 
@@ -1052,26 +1095,45 @@ Therefore, the Wronskian of eqns \ref{eqs:linindependentWhomo} is
 
 
 \section{Partition function of ABPs. \label{app:statmech}}
-The partition function of the steady state can be written as
+In this section, we will derive the partition function of the
+generalized steady state. Since we are also interested in the
+correlation functions of the couplings between orientation and
+position, we also include an extra parameter $J$, which will
+then serve as a way to generate this couplings (in the language
+of probability, $Z(J)$ is a characteristic function, and the
+partition function is $Z(0)$). With this, we get
 \begin{widetext}
-\begin{align}
-  Z =&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
-       \times\exp\bigg(-\sum_{i=1}^N\sum_{j=1}^{i-1}\big[
-       \mathcal{V}(r_{ij})+\lambda w(r_{ij})\bm{r}_{ij}
-       \cdot\bm{u}_{ij}\big]\bigg)\nonumber\\
+\begin{align}\label{appeq:genfunc}
+  Z(J)
   =&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
-     \times\exp\bigg(-\frac{1}{2}\sum_{i,j;j\neq i}\big[
-     \mathcal{V}(r_{ij})+\lambda w(r_{ij})\bm{r}_{ij}
-     \cdot\bm{u}_{ij}\big]\bigg)\nonumber\\
+  \times\exp\bigg(-\sum_{i=1}^N\sum_{j=1}^{i-1}\big[
+    \mathcal{V}(r_{ij})+\lambda (w(r_{ij})+J)\bm{r}_{ij}
+    \cdot\bm{u}_{ij}\big]\bigg)\nonumber\\
   =&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
-     \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
-     \mathcal{V}(r_{ij})
-     +\lambda\sum_{i=1}^N\sum_{j\neq i}^N\bm{u}_{i}
-     \cdot w(r_{ij})\bm{r}_{ij}\bigg).
+  \times\exp\bigg(-\frac{1}{2}\sum_{i,j;j\neq i}\big[
+    \mathcal{V}(r_{ij})+\lambda (w(r_{ij})+J)\bm{r}_{ij}
+    \cdot\bm{u}_{ij}\big]\bigg)\nonumber\\
+  =&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
+  \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
+  \mathcal{V}(r_{ij})
+  +\lambda\sum_{i=1}^N\sum_{j\neq i}^N\bm{u}_{i}
+  \cdot \bm{r}_{ij}(w(r_{ij})+J)\bigg).
 \end{align}
 \end{widetext}
-where we have used eqn \ref{eq:u_itou_ij}. With the definition of eqn
-\ref{eq:b_i}, this is re-written as
+where we have used eqn \ref{eq:u_itou_ij}. With the definition of
+\begin{align}\label{appeq:b_i}
+  \tilde{b}_i(J) = |\tilde{\bm{b}}_i(J)|\equiv
+  \bigg|\sum_{j\neq i}^N(w(r_{ij})+J)
+  \bm{r}_{ij}\bigg|,
+\end{align}
+or equivalently,
+\begin{align}\label{appeq:b_i2}
+  \sum_{i=1}^N\tilde{b}_i^2(J)
+  =&\sum_{i=1}^N\sum_{j\neq i}^N(w(r_{ij})+J)^2r_{ij}^2\nonumber\\
+  &+\sum_{i=1}^N\sum_{j\neq i}^N\sum_{\substack{k\neq i \\ k\neq j}}^N
+  (w(r_{ij})+J)(w(r_{ik})+J)\bm{r}_{ij}\cdot\bm{r}_{ik},
+\end{align}
+this is re-written as
 \begin{widetext}
 \begin{align}
   Z=&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
@@ -1120,6 +1182,328 @@ The angular integrals can be re-written as
 which is $I_0(\lambda|b|)$ using the definition of eqn \ref{eq:Iintegral}.
 Inserting these results back into the partition function gives eqn
 \ref{eq:partitionfunction}.
+
+From the definition of eqn \ref{appeq:genfunc}, one can see that
+\begin{align}
+  \bigg<\sum_{i,j;j\neq i} \bm{u}_{ij}\cdot\bm{r}_{ij}
+  \bigg>= -\frac{\partial \ln Z}{\partial \lambda J}.
+\end{align}
+
+\section{Virial coefficients.}
+To start with I will compute eqn \ref{eq:B2}. I can write
+\begin{align}
+  B_2
+  &=-\frac{1}{2A}\int d^2r_1 d^2r_2 f_{12}(r_{12})\nonumber\\
+  &=-\frac{1}{2}2\pi \int_0^{\infty}rdr(\exp(-W_2(r))-1)
+\end{align}
+  
+\section{Pressure in terms of correlation functions.\label{app:pressure}}
+
+
+In an equilibrium system, the pressure $P$ is defined as
+\begin{align}
+  \beta P = \frac{1}{Z}\frac{\partial Z}{\partial A}
+\end{align}
+where $Z$ is the (canonical) partition function. We now
+assume this holds for our active brownian particles system,
+and compute it in a similar manner for $\tilde{Z}$.
+
+To start with, I will consider a generic partition function
+\begin{align}
+  Z=\int\prod_{k=1}^N(d^2r_k)\exp[-\beta U(\{\bm{r}_i\})].
+\end{align}
+I will first explicitly introduce the area dependence in the integrand by
+writing $\bm{r}_i = A^{1/2}\bm{t}_i$, and so
+\begin{align}
+  Z = A^N\int\prod_{k=1}^N(d^2t_k)\exp[-\beta U(\{A^{1/2}\bm{t}_i\})].
+\end{align}
+Next, I take the area derivative of the partition function,
+\begin{align}
+  \frac{\partial Z}{\partial A}
+  =&NA^{N-1}\int\prod_{k=1}^N(d^2t_k)\exp[-\beta U(\{A^{1/2}\bm{t}_i\})]
+  \nonumber\\
+  &+A^N\int\frac{\partial}{\partial A}\prod_{k=1}^N(d^2t_k)
+  \exp[-\beta U(\{A^{1/2}\bm{t}_i\})]\nonumber\\
+  =&\frac{N}{A}Z
+  -A^N\int\frac{\partial}{\partial A}\prod_{k=1}^N(d^2t_k)
+  \exp[-\beta U(\{A^{1/2}\bm{t}_i\})]\nonumber\\
+  =&\frac{N}{A}Z
+  -\frac{\beta}{2A}A^N\int\prod_{k=1}^N(d^2t_k)
+  \frac{\partial U}{\partial\bm{r}_j}\cdot
+  \bm{r}_j\exp[-\beta U(\{A^{1/2}\bm{t}_i\})]\nonumber\\
+  =&\frac{N}{A}Z
+  -\frac{\beta}{2A}\int\prod_{k=1}^N(d^2r_k)
+  \sum_{j}\frac{\partial U}{\partial\bm{r}_j}\cdot
+  \bm{r}_j\exp[-\beta U(\{\bm{r}_i\})].
+\end{align}
+This then gives the pressure as
+\begin{align}
+  \beta P = \frac{N}{A}
+  -\frac{\beta}{2A}\bigg<\sum_{j=1}\bm{r}_j\cdot
+  \frac{\partial U}{\partial\bm{r}_j}\bigg>
+\end{align}
+where
+\begin{align}
+  <\cdots> = \frac{1}{Z}
+  \int\prod_{k=1}^N(d^2r_k)
+  \cdots\exp[-\beta U(\{\bm{r}_i\})].
+\end{align}
+
+\subsection{Pairwise and three-body interactions.\label{app:onlytwobody}}
+
+Next, I will assume a interaction potential of the form
+\begin{align}
+  \beta U = \sum_{i}\sum_{j<i}W_2+\sum_{i}\sum_{j<i}\sum_{k<j}W_3.
+\end{align}
+The partial derivative of this interaction potential with respect
+to position is then
+\begin{widetext}
+  \begin{align}
+    \frac{\partial \beta U}{\partial \bm{r}_l}
+    =& \sum_{i}\sum_{j<i}
+    \frac{\partial W_2(\bm{r}_i,\bm{r}_j)}{\partial \bm{r}_l}
+    +\sum_{i}\sum_{j<i}\sum_{k<j}
+    \frac{\partial W_3(\bm{r}_i,\bm{r}_j,\bm{r}_k)}{\partial \bm{r}_l}
+    \nonumber\\
+    =& \frac{1}{2}\bigg(\sum_{j\neq l}
+    \frac{\partial W_2(\bm{r}_l,\bm{r}_j)}{\partial \bm{r}_l}
+    +\sum_{i\neq l}
+    \frac{\partial W_2(\bm{r}_i,\bm{r}_l)}{\partial \bm{r}_l}\bigg)
+    +\frac{1}{6}\bigg(\sum_{j\neq l}\sum_{k\neq l,k\neq j}
+    \frac{\partial W_3(\bm{r}_l,\bm{r}_j,\bm{r}_k)}{\partial \bm{r}_l}
+    \nonumber\\
+    &+\sum_{i\neq l}\sum_{k\neq l, k\neq i}
+    \frac{\partial W_3(\bm{r}_i,\bm{r}_l,\bm{r}_k)}{\partial \bm{r}_l}
+    +\sum_{i\neq l}\sum_{j\neq l,j\neq i}
+    \frac{\partial W_3(\bm{r}_i,\bm{r}_j,\bm{r}_l)}{\partial \bm{r}_l}
+    \bigg).
+  \end{align}
+  Therefore,
+  \begin{align}
+    \sum_l\bm{r}_l\cdot\frac{\partial \beta U}{\partial \bm{r}_l}
+    =&\frac{1}{2}\bigg(\sum_l\sum_{j\neq l}\bm{r}_l\cdot
+    \frac{\partial W_2(\bm{r}_l,\bm{r}_j)}{\partial \bm{r}_l}
+    +\sum_l\sum_{i\neq l}\bm{r}_l\cdot
+    \frac{\partial W_2(\bm{r}_i,\bm{r}_l)}{\partial \bm{r}_l}\bigg)
+    +\frac{1}{6}\bigg(\sum_l\sum_{j\neq l}\sum_{k\neq l,k\neq j}
+    \bm{r}_l\cdot
+    \frac{\partial W_3(\bm{r}_l,\bm{r}_j,\bm{r}_k)}{\partial \bm{r}_l}
+    \nonumber\\
+    &+\sum_l\sum_{i\neq l}\sum_{k\neq l, k\neq i}\bm{r}_l\cdot
+    \frac{\partial W_3(\bm{r}_i,\bm{r}_l,\bm{r}_k)}{\partial \bm{r}_l}
+    +\sum_l\sum_{i\neq l}\sum_{j\neq l,j\neq i}\bm{r}_l\cdot
+    \frac{\partial W_3(\bm{r}_i,\bm{r}_j,\bm{r}_l)}{\partial \bm{r}_l}
+    \bigg).
+  \end{align}
+\end{widetext}
+Now, when integrating over the above expression, there are $N$ ways to
+integrate over the first particle, $N-1$ ways to integrate over the
+second particle, and $N-2$ ways to integrate over the third particle,
+so that the pressure becomes
+\begin{widetext}
+  \begin{align}
+    \beta P
+    =& \frac{N}{A}
+    -\frac{1}{Z}\frac{N(N-1)}{4A}\int d^2r_1d^2r_2\bigg(\bm{r}_1\cdot
+    \frac{\partial W_2(\bm{r}_1,\bm{r}_2)}{\partial \bm{r}_1}
+    +\bm{r}_2\cdot
+    \frac{\partial W_2(\bm{r}_1,\bm{r}_2)}{\partial \bm{r}_2}\bigg)
+    \int\prod_{k=3}^N(d^2r_k)
+    \exp[-\beta U(\{\bm{r}_i\})]\nonumber\\
+    &-\frac{1}{Z}\frac{N(N-1)(N-2)}{12A}\int d^2r_1d^2r_2d^2r_3\bigg(
+    \bm{r}_1\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_1}
+    +\bm{r}_2\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_2}
+    \nonumber\\
+    &+\bm{r}_3\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_3}
+    \bigg)
+    \int\prod_{k=4}^N(d^2r_k)
+    \exp[-\beta U(\{\bm{r}_i\})].
+  \end{align}
+
+  Defining the correlation function of order $n$ as
+  \begin{align}
+    g^{(n)}(\bm{r}_1,\cdots,\bm{r}_n)=\frac{A^nN!}{N^n(N-n)!}
+    \frac{1}{Z}\int\prod_{k=n+1}^N(d^2r_k)
+    \exp[-\beta U(\{\bm{r}_i\})],
+  \end{align}
+  this simplifies to
+  \begin{align}
+    \beta P
+    =& \frac{N}{A}
+    -\frac{N^2}{4A^3}\int d^2r_1d^2r_2\bigg(\bm{r}_1\cdot
+    \frac{\partial W_2(\bm{r}_1,\bm{r}_2)}{\partial \bm{r}_1}
+    +\bm{r}_2\cdot
+    \frac{\partial W_2(\bm{r}_1,\bm{r}_2)}{\partial \bm{r}_2}\bigg)
+    g^{(2)}(\bm{r}_1,\bm{r}_2)\nonumber\\
+    &-\frac{N^3}{12A^4}\int d^2r_1d^2r_2d^2r_3\bigg(
+    \bm{r}_1\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_1}
+    +\bm{r}_2\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_2}
+    +\bm{r}_3\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_3}
+    \bigg)g^{(3)}(\bm{r}_1,\bm{r}_2,\bm{r}_3).
+  \end{align}
+\end{widetext}
+
+If we assume that $W_2(\bm{r}_1,\bm{r}_2)=W_2(r_{12})$ is translationally
+invariant and $g^{(2)}(\bm{r}_1,\bm{r}_2)=g^{(2)}(r_{12})$, then the term
+with the second order correlation function can be simplified further.
+Using the change of coordinates
+\begin{align}
+  \bm{r}_1&=\frac{\bm{u}+\bm{v}}{\sqrt{2}},\\
+  \bm{r}_2&=\frac{\bm{v}-\bm{u}}{\sqrt{2}}
+\end{align}
+or
+\begin{align}
+  \bm{u}&=\frac{\bm{r}_2-\bm{r}_1}{\sqrt{2}},\\
+  \bm{v}&=\frac{\bm{r}_1+\bm{r}_2}{\sqrt{2}}.
+\end{align}
+then
+\begin{align}
+  &\int d^2r_1d^2r_2\bigg(\bm{r}_1\cdot
+  \frac{\partial W_2(r_{12})}{\partial \bm{r}_1}
+  +\bm{r}_2\cdot
+  \frac{\partial W_2(r_{12})}{\partial \bm{r}_2}\bigg)
+  g^{(2)}(r_{12})\nonumber\\
+  &=\int d^2r_1d^2r_2
+  W_2'(r_{12})(\bm{r}_2-\bm{r}_2)\cdot
+  \frac{(\bm{r}_2-\bm{r}_1)}{r_{12}}
+  g^{(2)}(r_{12})\nonumber\\
+  &=\int d^2u W_2'(u)u g^{(2)}(u)\nonumber\\
+  &=A\int d^2u W_2'(u)u g^{(2)}(u)\nonumber\\
+  &=2\pi A\int_0^{\infty} du W_2'(u)u^2 g^{(2)}(u).
+\end{align}
+
+\section{$b_i^n$}
+In this section, I would like to determine the many body terms
+of $b_i^{2n}$, where $b_i$ is defined in eqn \ref{eq:b_i}.
+The squared term is
+\begin{align}
+  b_i^2
+  =&\sum_{j\neq i}^Nw^2(r_{ij})r_{ij}^2\nonumber\\
+   &+\sum_{j\neq i}^N\sum_{\substack{k\neq i \\ k\neq j}}^N
+  w(r_{ij})w(r_{ik})\bm{r}_{ij}\cdot\bm{r}_{ik}.
+\end{align}
+I will define
+\begin{subequations}
+  \begin{align}
+    r &= \sum_{j\neq i}^Nw^2(r_{ij})r_{ij}^2,\\
+    s &=\sum_{j\neq i}^N\sum_{\substack{k\neq i \\ k\neq j}}^N
+    w(r_{ij})w(r_{ik})\bm{r}_{ij}\cdot\bm{r}_{ik},
+  \end{align}
+\end{subequations}
+so we can utilize the binomial theorem
+\begin{align}
+  b_i^{2n} = \sum_{k=0}^n{ n \choose k} r^{n-k}s^k.
+\end{align}
+We would like to limit the expansion to just including two-body
+and three-body terms. Limiting to just a two body expansion is
+straightforward, as any product $r^{n-k}s^k$ with $k\neq 0$ will
+have a product of a two-body and a three-body term, which is
+irreducible to anything less than a three-body term (if this
+wasn't the case, then the three-body term itself would be
+reducible to a two-body term, leading to a contradiction of us
+assuming it was a three-body term). Therefore, we start by
+using the multinomial formula,
+\begin{align}
+  (\sum_{j\neq i}^Nx_j)^k = \sum_{j_1+j_2+\cdots+j_N=k}
+  { k \choose j_1,j_2,\cdots j_N }\prod_{t=1,t\neq i}^N x_t^{j_t}.
+\end{align}
+For us, this simplifies to 
+\begin{widetext}
+  \begin{align}
+    r^k &= \bigg(\sum_{j\neq i}^Nw^2(r_{ij})r_{ij}^2\bigg)^k
+    \nonumber\\
+    &=\sum_{j\neq i}^Nw^{2k}(r_{ij})r_{ij}^{2k}
+    + \frac{1}{2}\sum_{l\neq i}\sum_{\substack{m\neq i \\ m\neq l}}
+    \sum_{\substack{j_l+j_m=k \\ j_l\neq 0 \\ j_m\neq 0}}
+        { k \choose j_l,j_m }
+        (w(r_{il})r_{il})^{2j_l}(w(r_{im})r_{im})^{2j_m}
+        +\textrm{four (and higher) body terms}.
+  \end{align}
+\end{widetext}
+From the looks of this, it seems like three-body terms will be
+difficult to include in any sort of coherent way...
+
+Continuing on with just two body terms then, $b_i^{2k}$ simplifies
+substantially to
+\begin{align}
+  b_i^{2k}=\sum_{j\neq i}^N(w(r_{ij})r_{ij})^{2k}
+  +\textrm{three (and higher) body terms}.
+\end{align}
+we can write the effective
+potential as
+\begin{widetext}
+  \begin{align}
+    V_{\mathrm{eff}}(\{\bm{r}_i\})
+    =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\ln(I_0(\lambda b_i))\nonumber\\
+    =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\ln\bigg(\sum_{k=0}^{\infty}
+    \frac{\bigg(\frac{1}{4}(\lambda^2 b_i^2)\bigg)^k}{(k!)^2}\bigg)\nonumber\\
+    =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\ln\bigg(\sum_{k=0}^{\infty}
+    \frac{\bigg(\frac{1}{4}\lambda^2\bigg)^k}{(k!)^2}b_i^{2k}\bigg)\nonumber\\
+    \approx&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\ln\bigg(\sum_{j\neq i}\sum_{k=0}^{\infty}
+    \frac{\bigg(\frac{1}{4}\lambda^2\bigg)^k}{(k!)^2}
+    (w(r_{ij})r_{ij})^{2k}\bigg)\nonumber\\
+    \approx&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\ln\bigg(1+\sum_{j\neq i}\sum_{k=1}^{\infty}
+    \frac{\bigg(\frac{1}{4}\lambda^2\bigg)^k}{(k!)^2}
+    (w(r_{ij})r_{ij})^{2k}\bigg)\nonumber\\
+    \approx&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\sum_{n=0}^{\infty}\frac{(-1)^{n+1}}{n}
+    \bigg(\sum_{j\neq i}\sum_{k=1}^{\infty}
+    \frac{\bigg(\frac{1}{4}\lambda^2\bigg)^k}{(k!)^2}
+    (w(r_{ij})r_{ij})^{2k}\bigg)^n\nonumber\\
+    \approx&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\sum_{j\neq i}\sum_{n=0}^{\infty}\frac{(-1)^{n+1}}{n}
+    \bigg(\sum_{k=1}^{\infty}
+    \frac{\bigg(\frac{1}{4}\lambda^2\bigg)^k}{(k!)^2}
+    (w(r_{ij})r_{ij})^{2k}\bigg)^n\nonumber\\
+    =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\sum_{j\neq i}\ln(I_0(\lambda w(r_{ij})r_{ij}))
+    +\textrm{three (and higher) body terms}.
+  \end{align}
+\end{widetext}
+
+
+\section{Pressure calculation from virial expansion}
+Now, according to \cite{LEE198895}
+\footnote{The section of this book is riddled with
+  typos, so I should cross-reference with another source or check myself.},
+the virial expansion for a three body potential with the form of eqn
+\ref{eq:Veff} can be written in terms of the two-body and three body
+Mayer F-functions in the usual way, i.e.
+\begin{align}
+  \beta P = \rho + B_2\rho^2 +B_3\rho^3+\cdots,
+\end{align}
+where $\rho\equiv N/A$, the second virial coefficient is
+\begin{align}\label{eq:B2}
+  B_2=-\frac{1}{2A}\int d^2r_1 d^2r_2 f_{12},
+\end{align}
+the third virial coefficient is
+\begin{widetext}
+  \begin{align}\label{eq:B3}
+    B_3=-\frac{1}{3A}\int d^2r_1 d^2r_2 d^2r_3
+    [f_{12}f_{23}f_{31}+f_{123}(1+f_{12})(1+f_{23})(1+f_{31})],
+  \end{align}
+  \end{widetext}
+the two-body Mayer function is
+\begin{align}\label{eq:f12}
+  f_{12} = \exp(-W_2(r_{12}))-1,
+\end{align}
+and the three-body Mayer function is
+\begin{align}\label{eq:f13}
+  f_{123} = \exp(-W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3))-1.
+\end{align}
+
+
 \bibliographystyle{plain}
 \bibliography{main}
 

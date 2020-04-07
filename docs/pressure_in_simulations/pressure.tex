@@ -1,0 +1,406 @@
+\documentclass[twocolumn,amsmath,amssymb,aps]{revtex4-1}%{article}
+%\usepackage[hmargin=1.25cm,vmargin=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{bm}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{dcolumn}
+\usepackage[caption=false]{subfig}
+
+\begin{document}
+ 
+\title{calculation: coarse-graining active brownian particles}
+\author{Sam Cameron}
+\affiliation{%
+  University of Bristol}%
+\date{\today}
+
+\begin{abstract}
+\end{abstract}
+
+\maketitle
+
+\section{Microscopic definition of pressure.}
+\subsection{System with walls.}
+
+Following appendix C of \cite{C5SM01412C}.
+
+Define the pressure, $p^{e,\alpha}$ on a surface of area
+$\Delta S^{\alpha}$ as
+\begin{align}\label{eq:pfund}
+  p^{e,\alpha}\Delta S^{\alpha}
+  \equiv -\sum_{i\in\Delta S^{\alpha}}
+  <\bm{F}_i^{s,{\alpha}}\cdot\bm{n}_i^{\alpha}>.
+\end{align}
+$\bm{F}_i^{s,{\alpha}}$ is the force exerted on the surface
+(e.g. through some potential energy of the surface) due to
+the $i^{th}$ particle, and $\bm{n}_i^{\alpha}$ is the normal
+to the surface at the location of the $i^{th}$ particle. The
+centre of $\Delta S^{\alpha}$ is at $\bm{r}^{\alpha}$, and
+the normal at $\bm{r}^{\alpha}$ is $\bm{n}^{\alpha}$.
+
+Assume $\Delta S^{\alpha}$ is smooth (curvature variations
+are small compared to some particle length scale $\sigma$).
+More concretely, this is saying that the change in curvature
+of the wall at any two points within $\Delta S^{\alpha}$ is
+small, $\sigma d\bm{n}/dr^{\alpha}|_{\Delta S^{\alpha}}\ll 1$.
+This should be valid for small enough $\Delta S^{\alpha}$.
+Then, we can say that
+$\bm{n}_i^{\alpha}\approx\bm{n}^{\alpha}$. We can now re-write
+eqn \ref{eq:pfund} as
+\begin{align}
+  p^{e,\alpha}\Delta S^{\alpha}\bm{n}^{\alpha}
+  \cdot\bm{r}^{\alpha}
+  \approx -\sum_{i\in\Delta S^{\alpha}}<\bm{F}_i^{s,\alpha}>
+\end{align}
+where we have multiplied both sides by the dot product
+$\bm{r}^{\alpha}\cdot\bm{n}^{\alpha}$.
+
+Next, define $d\bm{S}\equiv\Delta S^{\alpha}\bm{n}^{\alpha}$,
+and use the assumption that for small enough $d\bm{S}$,
+$\bm{r}^{\alpha}\approx\bm{r}_i^{\alpha}$ so that the sum over
+all $\alpha$ is
+\begin{align}
+  \sum_{\alpha}p^{e,\alpha}\Delta S\bm{n}^{\alpha}
+  \cdot\bm{r}^{\alpha}
+  \approx -\sum_{\alpha}\sum_{i\in\Delta S^{\alpha}}
+  <\bm{F}_i^{s,\alpha}\cdot\bm{r}_i^{\alpha}>
+  \approx-\sum_{i=1}^{N}<\bm{F}_i^{s}\bm{r}_i>.
+\end{align}
+In the last line, I have assumed that each particle only
+exerts forces on one surface element. This is not the case
+at e.g. corners, but errors introduced from this assumption
+should be negligible in the limit of large particle number,
+as only a small number of particles can be within a close
+enough distance to a wall corner to feel multiple surface
+elements. In the limit of $\Delta S\to 0$, the sum over
+$\alpha$ becomes an integral, and the approximations above
+become exact (aside from the corner discussion).
+replacing the discrete $\bm{r}^{\alpha}$ to a continuous
+vector $\bm{r}$, and using the divergence theorem,
+\begin{align}
+  \int_{S} p^e(\bm{r})\bm{r}\cdot d\bm{S}
+  =\int_V\nalba\cdot(p^e(\bm{r})\bm{r})d^dr
+  =-\sum_{i=1}^{N}<\bm{F}_i^{s}\bm{r}_i>
+\end{align}
+where $d$ is the volume element in $d$ dimensions.
+
+Finally, if $p^e$ is independent of position, then in $d$
+dimensions the pressure on a wall is
+\begin{align}\label{eq:pwall}
+  p^e
+  =-\frac{1}{dV}\sum_{i=1}^{N}<\bm{F}_i^{s}\bm{r}_i>,
+\end{align}
+and so the pressure on the wall is the virial over all
+surface forces.
+
+\subsection{Periodic boundary conditions.}
+
+\section{Standard method of pressure computation in LAMMPS.}
+
+In LAMMPS, the pressure is computed by first assuming the formula
+\begin{align}
+  P_{\alpha\beta}V = \bigg<\sum_{i=1}^N(\m_i(\bm{v}_i)_{\alpha}
+  (\bm{v}_i)_{\beta}+W_{\alpha\beta}(\{\bm{r}_i\}))\bigg>
+\end{align}
+is correct, where
+\begin{align}
+  W_{\alpha\beta}(\{\bm{r}_i\})\equiv\sum_{k\in\bm{0}}
+  \sum_{w=1}^{N_k(\bm{r}_w^k)_{\alpha}
+    (\bm{F}_w^k)_{\beta}
+\end{align}
+is the virial tensor, where the system has been broken into
+$k$ groups of atoms which interact with each other (i.e.
+are within cutoff distance of each other, and so an atom can
+belong to multiple groups), and each group has $N_k$ atoms in
+it. So $\bm{r}_w^k$ is the position of the $w^{th}$ atom in
+group $k$, $\bm{F}_w^k$ is the force due to all atoms in group
+$k$ on the $w^{th}$ atom in group $k$. The first summation,
+with $k\in\bm{0}$, just states that the sum is over all group
+images associated with the local lattice cell, and so it is
+taken that $\bm{r}_1^k=\bm{r}_{i\bm{0}}$ is always in the local
+cell. This is actually equivalent to the second in term in ref
+Gompperant so can remain in the system.
+
+Just need to figure out the term with summation over
+$\sum_{i}\sum_{j}\sum_{\bm{n}}\bm{F}_{ij\bm{n}}\cdot\bm{e}_i$,
+probably using same style as Thomson calculation for lammps.
+(look at lammps code for insight??).
+
+of interacting atoms having
+  . Unfortunately, it is not. The first term can be easily
+neglected by telling lammps not to compute it, but the second
+term might still be some use if we can understand where it comes
+from.
+
+\section{Writing the active brownian particles equations of motion into
+  the correct form}
+
+The equations of motion for active brownian particles are:
+\begin{subequations}
+  \label{eqs:basicABPsODEs_dimensional}
+  \begin{align}
+    \frac{d\tilde{\bm{r}}_i}{d\tilde{t}}&=\tilde{\beta}
+    \tilde{D}^t\big(\tilde{\bm{F}}_i
+    +\tilde{f}^P\bm{P}_i\big)
+    +\sqrt{2\tilde{D}^t}\tilde{\bm{\xi}}^r_i,\\
+    \frac{d\theta_i}{dt}&=\sqrt{2\tilde{D}^r}
+    \tilde{\bm{\xi}}^{\theta}_i.
+  \end{align}
+\end{subequations}
+where $\tilde{\bm{r}}_i=(x_i,y_i)$ are the particle positions,
+$\bm{P}_i=(\cos\theta_i,\sin\theta_i)$ are the particle orientations,
+and $\tilde{\bm{\xi}}^{a}_i$, $a=t,r$ are Gaussian white noise
+with zero mean and unit variance, i.e.
+\begin{subequations}
+  \begin{align}
+    \big<(\tilde{\xi}^a_i(t))_{\gamma}\big>&=0,\\
+    \big<(\tilde{\xi}^a_i(t))_{\gamma}(\tilde{\xi}^b_j(t'))_{\beta}\big>
+    &=\delta_{\beta\gamma}\delta_{ij}\delta_{ab}\delta(t-t^{\prime}).
+  \end{align}
+\end{subequations}
+
+If I take $\sigma$ (the length scale of the force $\bm{F}_i$) as the unit of
+length, $\beta$ as the unit of energy, and $\tau = \sigma^2/D^t$ as the unit
+of time, then eqn \ref{eqs:basicABPsODEs_dimensional} can be re-written as
+\begin{subequations}
+  \label{eqs:basicABPsODEs}
+  \begin{align}
+    \dot{\bm{r}}_i&=\bm{F}_i
+    +f^P\bm{P}_i
+    +\sqrt{2}\bm{\xi}^{r}_i,\label{eq:micro_pos}\\
+    \dot\theta_i&=\sqrt{4\Pi}\xi^{\theta}_i,\label{eq:micro_theta}
+  \end{align}
+\end{subequations}
+where dots over variables are derivatives with respect to (dimensionless)
+time $t$ and all variables without tildes are dimensionless, i.e.
+\begin{subequations}
+  \label{eqs:dimensionless}
+  \begin{align}
+    \tilde{t} &= t\frac{\sigma^2}{D^t},\\
+    \tilde{\bm{r}}_i &= \bm{r}_i\sigma,\\
+    \tilde{\bm{F}}_i & = \bm{F}_i\frac{1}{\beta\sigma},\\
+    \tilde{f}^P &= f^P\frac{1}{\beta\sigma},\\
+    \tilde{D}^r &= \Pi \frac{2D^t}{\sigma^2}.
+  \end{align}
+\end{subequations}
+Taking the dot product of eqn \ref{eq:micro_pos} with $\bm{r}_i$, and then
+taking the ensemble average defined as
+\begin{align}
+  <\mathcal{O}(\bm{\xi}(t))>\frac{1}{Z}\int \mathcal{D}\bm{\xi}
+  \mathcal{O}(\bm{\xi}(t))
+  \exp\bigg(-\frac{1}{2}\int_0^Tdt(\bm{\xi}(t))^2\bigg),
+\end{align}
+where the components of $\bm{\xi}$ include all particles, with each particle
+having $3$ ($x$, $y$, and $\theta$) noise terms (and so $3N$ terms total),
+we get
+\begin{align}
+  \frac{1}{2}\frac{d}{dt}<\bm{r}_i^2>
+  = <\bm{F}_i\cdot\bm{r}_i>+f^P<\bm{P}_i\cdot\bm{r}_i>
+  +\sqrt{2}<\bm{\xi}^r\cdot\bm{r}_i>
+\end{align}
+
+\newpage
+\appendix
+
+\section{Ensemble-averaged quantities}
+
+In this section, we evaluate ensemble averaged quantities by using the formal
+solution to eqn \ref{eq:micro_pos}, namely
+\begin{align}
+  \bm{r}_i(t)=
+  &\bm{r}_i(t-\Delta t)
+  +\int_{t-\Delta t}^tdt_1[\bm{F}_i(\{\bm{r}_j\})\nonumber\\
+    &+f^P\bm{P}_i(t_1)
+    +\sqrt{2}\bm{\xi}_i(t_1)].
+\end{align}
+Before evaluating, it is also useful to note that
+\begin{align}
+  <\bm{P}_i(t)\bm{P}_i(t')> = e^{-(d-1)\Pi |t-t'|}.
+\end{align}
+in $d$ dimensions...
+BUT HOW DO I DERIVE THIS????
+\subsection{$<\bm{P}_i\cdot\bm{r}_i>$}
+\begin{widetext}
+  \begin{align}
+    <\bm{P}_i(t)\cdot\bm{r}_i(t)>=
+    &<\bm{r}_i(t-\Delta t)\cdot\bm{P}_i(t)>
+    +<\int_{t-\Delta t}^tdt_1\big[\bm{F}_i(\{\bm{r}_j\})
+      \cdot\bm{P}_i(t)+f^P\bm{P}_i(t_1)\cdot\bm{P}_i(t)
+      +\sqrt{2}\bm{\xi}_i(t_1)\cdot\bm{P}_i(t)\big]>\nonumber\\
+    =&\int_{t-\Delta t}^tdt_1\big[<\bm{F}_i(\{\bm{r}_j\})
+      \cdot\bm{P}_i(t)>+f^P<\bm{P}_i(t_1)\cdot\bm{P}_i(t)>
+      +\sqrt{2}<\bm{\xi}_i(t_1)\cdot\bm{P}_i(t)>\big]\nonumber\\
+  \end{align}
+\end{widetext}
+
+\section{Fokker-Planck equations\label{app:fokkerplanck}}
+
+Now, I can define a vector of length $3N$ with components
+\begin{align}
+  \bm{r}=(\bm{r}^{(1)},\bm{r}^{(2)},\cdots,\bm{r}^{(N)},\theta_1,\theta_2,\cdots,
+  \theta_N).
+\end{align}
+
+This will then give the differential equation
+\begin{align}
+  \frac{d\bm{r}}{dt}=\beta\bm{D}\cdot(\bm{F}(\bm{r})+\bm{v}(\bm{r}))
+  +\sqrt{2D_{\alpha\beta}}u_{\beta}(t),
+\end{align}
+where $D_{\alpha\beta}$ is diagonal, and the values of the diagonal are
+$D^t$ for the first $2N$ terms, and $D^r$ for the last $N$ terms.
+
+Next, I will define
+\begin{align}
+  \bm{x}&\equiv(x_1,x_2,\cdots,x_{3N}),\\
+  \nabla&\equiv(\partial_{x_1},\partial_{x_2},\cdots,\partial_{x_{3N}}).
+\end{align}
+
+as well as the stochastic probability density operator
+\begin{align}
+  \hat{\rho}(\bm{x},t)=\delta(\bm{x}-\bm{r}(t)).
+\end{align}
+
+Taking the partial derivative of this with respect to time gives
+\begin{align}
+  \frac{\partial\hat{\rho}}{\partial t}
+  &=-(\nabla_{\bm{x}}\delta(\bm{x}-\bm{r}(t))
+  \cdot\frac{d\bm{r}}{dt}\nonumber\\
+  &=-\nabla_{\bm{x}}\cdot\bigg(\frac{d\bm{r}}{dt}
+  \delta(\bm{x}-\bm{r}(t)\bigg)\nonumber\\
+  &=-\nabla_{\bm{x}}\cdot\hat{\bm{j}}(\bm{x},t),
+\end{align}
+where I have defined the stochastic current operator
+\begin{align}
+  \hat{\bm{j}}(\bm{x},t)\equiv
+  &\beta\bm{D}\cdot\bm{F}(\bm{x})\delta(\bm{x}-\bm{r}(t))
+  +\beta\bm{D}\bm{v}(\bm{x})\delta(\bm{x}-\bm{r}(t))\nonumber\\
+  &+\sqrt{2D_{\alpha\beta}}u_{\beta}(t)
+  \delta(\bm{x}-\bm{r}(t))\nonumber\\
+  =&\beta\bm{D}\cdot\bm{F}(\bm{x})\hat{\rho}(\bm{x},t)
+  +\beta\bm{D}\cdot\bm{v}(\bm{x})\hat{\rho}(\bm{x},t)\nonumber\\
+  &+\sqrt{2D_{\alpha\beta}}u_{\beta}(t)\hat{\rho}(\bm{x},t).
+\end{align}
+
+You can average $\hat{\rho}(\bm{x},t)$ over the fluctuations $\bm{u}(t)$, and
+get the resulting density
+\begin{align}
+  P(\bm{x},t)=<\hat{\rho}(\bm{x},t)>,
+\end{align}
+where I have used the definition that for some observable $\hat{\mathcal{O}}$,
+\begin{align}
+  <\hat{\mathcal{O}}(\bm{u}(t))>=\frac{1}{Z}\int\mathcal{D}\bm{u}
+  \hat{\mathcal{O}}(\bm{u}(t))
+  \exp\bigg(-\frac{1}{2}\int_0^Tdt(\bm{u}(t))^2\bigg).
+\end{align}
+From this, I can calculate that noise-averaged current as
+\begin{align}
+  \bm{J}(\bm{x},t)=
+  &\beta\bm{D}\cdot(\bm{F}(\bm{x})P(\bm{x},t)
+  +\bm{v}(\bm{x})P(\bm{x},t))\nonumber\\
+  &+\sqrt{2D_{\alpha\beta}}<u_{\beta}(t)\hat{\rho}(\bm{x},t)>.
+\end{align}
+
+In order to write the noise term above in terms of $P(\bm{x},t)$, I will use
+the properties of the Dirac-delta function, namely,
+\begin{align}
+  \delta(\bm{x})=\int\frac{d^dk}{(2\pi)^d}\exp(-ik_jx_j),
+\end{align}
+to write
+\begin{align}
+  <u_{\beta}\hat{\rho}(\bm{x},t)>=\int\frac{d^dk}{(2\pi)^d}u_{\beta}(t)
+  \exp(-ik_j(x_j-r_j(t))).
+\end{align}
+
+Since correlations between the noise
+$<u_{\alpha}(t)u_{\beta}(t)>=\delta_{\alpha\beta}\delta(t-t^{\prime})$ only
+occur for fluctuations happening at the same time, we can write
+\begin{align}
+  \bm{r}(t)=
+  &\bm{r}(t-\Delta t)
+  +\int_{t-\Delta t}^tdt_1[\beta\bm{D}(\bm{F}(\bm{r}(t_1))
+    +\bm{v}(\bm{r}(t_1)))\nonumber\\
+    &+\sqrt{2D_{j\gamma}}u_{\gamma}(t_1)]
+\end{align}
+as $\Delta t\to0$. Then, since
+\begin{align}
+  \exp\bigg[\int_{t-\Delta t}^tdt_1(\bm{F}(\bm{r}(t_1)
+  +\bm{v}({\bm{r}(t_1)})\bigg]=1+O(\Delta t),
+\end{align}
+this can be written as
+\begin{widetext}
+  \begin{align}
+    <u_{\beta}(t)\exp(-ik_jr_j(t))>=
+    &\bigg<u_{\beta}(t)\exp\bigg[-ik_jr_j(t-\Delta t)-ik_j
+      \int_{t-\Delta t}^tdt_1(F_j(\bm{r}(t_1)+v_j{\bm{r}(t_1)}
+      +\sqrt{2D_{j\gamma}}u_{\gamma}(t_1))\bigg]\bigg>\nonumber\\
+    =&\bigg<u_{\beta}(t)\exp(-ik_jr_j(t-\Delta t))
+    \bigg[1-ik_j\int_{t-\Delta t}^tdt_1
+      \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>+O(\Delta t).
+  \end{align}
+\end{widetext}
+Next, since $t-\Delta t<t_1,t$, there won't be any correlations between the
+fluctuations at earlier times and those at $t$, so using the fact that for uncorrelated
+functions $<AB>=<A><B>$, I get
+\begin{widetext}
+\begin{align}
+  <u_{\beta}(t)\exp(-ik_jr_j(t))>
+  &=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  \bigg<u_{\beta}(t)\bigg[1-ik_j\int_{t-\Delta t}^tdt_1
+    \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>
+  +O(\Delta t)\nonumber\\
+  &=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  \bigg(<u_{\beta}(t)>
+  -\bigg<ik_j\int_{t-\Delta t}^tdt_1
+  \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)
+  u_{\beta}(t)\bigg>\bigg)
+  +O(\Delta t)\nonumber\\
+  &=-\bigg<ik_j\sqrt{2D_{j\gamma}}\int_{t-\Delta t}^tdt_1
+  \delta_{\beta \gamma}\delta(t-t_1)\bigg>
+  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  +O(\Delta t)\nonumber\\
+  &=-\bigg<ik_j\sqrt{2D_{j\beta}}\int_{t-\Delta t}^tdt_1
+  \delta(t-t_1)\bigg>
+  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  +O(\Delta t)\nonumber\\
+  &=-\bigg<ik_j\sqrt{2D_{j\beta}}\int_0^{\Delta t}du
+  \delta(u)\bigg>
+  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  +O(\Delta t)\nonumber\\
+  &=-\frac{1}{2}ik_j\sqrt{2D_{j\beta}}
+  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  +O(\Delta t)\nonumber\\.
+\end{align}
+\end{widetext}
+Taking the limit as $\Delta t\to0$, this becomes
+\begin{align}
+  <u_{\beta}(t)&\exp(-ik_jr_j(t)>=\nonumber\\
+  &-\frac{1}{2}ik_j\sqrt{2D_{j\beta}}\bigg<\exp(-ik_jr_j(t))\bigg>.
+\end{align}
+Taking the inverse Fourier transform then gives
+\begin{align}
+  <u_{\beta}(t)\hat{\rho}(\bm{x},t)>=-\frac{1}{2}\sqrt{2D_{j\beta}}
+  \partial_jP(\bm{x},t).
+\end{align}
+Finally, inserting this into the current I get
+\begin{align}
+  J_{\alpha}(\bm{x},t)=
+  &\beta D_{\alpha\beta}F_{\beta}(\bm{x})P(\bm{x},t)
+  +\beta D_{\alpha\beta}v_{\beta}(\bm{x})P(\bm{x},t)\nonumber\\
+  &+\sqrt{2D_{\alpha\beta}}\bigg(-\frac{1}{2}\sqrt{2D_{j\beta}}
+  \partial_jP(\bm{x},t)\bigg)\nonumber\\
+  =&\beta D_{\alpha\beta}F_{\beta}(\bm{x})P(\bm{x},t)
+  +\beta D_{\alpha\beta}v_{\beta}(\bm{x})P(\bm{x},t)\nonumber\\
+  &-\sqrt{D_{\alpha\beta}D_{\gamma\beta}}
+  \partial_{\gamma}P(\bm{x},t))
+\end{align}
+
+Since in our case, $D_{\alpha\beta}$ is diagonal, this just gives eqn
+\ref{eq:Nparticlecurrent} as desired.
+
+\bibliographystyle{plain}
+\bibliography{bib}
+
+\end{document}
