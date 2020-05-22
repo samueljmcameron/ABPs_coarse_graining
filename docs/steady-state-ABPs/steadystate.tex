@@ -1,0 +1,457 @@
+\documentclass[twocolumn,amsmath,amssymb,aps]{revtex4-1}%{article}
+%\usepackage[hmargin=1.25cm,vmargin=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{bm}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{dcolumn}
+\usepackage[caption=false]{subfig}
+\usepackage{braket}
+\usepackage{subfiles}
+
+\begin{document}
+ 
+\title{Steady State probability distribution of ABPs}
+\author{Sam Cameron}
+\affiliation{%
+  University of Bristol}%
+\date{\today}
+
+\begin{abstract}
+  In equilibrium systems, collective properties are calculated
+  through knowledge of the Boltzmann probability density,
+  $e^{-\beta \mathcal{H}(\{\bm{x}_i)\}}$ and the corresponding partition
+  function. In contrast, non-equilibrium/active systems do not obey
+  Boltzmann statistics, and so the functional form of the steady-state
+  probability density (if it exists) is not known a priori. In this letter,
+  we present a systematic way of calculating the steady-state
+  probability density of an active systems. As a proof of concept, we use
+  this method to calculate the steady-state probability density of
+  interacting active brownian particles. Finally, we compare our calculation
+  to Molecular Dynamics simulations.
+\end{abstract}
+
+
+\maketitle
+
+
+\section{Introduction.}
+Classical equilibrium statistical mechanics works because of the existence of
+a unique probability distribution, which allows scientists to compute
+all equilibrium features about a system of particles. For example,
+in the canonical ensemble all we need to know about our system is the
+form of the interactions between particles (i.e. the Hamiltonian
+$\beta U(\{\bm{x}_i\})$) and the temperature $(\beta)^{-1}$ of
+the system. With this knowledge, we can immediately write down the probability
+distribution of the system as $\rho_{ss}(\{\bm{x}_i\})=\exp(-\beta U)/Z$
+(the Boltzmann distribution) and the partition function
+\begin{align}
+  Z = \int \bigg(\prod_{i=1}^Nd^dx_i\bigg)e^{-\beta U}
+\end{align}
+where $d$ is the dimension of space. With knowledge of $Z$, we can then
+go on to calculate the equation of state for the system, any phase-transitions,
+response functions, and other \textit{collective behaviours} of the
+system.
+
+Of course, there are numerous practical difficulties in this procedure that
+we are omitting, such as how one computes a $dN$ dimensional integral
+and whether the Hamiltonian specified really reflects the true nature of
+the system one is modelling. But, all of these difficulties can be (at least
+partially) overcome via crafty analytical techniques, reasonable
+approximations, and numerical methods. The importance of the Boltzmann
+distribution, then, is that it gives us a solid foundation, on-top of which we
+can build a significantly less sturdy (but good enough) structure.
+
+In contrast, non-equilibrium statistical mechanics does not have a nice
+foundation to compute collective behaviour. There is no reason that the
+steady-state of a non-equilibrium system should follow a Boltzmann
+distribution, and in fact, there is no reason why a steady-state should even
+exist!
+
+However, in this letter, we highlight recent work demonstrating the
+possibility of calculating steady-state probability distributions for
+systems which includes non-conservative forces. This is possible only
+in certain non-equilibrim systems, and requires a full dynamical
+description (i.e. the stochastic equations of motion). We then showcase
+the utility of this procedure by perturbatively computing the
+steady-state probability distribution for a system of active brownian
+particles (ABPs) with interactions.
+
+
+
+\section{Generic steady-state algorithm.}
+The procedure only works if we already know the equations of motion.
+We restrict our attention to
+systems of stochastic differential equations having the form
+\footnote{We use summation notation, so all repeated indices are summed
+  over.}
+\begin{align}\label{eq:stochasticEOMs}
+  \dot{\bm{x}}_i = \bm{F}_i(\{\bm{x}_j\})+\sqrt{2}(D^{1/2})\cdot\bm{\xi}_i
+\end{align}
+$\bm{x}_i$ is the generalised coordinates in phase space for particle
+$i$ and $\bm{F}_i$ is the force that is exerted on this particle.
+The set of vectors $\{\bm{\xi}_i\}$ generate additive Gaussian white
+noise with zero mean and variance $D_{\alpha\beta}$, i.e.
+\footnote{The ensemble average of the system of an observable
+  $\mathcal{O}(\{\bm{\xi}_i\})$ is the average over the noise,
+  \unexpanded{
+  \begin{align}
+    <\mathcal{O}>
+    = \int \mathcal{D}[\{\bm{\xi}_i\}]\mathcal{O}
+    \exp\bigg(-\frac{1}{T}\int_0^T\sum_{j=1}^N\bm{\xi}_j(t)^2 dt'\bigg).
+  \end{align}
+  }
+}
+\begin{align}
+  <\bm{\xi}_i>=0,\:\:<(\bm{\xi}_i)_{\alpha}(t)(\bm{\xi}_j)_{\beta}(t')>
+  =\delta_{ij}\delta_{\alpha\beta}\delta(t-t'),
+\end{align}
+and $D_{\alpha,\beta}$ is a multiplicative tensor (typically a diffusion
+constant which is set as a parameter) which is for our purposes independent
+of position and time, and also diagonal.
+
+A conservative force $\bm{F}_{i,c}$ is one which can be written as the gradient
+of a scalar. We can decompose the total force then into two vectors,
+\begin{align}
+  \bm{F}_{i}
+  & = \bm{F}_{i,c}+\bm{F}_{i,a} = -\nabla_{i}U(\{\bm{x}_j\}) + \bm{F}_{i,a}
+\end{align}
+where $\bm{F}_{i,a}$ cannot be written as the gradient of a scalar.
+
+The above equations of motion can be re-cast using standard techniques into
+the Fokker-Planck equation
+\begin{align}
+  \frac{\partial P(\bm{x})}{\partial t} + \nabla\cdot\bm{J}(\bm{x},t)
+  = 0
+\end{align}
+where $\bm{x}$ is an $nD$ dimensional vector, $P(\bm{x},t)$ is the
+probability of finding the set of $N$ particles in configuration $\bm{x}$
+at time $t$, and the current is given by
+\begin{align}
+  J_{\alpha}(\bm{x},t)
+  = \bigg[D_{\alpha\beta}F_{\beta}(\bm{x})
+    -\sqrt{D_{\alpha\beta}D_{\gamma\beta}}
+    \partial_{\gamma}\bigg]P(\bm{x},t).
+\end{align}
+As before, repeated indices imply summation.
+Note that now $\alpha=1,\cdots,dN$ and $\beta=1,\cdots,dN$ (as opposed to
+in eqn \ref{eq:stochasticEOMs} where $\alpha=1,\cdots,d$).
+
+We are interested in steady-states, so that $\partial P/\partial t=0$.
+If we write the steady-state as $\rho_{ss}(\bm{x})\propto \exp(-h(\bm{x}))$,
+we can determine $h$ through the set of equations
+\begin{align}\label{eq:generic_ss}
+  0
+  =&D_{\alpha\beta}\big[\partial_{\alpha}F_{\beta}
+    -F_{\beta}\partial_{\alpha}h\big]\nonumber\\
+  &+\sqrt{D_{\alpha\beta}D_{\gamma\beta}}
+    \big[\partial_{\alpha}h\partial_{\gamma}h
+      -\partial_{\alpha}\partial_{\gamma}h\big].
+\end{align}
+Notably, if the force $\bm{F}$ is conservative so that
+$\bm{F}=-\nabla U(\bm{x})$, and the tensor $D_{\alpha\beta}$ is symmetric,
+then $h=U(\bm{x})$ and we recover the Boltzmann steady-state distribution.
+
+However, the general case results in a non-linear PDE for $h$,
+and so finding a closed-form solution seems unlikely at best. But, if
+we assume that the non-conservative force is small, we should be able
+to find a perturbative solution for $h$. That is what we now present for
+the case of ABPs.
+
+\subsection{Perturbative calculation of ABP steady state.}
+The equations of motion for a $d=2$ system of ABPs (neglecting hydrodynamics)
+in contact with a thermal bath are
+\begin{subequations}
+  \label{eqs:ABPsEOMs}
+  \begin{align}
+    \dot{\bm{r}}_i
+    &= -\nabla_i U+\mathrm{Pe}\:\bm{u}_i + \sqrt{2}\bm{\xi}_{i}^r,
+    \label{eq:pos_EOM}\\
+    \dot{\theta}_i &= \sqrt{4\Pi}\xi_i^{\theta}\label{eq:theta_EOM},
+  \end{align}
+\end{subequations}
+where $\Pi=\sigma^2D^r/(2D^t)$ and $\mathrm{Pe} = v\beta\sigma$ are the
+(dimensionless) rotational diffusion constant and Peclet number,
+respectively. We measure length in units of a microscopic length
+scale specified by $ U$, and time in units of $\sigma^2/D^t$.
+$\bm{u}_i = (\cos\theta_i,\sin\theta_i)$ is the direction
+of self-propulsion for particle $i$. We assume that the conservative
+forces can be written as a sum over
+pair potentials which only depend on the distance between particles,
+\begin{align}\label{eq:HtoV}
+   U(\bm{x}) = \sum_{i=1}^N\sum_{j=1}^{i-1}\mathcal{V}(r_{ij}).
+\end{align}
+
+We re-write eqn \ref{eq:generic_ss} as
+\begin{align}\label{eq:perturbODE}
+  \sum_{i=1}^N[\mathcal{L}_i^{(0)}(h)+\mathrm{Pe}\:\mathcal{L}_i^{(1)}(h)]
+  = 0
+\end{align}
+where
+\begin{align}\label{eq:perturb0th}
+  \mathcal{L}_i^{(0)}(h)=&(\nabla_i h)^2 + \nabla_i^2 U
+  -\nabla_i U\cdot\nabla_ih-\nabla_i^2h\nonumber\\
+  &+2\Pi\big[(\partial_{\theta_i}h)^2-\partial_{\theta_i}^2h\big],
+\end{align}
+and
+\begin{align}\label{eq:perturb1st}
+  \mathcal{L}_i^{(1)}(h)=\bm{u}_i\cdot\nabla_ih.
+\end{align}
+Up until eqn \ref{eq:perturb1st}, our result is still exact. We now
+introduce approximations in order to make the problem tractable.
+
+Defining $\bm{r}_{ij}=\bm{r}_j-\bm{r}_i$, $\bm{u}_{ij}=\bm{u}_j-\bm{u}_i$,
+we expand
+\begin{align}\label{eq:hgeneric}
+  h= U+\mathrm{Pe}\:\sum_{i=1}^N\sum_{j=1}^{i-1}w(r_{ij})
+  \bm{r}_{ij}\cdot\bm{u}_{ij}
+\end{align}
+as the lowest order rotationally invariant form, assuming terms with
+$\bm{u}_{ij}\cdot\bm{u}_{ij}$ are negligible.
+
+Inserting this into eqn \ref{eq:perturbODE}, we arrive at the equation
+\begin{widetext}
+\begin{align}\label{eq:bigeq}
+  0=&\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\bm{u}_{ij}
+  \bigg\{\sum_{k\neq i}^N\bigg[
+    \frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}
+    w'(r_{ij})\frac{\bm{r}_{ik}\cdot\bm{r}_{ij}}{r_{ij}}\bigg]
+  -w''(r_{ij})-3\frac{w'(r_{ij})}{r_{ij}}
+  +\Pi w(r_{ij})
+  +\frac{\mathcal{V}^{\prime}(r_{ij})}{2r_{ij}}\bigg\}\nonumber\\
+  &+\sum_{i=1}^N\sum_{j\neq i}^N\bm{r}_{ij}\cdot\sum_{k\neq i}^N
+  \bm{u}_{ik}\frac{\mathcal{V}^{\prime}(r_{ik})}{r_{ik}}w(r_{ik}).
+\end{align}
+\end{widetext}
+
+To simplify this further, we note that
+any terms  involving $\sum_{i\neq k}f(\bm{r}_{ik})\bm{r}_{ik}$, with no
+coupling to orientation $\bm{u}_{ij}$, can be written as
+\begin{align}\label{eq:g2_hat}
+  \sum_{i\neq k}f(\bm{r}_{ik})\bm{r}_{ik}
+  \propto\int\hat{g}_2(\bm{r})f(-\bm{r})\bm{r}d^dr,
+\end{align}
+where $\hat{g}_2(\bm{r})=\sum_{k\neq i}\delta(\bm{r}-\bm{r}_{ik})$ is the
+instantaneous value of the radial distribution function. On average, we
+expect this to be isotropic, i.e. $\braket{\hat{g}_2(\bm{r})}=g_2(r)$.
+Then, any terms in the form of eqn \ref{eq:g2_hat} should, on average, be
+zero due to radial symmetry \footnote{Strictly speaking, this implies
+  that we are averaging over some fluctuations in the system, and this
+  assumption could be problematic. However, we expect that any error
+  should vanish as the number of particles $N\to\infty$.}.
+With these assumptions, we get a second order linear ODE,
+\begin{align}\label{eq:w_ODE}
+  w''(r)+\frac{3w'(r)}{r}-\Pi w(r)=\frac{\mathcal{V}'(r)}{2r}=0.
+\end{align}
+
+In appendix \ref{app:solve_w_ODE}, we suggest that the boundary conditions
+which accompany eqn \ref{eq:w_ODE} are
+that $w(r)$ vanishes at large $r$, so that the boundary conditions
+\begin{subequations}
+  \label{eqs:w_BCs}
+  \begin{align}
+    w'(r_0)r_0+w(r_0)+\frac{1}{3} = 0,\label{eq:w_BC_r0}\\
+    w(\infty) = 0,\label{eq:w_BC_inf}.
+  \end{align}
+\end{subequations}
+The former arises from a force balance of three
+particles converging on each other and forming a (temporarily) stable
+cluster at separation $r_0$. The latter is assuming no long-range effects
+are present.
+
+In order to solve eqns \ref{eq:w_ODE} and \ref{eqs:w_BCs}, a form of
+$\mathcal{V}$ must be selected. In appendix \ref{app:solve_w_ODE},
+we determine $w(r)$ for both the hard sphere potential and the repulsive
+Weeks-Chandler-Anderson (WCA) potential. In Figure \ref{fig:1} we
+show the functional form of $w(r)$ for the WCA potential at different
+$\mathrm{Pe}$ values, with $\Pi=3/2$ fixed.
+
+\begin{figure}[t!]
+  \includegraphics[width=0.5\textwidth]{Figures/2020_05_15_soft_sphere.pdf}
+  \caption{Functional form of $w(r)$ with $\Pi=3/2$ held constant and
+    a repulsive $\mathcal{V}$. The value of $r_0$,
+    when an isolated trimer experiences zero force, is shown in black dots
+    for each Peclet number.
+  }\label{fig:1}
+\end{figure}
+
+\section{Statistical Mechanics of ABPs.}
+If we assume only that the steady state of the ABPs takes the form
+$\frac{1}{\tilde{Z}}\exp(-h)$, where
+$h(\{\bm{r}_i\},\{\bm{\theta}_i\})$ is given by eqn \ref{eq:hgeneric},
+we can write, in analogy to
+equilibrium thermodynamics, a ``partition function'' for the position and
+orientation degrees of freedom, $\tilde{Z}$. Just as in equilibrium
+thermodynamics,
+the partition function is just a normalising factor
+$\tilde{Z}$, defined as
+\begin{align}\label{eq:Zori}
+  \tilde{Z} =& \int\prod_{i=1}^N(d^2r_id\theta_i)\nonumber\\
+  &\times\exp\bigg(-\sum_{i,j<i}[\mathcal{V}(r_{ij})
+    +\mathrm{Pe}\:w(r_{ij})\bm{r}_{ij}\cdot\bm{u}_{ij}]\bigg).
+\end{align}
+We have shown in appendix \ref{app:Z}
+that it is possible to integrate out all orientational degrees
+of freedom in $\tilde{Z}$, such that
+\begin{align}\label{eq:Z}
+  Z = \int\prod_{i=1}^N(d^2r_i)\exp[-V_{\mathrm{eff}}(\{\bm{r}_i\})],
+\end{align}
+where $V_{\mathrm{eff}}$ is a new, effective potential for this ABP
+steady-state, which only depends on the positions of the particles.
+We can then write our steady-state probability density as
+$\rho_{ss}=1/Ze^{-V_{\mathrm{eff}}}$. Furthermore, this effective
+potential can be expanded in powers of $\mathrm{Pe}^2$,
+and to $O(\mathrm{Pe}^4)$ (see \ref{app:Z}),
+\begin{align}
+  V_{\mathrm{eff}}(\{\bm{r}_i\};\mathrm{Pe})
+  &\approx\sum_{j<i}W_2(r_{ij})
+  +\sum_{k<j<i}W_3(r_{ij},r_{ik},\theta)
+\end{align}
+where
+\begin{subequations}
+  \label{eqs:2and3body}
+  \begin{align}
+    W_2(r;\mathrm{Pe})
+    &= \mathcal{V}(r)
+      -\frac{1}{2}\mathrm{Pe}^2 r^2w^2(r),\label{eq:2body}\\
+    W_3(r_1,r_2,\theta;\mathrm{Pe})
+    &= -\frac{3}{2}\mathrm{Pe}^2w(r_1)w(r_2)r_1r_2\cos\theta
+      \label{eq:3body}
+  \end{align}
+\end{subequations}
+are the effective two-body and three-body interactions for the ABP
+steady state. The presence of three-body interactions at $O(\mathrm{Pe}^2)$
+is a consequence of eqn \ref{eq:hgeneric}, regardless of the functional
+form of $w(r)$. This highlights that in
+general, we expect that many-body effects will play a role in the
+steady-state behaviour of ABPs. We investigate this further in section
+\ref{subsec:collbeh} below.
+
+We have calculated these effective interactions,
+taking the true two-body potential $\mathcal{V}$
+in eqn \ref{eq:HtoV} to be WCA potential.
+The resulting forms of $W_2(r)$ and $W_3(r_{12},r_{13},\cos\theta)$ are
+presented in Figures
+\ref{fig:2} and \ref{fig:3}, respectively. Notably,
+a minimum develops in the effective two-body interaction, $W_2$,
+\textit{even though} the original WCA potential is strictly repulsive.
+Extrapolating
+results from liquid-state theory, we expect that presence of this
+effective attractive interaction potential will allow the ABPs to phase
+separate into a low-density and a high-density phase. This phase
+separation has been verified to occur in simulation, and is known as
+Motility Induced Phase Separation (MIPS).
+
+\begin{figure}[t!]
+  \includegraphics[width=0.5\textwidth]{Figures/2020_05_15_W_2.pdf}
+  \caption{Functional form of the effective potential two-body interaction,
+    $W_2(r)$, with $\Pi=3/2$ held constant and a repulsive $\mathcal{V}$.
+    The value of $r_0$,
+    when an isolated trimer experiences zero force, is shown in black dots
+    for both Peclet numbers. The inset highlights the existence of a shallow
+    minimum for $\mathrm{Pe}=0.1$.
+  }\label{fig:2}
+\end{figure}
+
+\begin{figure}[t!]
+  \includegraphics[width=0.5\textwidth]{{Figures/2020_05_15_W_3_Pe_10.0}.pdf}
+  \caption{Functional form of the effective potential three-body
+    interaction, $W_3(r)$, with $\Pi=3/2$, $\mathrm{Pe}=10$ held constant
+    and a repulsive $\mathcal{V}$. $\bm{r}_{12}$ is the distance between
+    the first and second particle in the three-body interaction, and
+    $\bm{r}_{13}$ is the distance between the first and third particle.
+    $\bm{r}_{13}\cdot\bm{r}_{12}=r_{12}r_{13}\cos\theta$, and we have
+    chosen $\theta=\pi/3$. Therefore, when $r_{12}=r_{13}$ in this
+    figure, the three
+    particles are in an equilateral triangle configuration.
+  }\label{fig:3}
+\end{figure}
+
+\subsection{Collective behaviour of ABPs using $\rho_{ss}=e^{-h}/\tilde{Z}$.
+  \label{subsec:collbeh}}
+
+In this section, we make predictions about collective behaviour of ABPs
+using eqns \ref{eq:Zori}, \ref{eq:Z}, \ref{eq:2body}, and,
+when necessary, \ref{eq:3body}.
+As in the case of equilibrium statistical mechanics, we generate various
+ensemble averages through derivatives of $\ln \tilde{Z}$. We compare our
+predictions with simulations of eqn \ref{eqs:ABPsEOMs}, with $N=10000$
+ABPs and periodic boundary conditions.
+
+To begin with, we consider the analog of the equilibrium pressure for the
+ABP system,
+\begin{align}
+  P_{ss} = \frac{\partial \ln Z}{\partial A}
+\end{align}
+where $\rho\equiv N/A$ is the number density of ABPs.
+We label this pressure as $P_{ss}$ to differentiate from the pressure we
+measure in simulation, which we will denote $P$
+\footnote{Computation of the simulation pressure $P$ is discussed in
+  appendix \ref{app:pressure}}.
+
+If we keep terms to $O(\mathrm{Pe}^2)$, this pressure
+can equivalently be expressed as
+$P_{ss}=P_{\mathrm{id}}+P_{ss}^{(2)}+P_{ss}^{(3)}$, where
+\begin{subequations}
+  \label{eqs:P2andP3}
+  \begin{align}
+    P_{ss}^{(2)}
+    &\equiv-\frac{\pi N^2}{2A^2}\int du W_2'(u)u^2 g^{(2)}(u),
+    \label{eq:P2}\\
+    P_{ss}^{(3)}
+    &\equiv-\frac{2\pi N^3}{3A^3}\int dudvd\theta u^2v
+    \frac{\partial W_3(u,v,\theta)}{\partial u}
+    g^{(3)}(u,v,\theta),\label{eq:P3}
+  \end{align}
+\end{subequations}
+are the two-body and three-body contributions to the steady-state pressure
+at $O(\mathrm{Pe}^2)$, and $P_{\mathrm{id}}=\rho$ is the ideal gas pressure.
+The main assumptions in deriving eqn \ref{eqs:P2andP3} are that the two-body
+and three-body correlation functions, $g^{(2)}(u)$ and
+$g^{(3)}(u,v,\theta)$, respectively, are invariant
+under rotations, translations, and permutation of particle positions
+\footnote{see appendix \ref{app:press} for details}. We use our simulations
+to compute both $g^{(2)}(u)$ and $g^{(3)}(u,v,\theta)$. We justify
+this by noting that we are investigating whether our steady-state gives
+a reasonable approximation to the measured simulation pressure, and so
+any further approximations employed to compute $g^{(i)}$ would be a
+distraction \footnote{Though they can in principle be calculated,
+  e.g. via a virial expansion.}.
+
+
+\begin{figure}[t!]
+  \includegraphics[width=0.5\textwidth]{{Figures/2020_05_19_threebody_correction_P_vs_fp_rho_is_0.05_and_0.5}.pdf}
+  \caption{Steady-pressure of the ABP system for $\rho=0.05$ (top) and
+    $\rho=0.5$ (bottom). Orange circles denote the simulation pressure
+    as measured in LAMMPS, $P_L$, less the ideal gas term
+    $P_{\mathrm{id}}=\rho$. Blue arrows denote the same simulation, but
+    subtracting out both $P_{\mathrm{id}}$ and the ideal swim pressure,
+    defined as $P_{\mathrm{swim}}=\rho\mathrm{Pe}^2/(4\Pi)$. The green
+    squares denote the pressure calculated using only the two-body
+    distribution function, $P_{ss}^{(2)}$ (eqn \ref{eq:P2} in the text),
+    whereas the red triangles denote the pressure calculated using both
+    $P_{ss}^{(2)}$ and the three-body distribution function, $P_{ss}^{(3)}$
+    (eqn \ref{eq:P3} in the text).
+  }\label{fig:4}
+\end{figure}
+
+To begin with, we note that the ABP pressure for a $d$ dimensional
+system can be written as
+\begin{align}
+  dVp^i=&
+  dN + \frac{1}{2}\sum_{i,j\neq i}\sum_{\bm{n}}
+  \braket{\bm{F}_{ij}^{\bm{n}}\cdot(\bm{r}_i-\bm{r}_j-\bm{R}_{\bm{n}})}
+  \nonumber\\
+  &+\mathrm{Pe}\:\sum_{i=1}^N\braket{\bm{u}_i\cdot\bm{r}_i},
+\end{align}
+where $\braket{\cdots}$ denotes the steady-state ensemble average,
+which we are taking as $\rho_{ss}=\exp(-h)/Z$.
+
+
+
+
+\bibliographystyle{plain}
+\bibliography{steadystate}
+\end{document}

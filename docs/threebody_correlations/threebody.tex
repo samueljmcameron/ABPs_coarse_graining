@@ -1,0 +1,80 @@
+\documentclass[twocolumn,amsmath,amssymb,aps]{revtex4-1}%{article}
+%\usepackage[hmargin=1.25cm,vmargin=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{bm}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{dcolumn}
+\usepackage[caption=false]{subfig}
+
+\begin{document}
+ 
+\title{Three-body correlation function.}
+\author{Sam Cameron}
+\affiliation{%
+  University of Bristol}%
+\date{\today}
+
+\begin{abstract}
+\end{abstract}
+
+\maketitle
+
+\section{N-body correlation function definition.}
+
+The $n$ body correlation function is defined as
+\begin{align}
+  g^(n)(\bm{r}_1,\bm{r}_2,\cdots,\bm{r}_n)
+  = \frac{A^n}{N^n}p^(n)(\bm{r}_1,\bm{r}_2,\cdots,\bm{r}_n)
+\end{align}
+where $p^(n)$ is the probability of finding one particle within a
+volume $d^2r_1$ centred at $\bm{r}_1$, a second particle within a
+volume $d^2r_2$ centred at $\bm{r}_2$, and a third particle at the
+volume $d^2r_3$. For example, in equilibrium for a system in the
+canonical ensemble, this probability is given by
+\begin{align}\label{eq:sub_prob}
+  p^(n)(\bm{r}_1,\bm{r}_2,\cdots,\bm{r}_n)
+  =\frac{N!}{(N-n)!}\frac{1}{Z}
+  \int\prod_{k=n+1}^Nd^2r_k\exp[-\beta U(\{\bm{r}_i\})]
+\end{align}
+where $Z$ is the partition function of the system, and the prefactors
+account for the (assumed) indistinguishability of particles.
+
+However, for our purposes we are only really concerned with measured or
+\textit{objective} probabilities. For discrete processes, these
+probabilities are conceptually simple. Namely, if a random process is repeated
+N times, then the probability of an event $A$ occuring is given by
+\begin{align}\label{eq:obj_prob}
+  p(A) = \lim_{N\to\infty} \frac{N_A}{N}
+\end{align}
+where $N_A$ is the number of times in which the event occurs. This is in
+contrast to the statistical mechanics probability written in eqn
+\ref{eq:sub_prob} above, which is
+a theoretical or \textit{subjective} probability.
+
+For us, we must adjust eqn \ref{eq:obj_prob} to suit our needs. In our case,
+the event $A$ will be more complex.
+
+First of all, we will assume translational invariance within the system.
+So, our events (such as $A$ in eqn \ref{eq:obj_prob}) will be the event
+that $n$ particles are at relative displacements from each other, e.g.
+\begin{align}
+  p^(n)(\bm{r}_1,\bm{r}_2,\cdots,\bm{r}_n)d^2r_1d^2r_2\cdots d^2r_n
+  = p^(n)(\bm{r}_{12},\bm{r}_{13},\cdots,\bm{r}_{n-1,n})d^2r_1d^2r_2
+  \cdots d^2r_n
+\end{align}
+
+In our simulations, we will iterate over the particles in the system once,
+so the origin at iteration $i$ will be $\bm{r}_i$. Then, given that we are
+at position $\bm{r}_i$, we need to determine the probability of another
+particle being at 
+
+\section{2-body correlation function.}
+
+
+\bibliographystyle{plain}
+\bibliography{bib}
+
+\end{document}

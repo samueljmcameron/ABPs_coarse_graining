@@ -16,9 +16,13 @@ def JupyterPlots():
               'text.usetex': True,
               'figure.figsize': figsize,
               'figure.dpi': 200,
-              'text.latex.preamble': [r"\usepackage{amstext}"]}
+              'text.latex.preamble': [r"\usepackage{amstext}",
+                                      r"\usepackage{amsmath}",
+                                      r"\usepackage{bm}",
+                                      r"\usepackage{siunitx}"]}
     plt.rcParams.update(params)
-    plt.rc('text.latex', preamble=r'\usepackage{amsmath} \usepackage{bm}')
+    #  plt.rc('text.latex',
+    #           preamble=r'\usepackage{amsmath} \usepackage{bm} \usepackage{siunitx}')
 
     return figsize
 

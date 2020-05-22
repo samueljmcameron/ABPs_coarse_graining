@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.signal as signal
+import scipy.interpolate as interpolate
 
 class RdfLoader():
 
@@ -41,6 +42,31 @@ class RdfLoader():
         return rbins,gcorrs,gstd
 
 
+    
+    def g2_spliner_setup(self,g2data,rs,kind='quadratic'):
+
+        g2spline = interpolate.interp1d(rs,g2data,
+                                        kind='quadratic')
+        
+        return g2spline
+
+    
+    def g2_spline(self,r,g2data,rs,g2tol=1e-12,r0_ret=False):
+
+        gs = self.g2_spliner_setup(g2data,rs)(r)
+
+
+        try:
+            r0 = r[gs<g2tol][-1]
+        except:
+            print('error! spline region isn\'t going to small'
+                  'enough r to find g(r)=0 !!')
+
+        if r0_ret:
+            return gs[r>r0],r[r>r0]
+        else:
+            return np.where(r<r0,0,gs)
+    
 
 if __name__ == "__main__":
 

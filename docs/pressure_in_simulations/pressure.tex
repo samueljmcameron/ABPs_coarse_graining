@@ -22,6 +22,79 @@
 
 \maketitle
 
+\section{Estimation of standard error in correlated data.}
+
+This section follows ref. \cite{doi:10.1063/1.457480}.
+
+To calculate a time-averaged quantity $<x>$ from an MD simulation, one
+must first take instantaneous measurements $x_i$ (here $i$ indicates the
+time at which the measurement was taken, and then computes the average in
+the standard way,
+\begin{align}\label{eq:xav}
+  <x>\approx m \equiv \frac{1}{n}\sum_{i=1}^nx_i
+\end{align}
+where $m$ is the estimate of $<x>$ given the data.
+
+An estimator of the variance of $m$ is
+\begin{align}\label{eq:sigma_est}
+  \sigma^2(m) = <m^2>-<m>^2,
+\end{align}
+and by inserting eqn \ref{eq:xav} and defining
+$\gamma_{i,j}=<x_ix_j>-<x_i><x_j>$, this becomes
+\begin{align}
+  \sigma^2(m)
+  &= \frac{1}{n^2}\sum_{i=1}^n\sum_{j=1}^n(<x_ix_j>-<x_i><x_j>)
+  \nonumber\\
+  &= \frac{1}{n^2}\sum_{i=1}^n\sum_{j=1}^n\gamma_{i,j}\nonumber\\
+  &=\frac{1}{n^2}\bigg(\sum_{i=1}^n\sum_{j\neq i}^n\gamma_{i,j}
+  + \sum_{i=1}^n\gamma_{i,i}\bigg)\nonumber\\
+  &=\frac{1}{n^2}\bigg(2\sum_{i=1}^n\sum_{j=1}^{i-1}\gamma_{i,j}
+  + \sum_{i=1}^n\gamma_{i,i}\bigg)\nonumber\\
+  &=\frac{1}{n}\bigg[\gamma_0
+    +2\sum_{t=1}^{n-1}\bigg(1-\frac{t}{n}\bigg)\gamma_t\bigg]
+\end{align}
+where in the last line we have used $\gamma_{i,j}=\gamma_t$ where $t=|i-j|$.
+
+It is suggested in the paper that the naive measure of $\gamma_t$ is
+\begin{align}
+  c_t = \frac{1}{n-t}\sum_{k=1}^{n-t}(x_{k+1}-m)(x_k-m).
+\end{align} 
+However, this is not a biased estimator of $\gamma_t$, as can be seen
+by formally taking the ensemble average of $c_t$, and recalling eqn
+\ref{eq:xav},
+\begin{widetext}
+\begin{align}
+  <c_t>
+  =& \frac{1}{n-t}\sum_{k=1}^{n-t}<(x_{k+t}-m)(x_k-m)>\nonumber\\
+  =& \frac{1}{n-t}\sum_{k=1}^{n-t}(<x_{k+t}x_k>-<mx_k>
+  -<mx_{k+t}>+<m^2>)\nonumber\\
+  =& \frac{1}{n-t}\sum_{k=1}^{n-t}(<x_{k+t}x_k>
+  +\sigma^2(m)+<m>^2-<m>^2+<m>^2
+  -\frac{1}{n}\sum_{i=1}^n<x_ix_k>
+  -\frac{1}{n}\sum_{i=1}^n<x_ix_{k+t}>)\nonumber\\
+  =&\gamma_t+\sigma^2(m)+2\sigma^2(m)-2\sigma^2(m)
+  -\frac{1}{n-t}\sum_{k=1}^{n-t}
+  \frac{1}{n}\sum_{i=1}^n(\gamma_{i,k}+\gamma_{i,k+t})
+  \nonumber\\
+  =&\gamma_t-\sigma^2(m)+2\frac{1}{n^2}\sum_{i=1}^n\sum_{j=1}^n\gamma_{i,j}
+  -\sum_{i=1}^n\sum_{k=1}^{n-t}
+  \frac{1}{n(n-t)}(\gamma_{i,k}+\gamma_{i,k+t})\nonumber\\
+  =&\gamma_t-\sigma^2(m)+\Delta_t
+\end{align}
+where
+\begin{align}
+  \Delta_t
+  &=\sum_{i=1}^n\bigg[\frac{2}{n^2}\sum_{j=1}^n\gamma_{i,j}
+  -\frac{1}{n(n-t)}\sum_{k=1}^{n-t}(\gamma_{i,k}+\gamma_{i,k+t})\bigg].
+\end{align}
+\end{widetext}
+Note that this is NOT equal to equation 10 of ref.\cite{doi:10.1063/1.457480}.
+It would only be equivalent for
+\begin{align}
+  \sum_{i=1}^n\sum_{k=1}^{n-t}(\gamma_{i,k}+\gamma_{i,k+t})
+  =2\sum_{i=1}^n\sum_{k=1}^{n-t}\gamma_{i,k}
+\end{align}
+which I cannot see as being true. I'm not sure where my error is.
 \section{Microscopic definition of pressure.}
 \subsection{System with walls.}
 
@@ -82,7 +155,7 @@ replacing the discrete $\bm{r}^{\alpha}$ to a continuous
 vector $\bm{r}$, and using the divergence theorem,
 \begin{align}
   \int_{S} p^e(\bm{r})\bm{r}\cdot d\bm{S}
-  =\int_V\nalba\cdot(p^e(\bm{r})\bm{r})d^dr
+  =\int_V\nabla\cdot(p^e(\bm{r})\bm{r})d^dr
   =-\sum_{i=1}^{N}<\bm{F}_i^{s}\bm{r}_i>
 \end{align}
 where $d$ is the volume element in $d$ dimensions.
@@ -102,13 +175,13 @@ surface forces.
 
 In LAMMPS, the pressure is computed by first assuming the formula
 \begin{align}
-  P_{\alpha\beta}V = \bigg<\sum_{i=1}^N(\m_i(\bm{v}_i)_{\alpha}
+  P_{\alpha\beta}V = \bigg<\sum_{i=1}^N(m_i(\bm{v}_i)_{\alpha}
   (\bm{v}_i)_{\beta}+W_{\alpha\beta}(\{\bm{r}_i\}))\bigg>
 \end{align}
 is correct, where
 \begin{align}
   W_{\alpha\beta}(\{\bm{r}_i\})\equiv\sum_{k\in\bm{0}}
-  \sum_{w=1}^{N_k(\bm{r}_w^k)_{\alpha}
+  \sum_{w=1}^{N_k}(\bm{r}_w^k)_{\alpha}
     (\bm{F}_w^k)_{\beta}
 \end{align}
 is the virial tensor, where the system has been broken into
@@ -186,56 +259,242 @@ time $t$ and all variables without tildes are dimensionless, i.e.
     \tilde{D}^r &= \Pi \frac{2D^t}{\sigma^2}.
   \end{align}
 \end{subequations}
-Taking the dot product of eqn \ref{eq:micro_pos} with $\bm{r}_i$, and then
-taking the ensemble average defined as
+\subsection{Ensemble averaging.}
+We define the ensemble average of some observable $\mathcal{O}(\bm{\xi}(t))$
+as
 \begin{align}
-  <\mathcal{O}(\bm{\xi}(t))>\frac{1}{Z}\int \mathcal{D}\bm{\xi}
+  <\mathcal{O}>=\frac{1}{Z}\int \mathcal{D}\bm{\xi}
   \mathcal{O}(\bm{\xi}(t))
   \exp\bigg(-\frac{1}{2}\int_0^Tdt(\bm{\xi}(t))^2\bigg),
 \end{align}
 where the components of $\bm{\xi}$ include all particles, with each particle
-having $3$ ($x$, $y$, and $\theta$) noise terms (and so $3N$ terms total),
-we get
+having $3$ ($x$, $y$, and $\theta$) noise terms (and so $3N$ terms total).
+
+To begin with, we derive the ensemble averaged orientation of eqn
+\ref{eq:micro_theta}. Formally,
 \begin{align}
-  \frac{1}{2}\frac{d}{dt}<\bm{r}_i^2>
-  = <\bm{F}_i\cdot\bm{r}_i>+f^P<\bm{P}_i\cdot\bm{r}_i>
-  +\sqrt{2}<\bm{\xi}^r\cdot\bm{r}_i>
+  \theta_i(t)-\theta(0)=\sqrt{4\Pi}\int_0^tdt_1\xi_i^{\theta}(t_1).
 \end{align}
+Then, the mean-squared angular fluctuations between two particles $i$
+and $j$ at times $t$ and $t'$ are
+\begin{align}
+  <[\theta_i(t)-\theta_j(t')]^2>
+  &= 4\Pi\int_{t'}^tdt_1\int_{t'}^tdt_2
+  <\xi_i^{\theta}(t_1)\xi_j^{\theta}(t_2)>\nonumber\\
+  &= \delta_{ij}4\Pi(t-t').
+\end{align}
+I will take $t'=0$ without loss of generality, and $i=j$ as from this
+calculation all particle orientations are uncorrelated with each other.
+
+If $\bm{P}(t)=\cos\theta(t)\bm{\hat{e}}_x+\sin\theta(t)\bm{\hat{e}}_y$
+is the orientation of a particle at time $t$, then the autocorrelation
+function of a particle's orientation is
+\begin{align}
+  <\bm{P}(t)\cdot\bm{P}(0)>
+  &=<\cos\theta(t)\cos\theta(0)+\sin\theta(t)\sin\theta(0)>
+  \nonumber\\
+  &=<\cos[\theta(t)-\theta(0)]>\nonumber\\
+  &=\bigg<\cos\bigg[\sqrt{4\Pi}\int_0^tdt_1\xi^{\theta}(t_1)\bigg]\bigg>.
+\end{align}
+Now, since $\cos x = (e^{ix}+e^{-ix})/2$, and using the explicit
+definition of the ensemble average,
+\begin{widetext}
+  \begin{align}
+    \bigg<\exp\bigg(\pm 4\Pi i\int_0^tdt_1\xi^{\theta}(t_1)\bigg)\bigg>
+    &=\frac{1}{Z}\int \mathcal{D}\bm{\xi}
+    \exp\bigg(-\frac{1}{2}\int_0^Tdt(\bm{\xi}(t))^2
+    \pm \sqrt{4\Pi} i\int_0^tdt_1\xi^{\theta}(t_1)\bigg)\bigg>
+    \nonumber\\
+    &=\frac{1}{Z}\int \mathcal{D}\bm{\xi}
+    \exp\bigg(-\frac{1}{2}\int_0^Tdt(\bm{\xi}(t)\pm\sqrt{4\Pi}i)^2
+    \bigg)\bigg>e^{-2\Pi t}\nonumber\\
+    &=e^{-2\Pi t}
+  \end{align}
+\end{widetext}
+and so
+\begin{align}
+  <\bm{P}(t)\cdot\bm{P}(0)>=e^{-2\Pi t}.
+\end{align}
+which holds for all models with angular diffusion described by eqn
+\ref{eq:micro_theta}.
 
 \newpage
 \appendix
-
+\begin{widetext}
 \section{Ensemble-averaged quantities}
 
 In this section, we evaluate ensemble averaged quantities by using the formal
 solution to eqn \ref{eq:micro_pos}, namely
-\begin{align}
+\begin{align}\label{appeq:rformal}
   \bm{r}_i(t)=
-  &\bm{r}_i(t-\Delta t)
-  +\int_{t-\Delta t}^tdt_1[\bm{F}_i(\{\bm{r}_j\})\nonumber\\
+  &\bm{r}_i(0)
+  +\int_{0}^tdt_1[\bm{F}_i(\{\bm{r}_j\})\nonumber\\
     &+f^P\bm{P}_i(t_1)
     +\sqrt{2}\bm{\xi}_i(t_1)].
 \end{align}
 Before evaluating, it is also useful to note that
 \begin{align}
-  <\bm{P}_i(t)\bm{P}_i(t')> = e^{-(d-1)\Pi |t-t'|}.
+  <\bm{P}_i(t)\bm{P}_i(t')> = e^{-2(d-1)\Pi |t-t'|}.
 \end{align}
-in $d$ dimensions...
-BUT HOW DO I DERIVE THIS????
+in $d$ dimensions.
 \subsection{$<\bm{P}_i\cdot\bm{r}_i>$}
-\begin{widetext}
-  \begin{align}
-    <\bm{P}_i(t)\cdot\bm{r}_i(t)>=
-    &<\bm{r}_i(t-\Delta t)\cdot\bm{P}_i(t)>
-    +<\int_{t-\Delta t}^tdt_1\big[\bm{F}_i(\{\bm{r}_j\})
-      \cdot\bm{P}_i(t)+f^P\bm{P}_i(t_1)\cdot\bm{P}_i(t)
-      +\sqrt{2}\bm{\xi}_i(t_1)\cdot\bm{P}_i(t)\big]>\nonumber\\
-    =&\int_{t-\Delta t}^tdt_1\big[<\bm{F}_i(\{\bm{r}_j\})
-      \cdot\bm{P}_i(t)>+f^P<\bm{P}_i(t_1)\cdot\bm{P}_i(t)>
-      +\sqrt{2}<\bm{\xi}_i(t_1)\cdot\bm{P}_i(t)>\big]\nonumber\\
-  \end{align}
-\end{widetext}
 
+\begin{align}\label{appeq:Pdotr}
+  <\bm{P}_i(t)\cdot\bm{r}_i(t)>=
+  &<\bm{r}_i(0)\cdot\bm{P}_i(t)>
+  +<\int_{0}^tdt_1\big[\bm{F}_i(\{\bm{r}_j(t_1)\})
+    \cdot\bm{P}_i(t)+f^P\bm{P}_i(t_1)\cdot\bm{P}_i(t)
+    +\sqrt{2}\bm{\xi}_i(t_1)\cdot\bm{P}_i(t)\big]>\nonumber\\
+  =&\int_{0}^tdt_1\big[<\bm{F}_i(\{\bm{r}_j(t_1)\})
+    \cdot\bm{P}_i(t)>+f^P<\bm{P}_i(t_1)\cdot\bm{P}_i(t)>
+    +\sqrt{2}<\bm{\xi}_i(t_1)\cdot\bm{P}_i(t)>\big]\nonumber\\
+  =&\int_{0}^tdt_1\big[<\bm{F}_i(\{\bm{r}_j(t_1)\})
+    \cdot\bm{P}_i(t)>+f^Pe^{-2(d-1)\Pi|t-t_1|}
+    \big]\nonumber\\
+  =&\int_{0}^tdt_1\big[<\bm{F}_i(\{\bm{r}_j(t_1)\})
+    \cdot\bm{P}_i(t)>\big]+\frac{f^P}{2(d-1)\Pi}(1-e^{-2(d-1)\Pi t})
+\end{align}
+
+
+\subsection{$<\bm{\xi}_i(t)\cdot\bm{r}_j(t)>$}
+\begin{align}\label{appeq:xidotr}
+  <\bm{\xi}_i(t)\cdot\bm{r}_i(t)>=
+  &<\bm{r}_i(-\infty)\cdot\bm{\xi}_i(t)>
+  +<\int_{-\infty}^tdt_1\big[\bm{F}_i(\{\bm{r}_j\})
+    \cdot\bm{\xi}_i(t)+f^P\bm{P}_i(t_1)\cdot\bm{\xi}_i(t)
+    +\sqrt{2}\bm{\xi}_i(t_1)\cdot\bm{\xi}_i(t)\big]>\nonumber\\
+  &=<\int_{-\infty}^tdt_1\big[
+    +\sqrt{2}\bm{\xi}_i(t_1)\cdot\bm{\xi}_i(t)\big]>\nonumber\\
+  &=\int_{-\infty}^tdt_1\big[
+    +\sqrt{2}d\delta(t-t')\big]\nonumber\\
+  &=\sqrt{2}\frac{d}{2}
+\end{align}
+
+\subsection{$<\dot{\bm{r}_i}(t)\cdot\bm{P}_i(t)>$}
+Taking the product of eqn \ref{eq:micro_pos} with $\bm{P}_i(t')$,
+\begin{align}
+  <\dot{\bm{r}_i}(t)\cdot\bm{P}_i(t')>
+  =&<\bm{F}_i(t)\cdot\bm{P}_i(t')>+<f^P\bm{P}_i(t)\cdot\bm{P}_i(t')>
+  +\sqrt{2}<\bm{\xi}_i^r\cdot\bm{P}_i(t')>\nonumber\\
+  =&<\bm{F}_i(t)\cdot\bm{P}_i(t')>+f^Pe^{-2\Pi|t-t'|}.
+\end{align}
+Following \cite{C5SM01412C}, when $t=t'$ this equation is considered to be an
+average particle velocity, $v$, projected onto its propulsion direction,
+\begin{align}
+  v=\frac{1}{N}\sum_{i=1}^N<\dot{\bm{r}_i}(t)\cdot\bm{P}_i(t)>.
+\end{align}
+Next, I will assume \footnote{AND LATER HOPEFULLY BE ABLE TO SHOW} that
+\begin{align}
+  <\dot{\bm{r}_i}(0)\cdot\bm{P}_i(t)>
+  = <\dot{\bm{r}_i}(0)\cdot\bm{P}_i(0)>e^{-2(d-1)\Pi t}
+\end{align}
+Now, I will further assume that in the stationary state
+\begin{align}
+  <\bm{P}_i(t)\cdot\bm{r}_i(t)>
+  &=\int_{-\infty}^t<\bm{P}_i(t)\cdot\dot{\bm{r}_i}(t')>dt'
+  +<\bm{P}_i(t)\cdot\bm{r}_i(-\infty)>\nonumber\\
+  &=\int_0^{\infty}<\bm{P}_i(t')\cdot\dot{\bm{r}_i}(0)>dt'
+\end{align}
+and so
+\begin{align}
+  \sum_{i=1}^N<\bm{P}_i(t)\cdot\bm{r}_i(t)>
+  &=\sum_{i=1}^N<\dot{\bm{r}_i}(0)\cdot\bm{P}_i(0)>
+  \int_0^{\infty}dt'e^{-2(d-1)\Pi t}\nonumber\\
+  &=\sum_{i=1}^N<\dot{\bm{r}_i}(0)\cdot\bm{P}_i(0)>
+  \frac{1}{2(d-1)\Pi}\nonumber\\
+  &=\frac{Nv}{2(d-1)\Pi}\nonumber\\
+  &=\frac{N}{2(d-1)\Pi}
+  \bigg(f^P+\frac{1}{N}\sum_{i=1}^N<\bm{F}_i\cdot\bm{e}_i>\bigg).
+\end{align}
+\subsection{Averaged ODE}
+If we take the dot product of eqn \ref{eq:micro_pos} with $\bm{r}_i$,
+then we get
+\begin{align}
+  \frac{1}{2}\frac{d}{dt}<\bm{r}_i^2>
+  =& <\bm{F}_i\cdot\bm{r}_i>+f^P<\bm{P}_i\cdot\bm{r}_i>
+  +\sqrt{2}<\bm{\xi}^r\cdot\bm{r}_i>\nonumber\\
+  =& <\bm{F}_i\cdot\bm{r}_i>
+  +f^P\int_{-\infty}^tdt_1\big[<\bm{F}_i(\{\bm{r}_j(t_1)\})
+    \cdot\bm{P}_i(t)>\big]+\frac{(f^P)^2}{2(d-1)\Pi}
+  +d
+\end{align}
+If you take the sum over all particles, then
+\begin{align}
+  \sum_{i=1}^N\frac{1}{2}\frac{d}{dt}<\bm{r}_i^2>
+  =&\sum_{i=1}^N <\bm{F}_i\cdot\bm{r}_i>
+  +f^P\sum_{i=1}^N\int_{-\infty}^tdt_1\big[<\bm{F}_i(\{\bm{r}_j(t_1)\})
+    \cdot\bm{P}_i(t)>\big]+\frac{N(f^P)^2}{2(d-1)\Pi}
+  +dN\nonumber\\
+  =&\sum_{i=1}^N <\bm{F}_i\cdot\bm{r}_i>
+  +\frac{f^P}{2(d-1)\Pi}\sum_{i=1}^N<\bm{F}_i(\{\bm{r}_j(t)\})
+    \cdot\bm{P}_i(t)>+\frac{N(f^P)^2}{2(d-1)\Pi}
+  +dN.
+\end{align}
+Using the fact that in steady state
+$<\bm{r}_i^2(t)>=<\bm{r}_i^2(0)>+2dD_{\mathrm{eff}}t$, this can be written as
+\begin{align}\label{appeq:generic_av}
+  dND_{\mathrm{eff}}
+  =&\sum_{i=1}^N <\bm{F}_i\cdot\bm{r}_i>
+  +\frac{f^P}{2(d-1)\Pi}\sum_{i=1}^N<\bm{F}_i
+    \cdot\bm{P}_i>+\frac{N(f^P)^2}{2(d-1)\Pi}
+  +dN.
+\end{align}
+
+\section{Periodic boundary conditions.}
+Eqn \ref{appeq:generic_av} is valid for any forces and system setup. In order to
+look at periodic boundary conditions, we first note that for pair-wise
+interactions in a periodic system, the forces on particle $i$ are
+\begin{align}
+  \bm{F}_i = \sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  \bm{F}_{ij}(\bm{r}_i-\bm{r}_j-\bm{R}_n)
+\end{align}
+where $\bm{n}$ is some indexing of which unit cell is being referred to,
+e.g. in the main (``local'') unit cell which is arbitrarily chosen,
+$\bm{n}=(0,0,0)$ (in $d=3$). $\bm{R}_n$ is then the lattice vector for
+cell $\bm{n}$. More general expressions are available for many-body forces
+and could be applied here \cite{doi:10.1063/1.3245303}.
+We will use the shorthand
+$\bm{F}_{ij}^{\bm{n}}\equiv\bm{F}_{ij}(\bm{r}_i-\bm{r}_j-\bm{R}_{\bm{n}})$.
+
+Then, with this definition, eqn \ref{appeq:generic_av} becomes
+\begin{align}\label{appeq:PBC_av}
+  dND_{\mathrm{eff}}
+  =&\sum_{i=1}^N\sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  <\bm{F}_{ij}^{\bm{n}}\cdot\bm{r}_i>
+  +\frac{f^P}{2(d-1)\Pi}
+  \sum_{i=1}^N\sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  <\bm{F}_{ij}^{\bm{n}}\cdot\bm{P}_i>
+  +\frac{N(f^P)^2}{2(d-1)\Pi}+dN.
+  =&\frac{1}{2}\sum_{i=1}^N\sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  <\bm{F}_{ij}^{\bm{n}}\cdot(\bm{r}_i-\bm{r}_j)>
+  +\frac{f^P}{2(d-1)\Pi}
+  \frac{1}{2}\sum_{i=1}^N\sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  <\bm{F}_{ij}^{\bm{n}}\cdot(\bm{P}_i-\bm{P}_j)>
+  +\frac{N(f^P)^2}{2(d-1)\Pi}+dN.
+\end{align}
+Now, in order to get a pressure, we follow again \cite{C5SM01412C} and
+subtract the term
+\begin{align}
+  \frac{1}{2}\sum_{i=1}^N\sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  <\bm{F}_{ij}^{\bm{n}}\cdot\bm{R}_{\bm{n}}>
+\end{align}
+from both sides of eqn \ref{appeq:PBC_av} to obtain the external pressure
+\begin{align}
+  dVp^e = dND_{\mathrm{eff}}
+  -\frac{1}{2}\sum_{i=1}^N\sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  <\bm{F}_{ij}^{\bm{n}}\cdot\bm{R}_{\bm{n}}>
+\end{align}
+and the internal pressure
+\begin{align}
+  dVp^i=
+  &\frac{1}{2}\sum_{i=1}^N\sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  <\bm{F}_{ij}^{\bm{n}}\cdot(\bm{r}_i-\bm{r}_j-\bm{R}_{\bm{n}})>
+  +\frac{f^P}{2(d-1)\Pi }
+  \frac{1}{2}\sum_{i=1}^N\sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  <\bm{F}_{ij}^{\bm{n}}\cdot(\bm{P}_i-\bm{P}_j)>
+  +\frac{N(f^P)^2}{2(d-1)\Pi}+dN.
+\end{align}
+\end{widetext}  
 \section{Fokker-Planck equations\label{app:fokkerplanck}}
 
 Now, I can define a vector of length $3N$ with components

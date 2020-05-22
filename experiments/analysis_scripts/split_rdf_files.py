@@ -1,7 +1,7 @@
 
 import sys
 
-def splitfile(inpath,outpath,fp,rho):
+def splitfile(inpath,outpath,fp,rho,binnum=2000):
 
 
     filename = inpath + f'g_{fp}_{rho}.rdf'
@@ -20,7 +20,7 @@ def splitfile(inpath,outpath,fp,rho):
                 a = line.split(' ')
                 newf = outpath + f'g_{fp}_{rho}_{count}.rdf'
                 count += 1
-                lines = [next(f) for i in range(2000)]
+                lines = [next(f) for i in range(binnum)]
                 header = '#' + a[0] + '\n'
                 lines = [header] + lines
                 with open(newf,'w') as newfile:

@@ -19,15 +19,8 @@ class W2potential(SoftSphere):
     def evaluate(self,r):
         
         return (self.V_WCA(r)
-                -0.5*self.l0**2*self.w(r)**2*r**2)
-    
+                -0.5*self.l0**2*self.w(r)**2*r**2)    
 
-    def prime_scalar(self,r):
-
-        w = self.w(r)
-
-        return (self.V_WCA_prime_scalar(r)-self.l0**2*r*w**2
-                -self.l0**2*r**2*w*self.w_prime_scalar(r))
 
     def prime(self,r):
 
@@ -36,11 +29,32 @@ class W2potential(SoftSphere):
         return (self.V_WCA_prime(r)-self.l0**2*r*w**2
                 -self.l0**2*r**2*w*self.w_prime(r))
 
-    def W_3(self,r1,r2,theta):
+class W3potential(SoftSphere):
+
+    def __init__(self,Omega=None,l0=1,epsilon=1,Pi=1):
+
+        super().__init__(Omega=Omega,l0=l0,epsilon=epsilon,Pi=Pi)
         
-        return (-3./2.*self.l0**2*self.w(r1)*self.w(r2)
-               *r1*r2*np.cos(theta))
+        return
+
     
+    def evaluate(self,u,v,theta):
+        
+        return (-3./2.*self.l0**2*self.w(u)*self.w(v)
+               *u*v*np.cos(theta))
+
+    def prime_u(self,u,v,theta):
+
+        return (-3./2.*self.l0**2*self.w_prime(u)*self.w(v)
+                *u*v*np.cos(theta)
+                -3./2.*self.l0**2*self.w(u)*self.w(v)
+                *v*np.cos(theta))
+
+    def prime_v(self,u,v,theta):
+
+        return self.prime_u(v,u,theta)
+        
+
 class Chi2potential(SoftSphere):
 
     def __init__(self,Omega=None,l0=1,epsilon=1,Pi=1):
@@ -55,13 +69,6 @@ class Chi2potential(SoftSphere):
 
         return self.V_WCA(r)-2*np.log(spec.i0(self.l0*w*r))
     
-    def prime_scalar(self,r):
-
-        w = self.w(r)
-
-        return (self.V_WCA_prime_scalar(r)
-                -2*self.l0*spec.ivp(0,self.l0*w*r)/spec.i0(self.l0*w*r)
-                *(w+r*self.w_prime_scalar(r)))
 
     def prime(self,r):
 

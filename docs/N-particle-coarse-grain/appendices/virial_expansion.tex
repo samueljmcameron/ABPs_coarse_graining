@@ -1,0 +1,34 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+Now, according to \cite{LEE198895}
+\footnote{The section of this book is riddled with
+  typos, so I should cross-reference with another source or check myself.},
+the virial expansion for a three body potential with the form of eqn
+\ref{eq:Veff} can be written in terms of the two-body and three body
+Mayer F-functions in the usual way, i.e.
+\begin{align}
+  \beta P = \rho + B_2\rho^2 +B_3\rho^3+\cdots,
+\end{align}
+where $\rho\equiv N/A$, the second virial coefficient is
+\begin{align}\label{eq:B2}
+  B_2=-\frac{1}{2A}\int d^2r_1 d^2r_2 f_{12},
+\end{align}
+the third virial coefficient is
+\begin{widetext}
+  \begin{align}\label{eq:B3}
+    B_3=-\frac{1}{3A}\int d^2r_1 d^2r_2 d^2r_3
+    [f_{12}f_{23}f_{31}+f_{123}(1+f_{12})(1+f_{23})(1+f_{31})],
+  \end{align}
+  \end{widetext}
+the two-body Mayer function is
+\begin{align}\label{eq:f12}
+  f_{12} = \exp(-W_2(r_{12}))-1,
+\end{align}
+and the three-body Mayer function is
+\begin{align}\label{eq:f13}
+  f_{123} = \exp(-W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3))-1.
+\end{align}
+
+\end{document}

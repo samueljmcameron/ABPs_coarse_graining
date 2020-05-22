@@ -36,6 +36,91 @@ subroutine my_lindemann(ref_coords, coords, num_nb, list_nb,&
   return 
 end subroutine my_lindemann
 
+subroutine threebody(coords, box, cutoff, MAXnb, N, D,&
+     nbins, nthetabins, g3)
+  !===========================================================
+  ! Compute three body distribution. 
+  !
+  !
+  !===========================================================
+  implicit none
+  integer, intent(in)  :: N, D, MAXnb, nbins,nthetabins
+  real(8), intent(in)  :: coords(N,D), box(D)
+  real(8), intent(in)  :: cutoff
+  real(8), intent(out) :: g3(nbins,nbins,nthetabins)
+  integer              :: i, j, k
+  integer              :: n_u, n_v, dum_n_uv,n_theta
+  real(8)              :: du, dv, dtheta
+  real(8)              :: pi = 3.14159265359
+  real(8)              :: u(D), v(D), uv(D)
+  real(8)              :: u_m, v_m,uv_m, costheta,theta,phi,rho
+  real(8)              :: up_y, up_x
+  integer              :: count
+  
+  du = cutoff/nbins
+  dv = du
+  dtheta = pi/nthetabins
+  rho = N/(box(1)*box(2))
+  
+  g3 = 0
+
+  count = 0
+  
+  do i = 1,N
+     do j = 1,N
+        if (i.eq.j) then
+           cycle
+        endif
+        do k = 1,N
+           if ((i.eq.k).or.(j.eq.k)) then
+              cycle
+           endif
+           count = count + 1
+
+           u = coords(i,:) - coords(j,:)
+
+           call PBC(u,box)
+           v = coords(i,:) - coords(k,:)
+           call PBC(v,box)
+
+           u_m = dsqrt(sum(u*u))
+           v_m = dsqrt(sum(v*v))
+
+           uv = v-u
+           call PBC(uv,box)
+           
+           uv_m = dsqrt(sum(uv*uv))
+
+           costheta = sum(u*v)/(u_m*v_m)
+
+           theta = dacos(costheta)
+
+           n_u = ceiling(u_m/du)
+           n_v = ceiling(v_m/dv)
+           dum_n_uv = ceiling(uv_m/du)
+           n_theta = ceiling(theta/dtheta)
+
+           u_m = (n_u-0.5)*du
+           v_m = (n_v-0.5)*dv
+           
+           if ((n_u.le.nbins) .and. (n_v.le.nbins) &
+                .and. (dum_n_uv.le.nbins)) then
+              u_m = (n_u*n_u-(n_u-1)*(n_u-1))*du*du/2.0
+              v_m = (n_v*n_v-(n_v-1)*(n_v-1))*dv*dv/2.0
+
+              g3(n_u,n_v,n_theta) = g3(n_u,n_v,n_theta) &
+                   + 1./(2*pi*N*rho*rho*2*dtheta*u_m*v_m)
+           
+           end if
+
+        end do
+     end do
+  end do
+  write(*,*) count
+
+end subroutine threebody
+
+
 
 subroutine distance_matrix(coords, psi6_re, psi6_im, mus,&
      local_rho, box, cutoff, gsq_flag, rho_0,MAXnb, N, D,& 

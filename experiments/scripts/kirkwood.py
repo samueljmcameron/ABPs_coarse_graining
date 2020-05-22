@@ -38,15 +38,6 @@ class Kirkwood(SoftSphere):
         
         return g2spline
 
-    def g2_spline_scalar(self,r,g2data,rs):
-
-        g = self.g2_spliner_lam(g2data,rs)(r)
-
-        if g < 1e-3:
-
-            g = 0
-
-        return g
     
     def g2_spline(self,r,g2data,rs,g2tol=1e-12,r0_ret=False):
 

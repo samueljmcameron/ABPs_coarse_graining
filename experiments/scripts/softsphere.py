@@ -215,12 +215,6 @@ class SoftSphere(SoftSphereBase):
         
         return np.where(r>=1,self.w_plus(r),self.w_minus(r))
 
-    def w_prime_scalar(self,r):
-
-        if r <= 1:
-            a = self.w_plus_prime(r)
-        else:
-            a = self.w_minus_prime(r)
     
     def w_prime(self,r):
 

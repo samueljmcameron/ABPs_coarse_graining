@@ -1,0 +1,99 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+Consider three interacting spheres, with their positions and orientations as
+\begin{subequations}
+  \label{eqs:3hardspherepositions}
+  \begin{align}
+    \bm{r}_1 &= \bm{0},\\
+    \bm{r}_2 &= r_0\bm{\hat{e}}_x,\\
+    \bm{r}_3 &= \frac{r_0}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),
+  \end{align}
+\end{subequations}
+and
+\begin{subequations}
+  \label{eqs:3hardsphereorientations}
+  \begin{align}
+    \bm{u}_1 &= \frac{1}{2}(\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y),\\
+    \bm{u}_2 &= \frac{1}{2}(-\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y),\\
+    \bm{u}_3 &= -\bm{\hat{e}}_y,
+  \end{align}
+\end{subequations}
+respectively. Then, the differences in positions and orientations are
+\begin{subequations}
+  \label{eqs:3hardsphererelativepositions}
+  \begin{align}
+    \bm{r}_{12} &= r_0\bm{\hat{e}}_x-\bm{0} = r_0\bm{\hat{e}}_x,\\
+    \bm{r}_{13} &= \frac{r_0}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y)-\bm{0}
+    = \frac{r_0}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),\\
+    \bm{r}_{23} &= \frac{r_0}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y)
+                  -r_0\bm{\hat{e}}_x
+    =\frac{r_0}{2}(-\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),
+  \end{align}
+\end{subequations}
+and
+\begin{subequations}
+  \label{eqs:3hardsphererelativeorientations}
+  \begin{align}
+    \bm{u}_{12} &= \frac{1}{2}(-\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y)
+                  -\frac{1}{2}(\sqrt{3}\bm{\hat{e}}_x+\bm{\hat{e}}_y)
+    = -\sqrt{3}\bm{\hat{e}}_x,\\
+    \bm{u}_{13} &= -\bm{\hat{e}}_y-\frac{1}{2}(\sqrt{3}\bm{\hat{e}}_x
+                  +\bm{\hat{e}}_y)
+    = -\sqrt{3}\frac{1}{2}(\bm{\hat{e}}_x+\sqrt{3}\bm{\hat{e}}_y),\\
+    \bm{u}_{23} &=  \bm{\hat{e}}_y-\frac{1}{2}(-\sqrt{3}\bm{\hat{e}}_x
+                  +\bm{\hat{e}}_y)
+    = \sqrt{3}\frac{1}{2}(\bm{\hat{e}}_x-\sqrt{3}\bm{\hat{e}}_y),
+  \end{align}
+\end{subequations}
+respectively. Then, from eqns \ref{eqs:3hardsphererelativepositions}
+and \ref{eqs:3hardsphererelativeorientations}, one arrives at the generic
+relationships
+\begin{align}
+  \bm{\hat{r}}_{ij} &= -\frac{\bm{u}_{ij}}{\sqrt{3}},\\
+  \bm{u}_{ij}\cdot\bm{r}_{ij} &= -\sqrt{3}r_0.
+\end{align}
+Inserting these into eqn \ref{eq:3hardspherevelocities}
+\begin{align}
+  \frac{\bm{V}_i}{\lambda}
+  &=\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[w'(r_{ij})
+    (\bm{u}_{ij}\cdot\bm{r}_{ij})\frac{\bm{r}_{ij}}{r_{ij}}
+    +w(r_{ij})\bm{u}_{ij}\bigg]\nonumber\\
+  &=\bm{\hat{u}}_i-\sum_{j\neq i}^N \bigg[w'(r_0)
+    r_0\bm{u}_{ij}+w(r_0)\bm{u}_{ij}\bigg]
+\end{align}
+and then taking the difference of two (out of three) velocities
+\begin{align}
+  \frac{\bm{V}_i}{\lambda}-\frac{\bm{V}_j}{\lambda}
+  =&-\bm{u}_{ij}-\sum_{k\neq i}^N \bigg[w'(r_0)
+     r_0\bm{u}_{ik}+w(r_0)\bm{u}_{ik}\bigg]\nonumber\\
+   &+\sum_{k\neq j}^N \bigg[w'(r_0)
+     r_0\bm{u}_{jk}+w(r_0)\bm{u}_{jk}\bigg].
+\end{align}
+Taking $i=1$ and $j=2$ gives
+\begin{align}
+  \frac{\bm{V}_1}{\lambda}-\frac{\bm{V}_2}{\lambda}
+  =&-\bm{u}_{12}-w'(r_0)r_0\bm{u}_{12}-w(r_0)\bm{u}_{12}
+  \nonumber\\
+  &-w'(r_0)r_0\bm{u}_{13}-w(r_0)\bm{u}_{13}\nonumber\\
+  &+w'(r_0)r_0\bm{u}_{21}+w(r_0)\bm{u}_{21}\nonumber\\
+  &+w'(r_0)r_0\bm{u}_{23}+w(r_0)\bm{u}_{23}\nonumber\\
+  =&-\bm{u}_{12}-2w'(r_0)r_0\bm{u}_{12}-2w(r_0)\bm{u}_{12}
+  \nonumber\\
+  &-(w'(r_0)r_0+w(r_0))(\bm{u}_{13}-\bm{u}_{23})\nonumber\\
+  =&\bm{u}_{12}\big[-1-3w'(r_0)r_0-3w(r_0)\big].
+\end{align}
+Setting the lefthand side of the above equation then gives
+\ref{eq:hardsphereBC}. The same result occurs for any choices of $i\neq j$
+for $N=3$ particles in this trimer configuration. Since we are in
+dimensionless variables we can set $r_0=1$.
+
+Inserting the homogeneous solution, eqn \ref{eq:Whomo}, into eqn
+\ref{eq:hardsphereBC} gives the coeffiecient of $w(r)$ as
+\begin{align}
+  c_2 = -\frac{1}{3\sqrt{\Pi}K'(\sqrt{\Pi})}>0.
+\end{align}
+     
+
+\end{document}

@@ -1,0 +1,26 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+For active brownian particles, the pressure \cite{doi:10.1063/1.457480}
+of a $d$ dimensional system in steady state with periodic boundary conditions
+and volume $V$ is
+\begin{widetext}
+\begin{align}
+  dVp^i=
+  &\frac{1}{2}\sum_{i=1}^N\sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  <\bm{F}_{ij}^{\bm{n}}\cdot(\bm{r}_i-\bm{r}_j-\bm{R}_{\bm{n}})>
+  +f^P\sum_{i=1}^N<\bm{u}_{i}\cdot\bm{r}_i>+dN\nonumber\\
+  =&\frac{1}{2}\sum_{i=1}^N\sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  <\bm{F}_{ij}^{\bm{n}}\cdot(\bm{r}_i-\bm{r}_j-\bm{R}_{\bm{n}})>
+  +\frac{f^P}{2(d-1)\Pi }
+  \frac{1}{2}\sum_{i=1}^N\sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  <\bm{F}_{ij}^{\bm{n}}\cdot(\bm{u}_i-\bm{u}_j)>
+  +\frac{N(f^P)^2}{2(d-1)\Pi}+dN.
+\end{align}
+\end{widetext}
+where $F_{ij}^{\bm{n}}$ are the pairwise equilibrium forces between
+particle $i$ and particle $j$ under the minimum image convention. The angle
+brackets denote the average over the steady-state probability
+distribution $e^{-h(\{\bm{r}_i,\theta_i\})}$.
+
+\end{document}

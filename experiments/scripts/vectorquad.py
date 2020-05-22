@@ -124,7 +124,7 @@ def quadrature_vec(func, a, bs, args=(), tol=1.49e-8, rtol=1.49e-8, maxiter=50,
     err = np.inf
     maxiter = max(miniter+1, maxiter)
     for n in range(miniter, maxiter+1):
-        newval = fixed_quad_vec(func, a, bs, (), n)[0]
+        newval = fixed_quad_vec(func, a, np.atleast_1d(bs), (), n)[0]
         err = abs(newval-val)
         oldval = val
         val = newval

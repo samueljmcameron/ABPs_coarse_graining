@@ -1,0 +1,166 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+Now, I can define a vector of length $3N$ with components
+\begin{align}
+  \bm{r}=(\bm{r}^{(1)},\bm{r}^{(2)},\cdots,\bm{r}^{(N)},\theta_1,\theta_2,\cdots,
+  \theta_N).
+\end{align}
+
+This will then give the differential equation
+\begin{align}
+  \frac{d\bm{r}}{dt}=\beta\bm{D}\cdot(\bm{F}(\bm{r})+\bm{v}(\bm{r}))
+  +\sqrt{2D_{\alpha\beta}}u_{\beta}(t),
+\end{align}
+where $D_{\alpha\beta}$ is diagonal, and the values of the diagonal are
+$D^t$ for the first $2N$ terms, and $D^r$ for the last $N$ terms.
+
+Next, I will define
+\begin{align}
+  \bm{x}&\equiv(x_1,x_2,\cdots,x_{3N}),\\
+  \nabla&\equiv(\partial_{x_1},\partial_{x_2},\cdots,\partial_{x_{3N}}).
+\end{align}
+
+as well as the stochastic probability density operator
+\begin{align}
+  \hat{\rho}(\bm{x},t)=\delta(\bm{x}-\bm{r}(t)).
+\end{align}
+
+Taking the partial derivative of this with respect to time gives
+\begin{align}
+  \frac{\partial\hat{\rho}}{\partial t}
+  &=-(\nabla_{\bm{x}}\delta(\bm{x}-\bm{r}(t))
+  \cdot\frac{d\bm{r}}{dt}\nonumber\\
+  &=-\nabla_{\bm{x}}\cdot\bigg(\frac{d\bm{r}}{dt}
+  \delta(\bm{x}-\bm{r}(t)\bigg)\nonumber\\
+  &=-\nabla_{\bm{x}}\cdot\hat{\bm{j}}(\bm{x},t),
+\end{align}
+where I have defined the stochastic current operator
+\begin{align}
+  \hat{\bm{j}}(\bm{x},t)\equiv
+  &\beta\bm{D}\cdot\bm{F}(\bm{x})\delta(\bm{x}-\bm{r}(t))
+  +\beta\bm{D}\bm{v}(\bm{x})\delta(\bm{x}-\bm{r}(t))\nonumber\\
+  &+\sqrt{2D_{\alpha\beta}}u_{\beta}(t)
+  \delta(\bm{x}-\bm{r}(t))\nonumber\\
+  =&\beta\bm{D}\cdot\bm{F}(\bm{x})\hat{\rho}(\bm{x},t)
+  +\beta\bm{D}\cdot\bm{v}(\bm{x})\hat{\rho}(\bm{x},t)\nonumber\\
+  &+\sqrt{2D_{\alpha\beta}}u_{\beta}(t)\hat{\rho}(\bm{x},t).
+\end{align}
+
+You can average $\hat{\rho}(\bm{x},t)$ over the fluctuations $\bm{u}(t)$, and
+get the resulting density
+\begin{align}
+  P(\bm{x},t)=<\hat{\rho}(\bm{x},t)>,
+\end{align}
+where I have used the definition that for some observable $\hat{\mathcal{O}}$,
+\begin{align}
+  <\hat{\mathcal{O}}(\bm{u}(t))>=\frac{1}{Z}\int\mathcal{D}\bm{u}
+  \hat{\mathcal{O}}(\bm{u}(t))
+  \exp\bigg(-\frac{1}{2}\int_0^Tdt(\bm{u}(t))^2\bigg).
+\end{align}
+From this, I can calculate that noise-averaged current as
+\begin{align}
+  \bm{J}(\bm{x},t)=
+  &\beta\bm{D}\cdot(\bm{F}(\bm{x})P(\bm{x},t)
+  +\bm{v}(\bm{x})P(\bm{x},t))\nonumber\\
+  &+\sqrt{2D_{\alpha\beta}}<u_{\beta}(t)\hat{\rho}(\bm{x},t)>.
+\end{align}
+
+In order to write the noise term above in terms of $P(\bm{x},t)$, I will use
+the properties of the Dirac-delta function, namely,
+\begin{align}
+  \delta(\bm{x})=\int\frac{d^dk}{(2\pi)^d}\exp(-ik_jx_j),
+\end{align}
+to write
+\begin{align}
+  <u_{\beta}\hat{\rho}(\bm{x},t)>=\int\frac{d^dk}{(2\pi)^d}u_{\beta}(t)
+  \exp(-ik_j(x_j-r_j(t))).
+\end{align}
+
+Since correlations between the noise
+$<u_{\alpha}(t)u_{\beta}(t)>=\delta_{\alpha\beta}\delta(t-t^{\prime})$ only
+occur for fluctuations happening at the same time, we can write
+\begin{align}
+  \bm{r}(t)=
+  &\bm{r}(t-\Delta t)
+  +\int_{t-\Delta t}^tdt_1[\beta\bm{D}(\bm{F}(\bm{r}(t_1))
+    +\bm{v}(\bm{r}(t_1)))\nonumber\\
+    &+\sqrt{2D_{j\gamma}}u_{\gamma}(t_1)]
+\end{align}
+as $\Delta t\to0$. Then, since
+\begin{align}
+  \exp\bigg[\int_{t-\Delta t}^tdt_1(\bm{F}(\bm{r}(t_1)
+  +\bm{v}({\bm{r}(t_1)})\bigg]=1+O(\Delta t),
+\end{align}
+this can be written as
+\begin{widetext}
+  \begin{align}
+    <u_{\beta}(t)\exp(-ik_jr_j(t))>=
+    &\bigg<u_{\beta}(t)\exp\bigg[-ik_jr_j(t-\Delta t)-ik_j
+      \int_{t-\Delta t}^tdt_1(F_j(\bm{r}(t_1)+v_j{\bm{r}(t_1)}
+      +\sqrt{2D_{j\gamma}}u_{\gamma}(t_1))\bigg]\bigg>\nonumber\\
+    =&\bigg<u_{\beta}(t)\exp(-ik_jr_j(t-\Delta t))
+    \bigg[1-ik_j\int_{t-\Delta t}^tdt_1
+      \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>+O(\Delta t).
+  \end{align}
+\end{widetext}
+Next, since $t-\Delta t<t_1,t$, there won't be any correlations between the
+fluctuations at earlier times and those at $t$, so using the fact that for uncorrelated
+functions $<AB>=<A><B>$, I get
+\begin{widetext}
+\begin{align}
+  <u_{\beta}(t)\exp(-ik_jr_j(t))>
+  &=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  \bigg<u_{\beta}(t)\bigg[1-ik_j\int_{t-\Delta t}^tdt_1
+    \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)\bigg]\bigg>
+  +O(\Delta t)\nonumber\\
+  &=\bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  \bigg(<u_{\beta}(t)>
+  -\bigg<ik_j\int_{t-\Delta t}^tdt_1
+  \sqrt{2D_{j\gamma}}u_{\gamma}(t_1)
+  u_{\beta}(t)\bigg>\bigg)
+  +O(\Delta t)\nonumber\\
+  &=-\bigg<ik_j\sqrt{2D_{j\gamma}}\int_{t-\Delta t}^tdt_1
+  \delta_{\beta \gamma}\delta(t-t_1)\bigg>
+  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  +O(\Delta t)\nonumber\\
+  &=-\bigg<ik_j\sqrt{2D_{j\beta}}\int_{t-\Delta t}^tdt_1
+  \delta(t-t_1)\bigg>
+  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  +O(\Delta t)\nonumber\\
+  &=-\bigg<ik_j\sqrt{2D_{j\beta}}\int_0^{\Delta t}du
+  \delta(u)\bigg>
+  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  +O(\Delta t)\nonumber\\
+  &=-\frac{1}{2}ik_j\sqrt{2D_{j\beta}}
+  \bigg<\exp(-ik_jr_j(t-\Delta t))\bigg>
+  +O(\Delta t)\nonumber\\.
+\end{align}
+\end{widetext}
+Taking the limit as $\Delta t\to0$, this becomes
+\begin{align}
+  <u_{\beta}(t)&\exp(-ik_jr_j(t)>=\nonumber\\
+  &-\frac{1}{2}ik_j\sqrt{2D_{j\beta}}\bigg<\exp(-ik_jr_j(t))\bigg>.
+\end{align}
+Taking the inverse Fourier transform then gives
+\begin{align}
+  <u_{\beta}(t)\hat{\rho}(\bm{x},t)>=-\frac{1}{2}\sqrt{2D_{j\beta}}
+  \partial_jP(\bm{x},t).
+\end{align}
+Finally, inserting this into the current I get
+\begin{align}
+  J_{\alpha}(\bm{x},t)=
+  &\beta D_{\alpha\beta}F_{\beta}(\bm{x})P(\bm{x},t)
+  +\beta D_{\alpha\beta}v_{\beta}(\bm{x})P(\bm{x},t)\nonumber\\
+  &+\sqrt{2D_{\alpha\beta}}\bigg(-\frac{1}{2}\sqrt{2D_{j\beta}}
+  \partial_jP(\bm{x},t)\bigg)\nonumber\\
+  =&\beta D_{\alpha\beta}F_{\beta}(\bm{x})P(\bm{x},t)
+  +\beta D_{\alpha\beta}v_{\beta}(\bm{x})P(\bm{x},t)\nonumber\\
+  &-\sqrt{D_{\alpha\beta}D_{\gamma\beta}}
+  \partial_{\gamma}P(\bm{x},t))
+\end{align}
+
+Since in our case, $D_{\alpha\beta}$ is diagonal, this just gives eqn
+\ref{eq:Nparticlecurrent} as desired.
+
+\end{document}

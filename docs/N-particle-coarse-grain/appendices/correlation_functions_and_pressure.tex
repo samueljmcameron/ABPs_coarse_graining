@@ -1,0 +1,434 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+In an equilibrium system, the pressure $P$ is defined as
+\begin{align}
+  \beta P = \frac{1}{Z}\frac{\partial Z}{\partial A}
+\end{align}
+where $Z$ is the (canonical) partition function. Consider a generic
+partition function
+\begin{align}
+  Z=\int\prod_{k=1}^N(d^2r_k)\exp[-\beta U(\{\bm{r}_i\})].
+\end{align}
+I will first explicitly introduce the area dependence in the integrand by
+writing $\bm{r}_i = A^{1/2}\bm{t}_i$, and so
+\begin{align}
+  Z = A^N\int\prod_{k=1}^N(d^2t_k)\exp[-\beta U(\{A^{1/2}\bm{t}_i\})].
+\end{align}
+Next, I take the area derivative of the partition function,
+\begin{align}
+  \frac{\partial Z}{\partial A}
+  =&NA^{N-1}\int\prod_{k=1}^N(d^2t_k)\exp[-\beta U(\{A^{1/2}\bm{t}_i\})]
+  \nonumber\\
+  &+A^N\int\frac{\partial}{\partial A}\prod_{k=1}^N(d^2t_k)
+  \exp[-\beta U(\{A^{1/2}\bm{t}_i\})]\nonumber\\
+  =&\frac{N}{A}Z
+  -A^N\int\frac{\partial}{\partial A}\prod_{k=1}^N(d^2t_k)
+  \exp[-\beta U(\{A^{1/2}\bm{t}_i\})]\nonumber\\
+  =&\frac{N}{A}Z
+  -\frac{\beta}{2A}A^N\int\prod_{k=1}^N(d^2t_k)
+  \frac{\partial U}{\partial\bm{r}_j}\cdot
+  \bm{r}_j\exp[-\beta U(\{A^{1/2}\bm{t}_i\})]\nonumber\\
+  =&\frac{N}{A}Z
+  -\frac{\beta}{2A}\int\prod_{k=1}^N(d^2r_k)
+  \sum_{j}\frac{\partial U}{\partial\bm{r}_j}\cdot
+  \bm{r}_j\exp[-\beta U(\{\bm{r}_i\})].
+\end{align}
+This then gives the pressure as
+\begin{align}
+  \beta P = \frac{N}{A}
+  -\frac{\beta}{2A}\bigg<\sum_{j=1}\bm{r}_j\cdot
+  \frac{\partial U}{\partial\bm{r}_j}\bigg>
+\end{align}
+where
+\begin{align}
+  <\cdots> = \frac{1}{Z}
+  \int\prod_{k=1}^N(d^2r_k)
+  \cdots\exp[-\beta U(\{\bm{r}_i\})].
+\end{align}
+
+\subsection{Pairwise and three-body interactions.\label{app:onlytwobody}}
+
+Next, I will assume a interaction potential of the form
+\begin{align}
+  \beta U = \sum_{i}\sum_{j<i}W_2+\sum_{i}\sum_{j<i}\sum_{k<j}W_3.
+\end{align}
+The partial derivative of this interaction potential with respect
+to position is then
+\begin{widetext}
+  \begin{align}
+    \frac{\partial \beta U}{\partial \bm{r}_l}
+    =& \sum_{i}\sum_{j<i}
+    \frac{\partial W_2(\bm{r}_i,\bm{r}_j)}{\partial \bm{r}_l}
+    +\sum_{i}\sum_{j<i}\sum_{k<j}
+    \frac{\partial W_3(\bm{r}_i,\bm{r}_j,\bm{r}_k)}{\partial \bm{r}_l}
+    \nonumber\\
+    =& \frac{1}{2}\bigg(\sum_{j\neq l}
+    \frac{\partial W_2(\bm{r}_l,\bm{r}_j)}{\partial \bm{r}_l}
+    +\sum_{i\neq l}
+    \frac{\partial W_2(\bm{r}_i,\bm{r}_l)}{\partial \bm{r}_l}\bigg)
+    +\frac{1}{6}\bigg(\sum_{j\neq l}\sum_{k\neq l,k\neq j}
+    \frac{\partial W_3(\bm{r}_l,\bm{r}_j,\bm{r}_k)}{\partial \bm{r}_l}
+    \nonumber\\
+    &+\sum_{i\neq l}\sum_{k\neq l, k\neq i}
+    \frac{\partial W_3(\bm{r}_i,\bm{r}_l,\bm{r}_k)}{\partial \bm{r}_l}
+    +\sum_{i\neq l}\sum_{j\neq l,j\neq i}
+    \frac{\partial W_3(\bm{r}_i,\bm{r}_j,\bm{r}_l)}{\partial \bm{r}_l}
+    \bigg).
+  \end{align}
+  Therefore,
+  \begin{align}
+    \sum_l\bm{r}_l\cdot\frac{\partial \beta U}{\partial \bm{r}_l}
+    =&\frac{1}{2}\bigg(\sum_l\sum_{j\neq l}\bm{r}_l\cdot
+    \frac{\partial W_2(\bm{r}_l,\bm{r}_j)}{\partial \bm{r}_l}
+    +\sum_l\sum_{i\neq l}\bm{r}_l\cdot
+    \frac{\partial W_2(\bm{r}_i,\bm{r}_l)}{\partial \bm{r}_l}\bigg)
+    +\frac{1}{6}\bigg(\sum_l\sum_{j\neq l}\sum_{k\neq l,k\neq j}
+    \bm{r}_l\cdot
+    \frac{\partial W_3(\bm{r}_l,\bm{r}_j,\bm{r}_k)}{\partial \bm{r}_l}
+    \nonumber\\
+    &+\sum_l\sum_{i\neq l}\sum_{k\neq l, k\neq i}\bm{r}_l\cdot
+    \frac{\partial W_3(\bm{r}_i,\bm{r}_l,\bm{r}_k)}{\partial \bm{r}_l}
+    +\sum_l\sum_{i\neq l}\sum_{j\neq l,j\neq i}\bm{r}_l\cdot
+    \frac{\partial W_3(\bm{r}_i,\bm{r}_j,\bm{r}_l)}{\partial \bm{r}_l}
+    \bigg).
+  \end{align}
+\end{widetext}
+Now, when integrating over the above expression, there are $N$ ways to
+integrate over the first particle, $N-1$ ways to integrate over the
+second particle, and $N-2$ ways to integrate over the third particle,
+so that the pressure becomes
+\begin{widetext}
+  \begin{align}
+    \beta P
+    =& \frac{N}{A}
+    -\frac{1}{Z}\frac{N(N-1)}{4A}\int d^2r_1d^2r_2\bigg(\bm{r}_1\cdot
+    \frac{\partial W_2(\bm{r}_1,\bm{r}_2)}{\partial \bm{r}_1}
+    +\bm{r}_2\cdot
+    \frac{\partial W_2(\bm{r}_1,\bm{r}_2)}{\partial \bm{r}_2}\bigg)
+    \int\prod_{k=3}^N(d^2r_k)
+    \exp[-\beta U(\{\bm{r}_i\})]\nonumber\\
+    &-\frac{1}{Z}\frac{N(N-1)(N-2)}{12A}\int d^2r_1d^2r_2d^2r_3\bigg(
+    \bm{r}_1\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_1}
+    +\bm{r}_2\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_2}
+    \nonumber\\
+    &+\bm{r}_3\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_3}
+    \bigg)
+    \int\prod_{k=4}^N(d^2r_k)
+    \exp[-\beta U(\{\bm{r}_i\})].
+  \end{align}
+
+  Defining the correlation function of order $n$ as
+  \begin{align}
+    g^{(n)}(\bm{r}_1,\cdots,\bm{r}_n)=\frac{A^nN!}{N^n(N-n)!}
+    \frac{1}{Z}\int\prod_{k=n+1}^N(d^2r_k)
+    \exp[-\beta U(\{\bm{r}_i\})],
+  \end{align}
+  this simplifies to
+  \begin{align}\label{appeq:p_2_and_3}
+    \beta P
+    =& \frac{N}{A}
+    -\frac{N^2}{4A^3}\int d^2r_1d^2r_2\bigg(\bm{r}_1\cdot
+    \frac{\partial W_2(\bm{r}_1,\bm{r}_2)}{\partial \bm{r}_1}
+    +\bm{r}_2\cdot
+    \frac{\partial W_2(\bm{r}_1,\bm{r}_2)}{\partial \bm{r}_2}\bigg)
+    g^{(2)}(\bm{r}_1,\bm{r}_2)\nonumber\\
+    &-\frac{N^3}{12A^4}\int d^2r_1d^2r_2d^2r_3\bigg(
+    \bm{r}_1\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_1}
+    +\bm{r}_2\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_2}
+    +\bm{r}_3\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_3}
+    \bigg)g^{(3)}(\bm{r}_1,\bm{r}_2,\bm{r}_3).
+  \end{align}
+\end{widetext}
+
+If we assume that $W_2(\bm{r}_1,\bm{r}_2)=W_2(r_{12})$ is translationally
+invariant and $g^{(2)}(\bm{r}_1,\bm{r}_2)=g^{(2)}(r_{12})$, then the term
+with the second order correlation function can be simplified further.
+Using the change of coordinates
+\begin{align}
+  \bm{r}_1&=\frac{\bm{u}+\bm{v}}{\sqrt{2}},\\
+  \bm{r}_2&=\frac{\bm{v}-\bm{u}}{\sqrt{2}}
+\end{align}
+or
+\begin{align}
+  \bm{u}&=\frac{\bm{r}_2-\bm{r}_1}{\sqrt{2}},\\
+  \bm{v}&=\frac{\bm{r}_1+\bm{r}_2}{\sqrt{2}}.
+\end{align}
+then
+\begin{align}
+  &\int d^2r_1d^2r_2\bigg(\bm{r}_1\cdot
+  \frac{\partial W_2(r_{12})}{\partial \bm{r}_1}
+  +\bm{r}_2\cdot
+  \frac{\partial W_2(r_{12})}{\partial \bm{r}_2}\bigg)
+  g^{(2)}(r_{12})\nonumber\\
+  &=\int d^2r_1d^2r_2
+  W_2'(r_{12})(\bm{r}_2-\bm{r}_1)\cdot
+  \frac{(\bm{r}_2-\bm{r}_1)}{r_{12}}
+  g^{(2)}(r_{12})\nonumber\\
+  &=\int d^2u W_2'(u)u g^{(2)}(u)\nonumber\\
+  &=A\int d^2u W_2'(u)u g^{(2)}(u)\nonumber\\
+  &=2\pi A\int_0^{\infty} du W_2'(u)u^2 g^{(2)}(u).
+\end{align}
+
+Next, if we assume that $W_3(r_{12},r_{13},\cos(\theta_{12}-\theta_{13}))$
+(consistent with eqn \ref{eq:3body}), where
+$\bm{r}_{12}\cdot\bm{r}_{13}=r_{12}r_{13}\cos(\theta_{12}-\theta_{13})$,
+the third order correlation function term in eqn \ref{appeq:p_2_and_3}
+can also be simplified further. The partial derivatives in the integrand
+of the third order term are
+\begin{widetext}
+  \begin{align}
+    \frac{\partial W_3}{\partial \bm{r}_1}
+    &= -\frac{\bm{r}_{12}}{r_{12}}\frac{\partial W_3}{\partial r_{12}}
+    - \frac{\bm{r}_{13}}{r_{13}}\frac{\partial W_3}{\partial r_{13}}
+    +\bigg[\frac{\bm{r}_{12}}{r_{12}^3r_{13}}\bm{r}_{12}\cdot\bm{r}_{13}
+      +\frac{\bm{r}_{13}}{r_{12}r_{13}^3}\bm{r}_{12}\cdot\bm{r}_{13}
+      -\frac{(\bm{r}_{12}+\bm{r}_{13})}{r_{12}r_{13}}\bigg]
+    \frac{\partial W_3}{\partial\cos(\theta_{12}-\theta_{13})},\\
+    \frac{\partial W_3}{\partial \bm{r}_2}
+    &= \frac{\bm{r}_{12}}{r_{12}}\frac{\partial W_3}{\partial r_{12}}
+    +\frac{1}{r_{12}r_{13}}\bigg[\bm{r}_{13}-\frac{\bm{r}_{12}}{r_{12}^2}
+      \bm{r}_{12}\cdot\bm{r}_{13}\bigg]
+    \frac{\partial W_3}{\partial\cos(\theta_{12}-\theta_{13})},\\
+    \frac{\partial W_3}{\partial \bm{r}_3}
+    &= \frac{\bm{r}_{13}}{r_{13}}\frac{\partial W_3}{\partial r_{13}}
+    +\frac{1}{r_{12}r_{13}}\bigg[\bm{r}_{12}-\frac{\bm{r}_{13}}{r_{13}^2}
+      \bm{r}_{12}\cdot\bm{r}_{13}\bigg]
+    \frac{\partial W_3}{\partial\cos(\theta_{12}-\theta_{13})}.
+  \end{align}
+\end{widetext}
+The integrand itself is then
+\begin{align}
+  &\bm{r}_1\cdot\frac{\partial W_3}{\partial \bm{r}_1}+
+  \bm{r}_2\cdot\frac{\partial W_3}{\partial \bm{r}_2}+
+  \bm{r}_3\cdot\frac{\partial W_3}{\partial \bm{r}_3}\nonumber\\
+  =&\frac{\bm{r}_{12}\cdot\bm{r}_{12}}{r_{12}}
+  \frac{\partial W_3}{\partial r_{12}}+
+  \frac{\bm{r}_{13}\cdot\bm{r}_{13}}{r_{13}}
+  \frac{\partial W_3}{\partial r_{13}}\nonumber\\
+  &+\frac{\bm{r}_{12}\cdot\bm{r}_{13}}{r_{12}r_{13}}\bigg[
+    2-\frac{\bm{r}_{12}\cdot\bm{r}_{12}}{r_{12}^2}
+    -\frac{\bm{r}_{13}\cdot\bm{r}_{13}}{r_{13}^2}\bigg]
+  \frac{\partial W_3}{\partial \cos(\theta_{12}-\theta_{13})}\nonumber\\
+  =&r_{12}\frac{\partial W_3}{\partial r_{12}}+
+  r_{13}\frac{\partial W_3}{\partial r_{13}}.
+\end{align}
+
+
+Next, we assume that the three body correlation function is rotationally
+invariant, so
+\begin{align}
+  g^{(3)}(\bm{r}_1,\bm{r}_2,\bm{r}_3)
+  = g^{(3)}(\bm{r}_{12},\bm{r}_{13},\bm{r}_{23}).
+\end{align}
+
+Introducing the change of variables
+\begin{equation}
+  \bm{x}=
+  \begin{bmatrix}
+    -1 &  0 &  1 &  0 &  0 &  0 \\
+    0  & -1 &  0 &  1 &  0 &  0 \\
+    -1 &  0 &  0 &  0 &  1 &  0 \\
+    0  & -1 &  0 &  0 &  0 &  1 \\
+    0  &  0 &  0 &  0 &  1 &  0 \\
+    0  &  0 &  0 &  0 &  0 &  1
+  \end{bmatrix}
+  \begin{bmatrix}
+    x_1 \\
+    y_1 \\
+    x_2 \\
+    y_2 \\
+    x_3 \\
+    y_3
+  \end{bmatrix},
+\end{equation}
+and defining $\bm{u} = \bm{r}_{12}$, $\bm{v} = \bm{r}_{13}$,
+the three body correlation term in eqn \ref{appeq:p_2_and_3}
+becomes (since the determinant of the above matrix is $1$)
+\begin{widetext}
+  \begin{align}\label{eq:trans_inv_g3}
+    &\frac{N^3}{12A^4}\int d^2r_1d^2r_2d^2r_3\bigg(
+    \bm{r}_1\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_1}
+    +\bm{r}_2\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_2}
+    +\bm{r}_3\cdot
+    \frac{\partial W_3(\bm{r}_1,\bm{r}_2,\bm{r}_3)}{\partial \bm{r}_3}
+    \bigg)g^{(3)}(\bm{r}_1,\bm{r}_2,\bm{r}_3)\nonumber\\
+    &=\frac{N^3}{12A^4}\int d^2r_1d^2r_2d^2r_3\bigg(
+    r_{12}\frac{\partial W_3}{\partial r_{12}}+
+    r_{13}\frac{\partial W_3}{\partial r_{13}}
+    \bigg)g^{(3)}(r_{12},r_{13},|\bm{r}_{12}-\bm{r}_{13}|)\nonumber\\
+    &=\frac{N^3}{12A^3}\int d^2ud^2v\bigg(
+    u\frac{\partial W_3}{\partial u}+
+    v\frac{\partial W_3}{\partial v}
+    \bigg)g^{(3)}(u,v,|\bm{u}-\bm{v}|)\nonumber\\
+    &=\frac{N^3}{12A^3}\int udud\theta_{12}vdvd\theta_{13}\bigg(
+    u\frac{\partial W_3}{\partial u}+
+    v\frac{\partial W_3}{\partial v}
+    \bigg)g^{(3)}(u,v,\cos(\theta_{12}-\theta_{13})).
+  \end{align}
+\end{widetext}
+In the last line, we have re-written $g^{(3)}$ in terms of the 
+difference in angle, $\theta_{12}-\theta_{13}$, between $\bm{u}$ and
+$\bm{v}$.
+
+Eqn \ref{eq:trans_inv_g3} can be simplified further by making the change
+of variables
+$\theta=\theta_{12}-\theta_{13}$, $\phi=\theta_{12}+\theta_{13}$,
+so that for some function $f(\theta_{12}-\theta_{13})$,
+\begin{align}
+  \int_0^{2\pi}d\theta_{12}\int_0^{2\pi}d\theta_{13}
+  f(\theta_{12}-\theta_{13})
+  =\frac{1}{2}\int_{\mathcal{R}}d\theta d\phi f(\theta)
+\end{align}
+where the region $\mathcal{R}$ is a square in the $\phi>0$ plane,
+with diagonals along the $\theta=0$ axis and the axis $\phi=2\pi$. To
+evaluate things consistently along the integration region, we integrate
+over four regions, and find that it simplifies greatly,
+\begin{widetext}
+  \begin{align}
+    \frac{1}{2}\int\int_{\mathcal{R}}d\theta d\phi f(\theta)
+    =&\frac{1}{2}\int_{-2\pi}^0d\theta
+    \int_{-\theta}^{2\pi}d\phi f(\theta)
+    +\frac{1}{2}\int_0^{2\pi}d\theta
+    \int_{\theta}^{2\pi}d\phi f(\theta)\nonumber\\
+    &+\frac{1}{2}\int_{-2\pi}^0d\theta
+    \int_{2\pi}^{4\pi+\theta}d\phi f(\theta)
+    +\frac{1}{2}\int_0^{2\pi}d\theta
+    \int_{2\pi}^{4\pi-\theta}d\phi f(\theta)\nonumber\\
+    =&\frac{1}{2}\int_{-2\pi}^0d\theta
+    (2\pi+\theta) f(\theta)
+    +\frac{1}{2}\int_0^{2\pi}d\theta
+    (2\pi-\theta) f(\theta)\nonumber\\
+    &+\frac{1}{2}\int_{-2\pi}^0d\theta
+    (2\pi+\theta) f(\theta)
+    +\frac{1}{2}\int_0^{2\pi}d\theta
+    (2\pi-\theta) f(\theta)\nonumber\\
+    =&\int_{-2\pi}^0d\theta
+    (2\pi+\theta) f(\theta)
+    +\int_0^{2\pi}d\theta
+    (2\pi-\theta) f(\theta)\nonumber\\
+    =&\int_0^{2\pi}d\theta
+    (2\pi-\theta) (f(\theta)+f(-\theta)).
+  \end{align}
+\end{widetext}
+We know explicitly that $W_3\propto\cos\theta$, and from physical
+considerations (since $g^{(3)}$ is a function only of the distances
+between three particles) that
+$g^{(3)}(\theta)=g^{(3)}(-\theta)=g^{(3)}(2\pi-\theta)$, so the
+$f(\theta)$ in the above equation should also satisfy these conditions.
+Therefore the above integral simplifies further (using the substitution
+$\theta'=2\pi-\theta$ where appropriate) as
+\begin{align}
+  &\int_0^{2\pi}d\theta
+  (2\pi-\theta) (f(\theta)+f(-\theta))\nonumber\\
+  =&2\int_0^{2\pi}d\theta(2\pi-\theta)f(\theta)\nonumber\\
+  =&2\int_0^{\pi}d\theta(2\pi-\theta)f(\theta)+
+  2\int_{\pi}^{2\pi}d\theta(2\pi-\theta)f(\theta)\nonumber\\
+  =&2\int_0^{\pi}d\theta(2\pi-\theta)f(\theta)+
+  2\int_{\pi}^{0}-d\theta'\theta'f(2\pi-\theta')\nonumber\\
+  =&2\int_0^{\pi}d\theta(2\pi-\theta)f(\theta)+
+  2\int_0^{\pi}d\theta'\theta'f(\theta')\nonumber\\
+  =&4\pi\int_0^{\pi}d\theta f(\theta)
+\end{align}
+This maybe should have been expected, as it corresponds to essentially
+integrating out one of the two original coordinates (e.g. $d\theta_{12}$)
+to get a factor of $2\pi$, and then knowing that the integral from $0$ to
+$\pi$ should be the same as the integral from $\pi$ to $2\pi$ to get another
+factor of $2$.
+  
+Inserting this result into eqn \ref{eq:trans_inv_g3} with its integrand
+\footnote{I have been a bit sloppy in changing the arguments of the function
+  freely without changing the function name, but it should be clear from
+  context what is meant.}
+instead of $f(\theta)$,
+\begin{widetext}
+  \begin{align}
+    &\frac{N^3}{12A^3}\int udud\theta_{12}vdvd\theta_{13}\bigg(
+    u\frac{\partial W_3}{\partial u}+
+    v\frac{\partial W_3}{\partial v}
+    \bigg)g^{(3)}(u,v,\cos(\theta_{12}-\theta_{13}))\nonumber\\
+    =&\frac{\pi N^3}{3A^3}\int_{0}^{\infty} udu\int_{0}^{\infty}vdv
+    \int_{0}^{\pi}d\theta\bigg(
+    u\frac{\partial W_3(u,v,\theta)}{\partial u}+
+    v\frac{\partial W_3(u,v,\theta)}{\partial v}
+    \bigg)g^{(3)}(u,v,\theta).
+  \end{align}
+\end{widetext}
+
+Therefore, in order to determine the three-body contributions to the pressure,
+I need to measure $g^{(3)}(u,v,\theta)$, where $u=r_{12}$, $v=r_{13}$, and
+$\theta=\arccos(\bm{r}_{12}\cdot\bm{r}_{13}/(r_{12}r_{13}))$.
+
+Just to touch briefly on the numerical measurement of $g^{(3)}$, we know by
+definition that
+\begin{align}
+  &\frac{N^3}{A^3}\hat{g}^{(3)}(\bm{r}_1,\bm{r}_2,\bm{r}_3)\nonumber\\
+  =&\sum_{\alpha=1}^N\sum_{\substack{\beta=1 \\\beta\neq \alpha}}^N
+  \sum_{\substack{\gamma=1 \\\gamma\neq \alpha \\
+      \gamma\neq\beta}}^N\delta(\bm{r}_1-\bm{x}_{\alpha})
+  \delta(\bm{r}_2-\bm{x}_{\beta})\delta(\bm{r}_3-\bm{x}_{\gamma}),
+\end{align}
+where $g^{(3)} = <\hat{g}^{(3)}>$.
+If the system is translationally invariant, then
+$g^{(3)}(\bm{r}_1,\bm{r}_2,\bm{r}_3)=g^{(3)}(\bm{u},\bm{v},\bm{v}-\bm{u})$,
+with $\bm{u}=\bm{r}_2-\bm{r}_1$, $\bm{v}=\bm{r}_3-\bm{r}_1$, and so
+\begin{align}
+  &\frac{N^3}{A^3}\hat{g}^{(3)}(\bm{u},\bm{v},\bm{v}-\bm{u})\nonumber\\
+  =&\sum_{\alpha,\beta,\gamma}^N\prime
+  \delta(\bm{r}_1-\bm{x}_{\alpha})
+  \delta(\bm{u}+\bm{r}_1-\bm{x}_{\beta})
+  \delta(\bm{v}+\bm{r}_1-\bm{x}_{\gamma})
+\end{align}
+where the prime on the sum indicates that $\alpha$, $\beta$, $\gamma$ must
+all take different values.
+We can then integrate out $\bm{r}_1$ since the lefthand side is independent
+of it, so
+\begin{align}
+  &A\frac{N^3}{A^3}\hat{g}^{(3)}(\bm{u},\bm{v},\bm{v}-\bm{u})\nonumber\\
+  =&\int d^2r_1\sum_{\alpha,\beta,\gamma}^N\prime
+  \delta(\bm{r}_1-\bm{x}_{\alpha})
+  \delta(\bm{u}+\bm{r}_1-\bm{x}_{\beta})
+  \delta(\bm{v}+\bm{r}_1-\bm{x}_{\gamma})\nonumber\\
+  =&\sum_{\alpha,\beta,\gamma}^N\prime
+  \delta(\bm{u}-(\bm{x}_{\beta}-\bm{x}_{\alpha}))
+  \delta(\bm{v}-(\bm{x}_{\gamma}-\bm{x}_{\alpha}))\nonumber\\
+  =&\sum_{\alpha,\beta,\gamma}^N\prime
+  \delta(\bm{u}-\bm{x}_{\alpha\beta})
+  \delta(\bm{v}-\bm{x}_{\alpha\gamma}).
+\end{align}
+Assuming that the system is also rotationally invariant, we can
+define $\theta=\theta_v-\theta_u$, and integrate out $\theta_u$ since
+$g^{(3)}$ is independent of it, i.e.
+\begin{align}
+  &2\pi\frac{N^3}{A^2}\hat{g}^{(3)}(u,v,\cos\theta)\nonumber\\
+  =&\int d\theta_u\sum_{\alpha,\beta,\gamma}^N\prime
+  \delta(u-x_{\alpha\beta})\delta(\theta_u-\theta_{\alpha\beta})
+  \delta(v-x_{\alpha\gamma})\nonumber\\
+  &\times\delta(\theta+\theta_u-\theta_{\alpha\gamma})\nonumber\\
+  =&\sum_{\alpha,\beta,\gamma}^N\prime
+  \delta(u-x_{\alpha\beta})
+  \delta(v-x_{\alpha\gamma})
+  \delta(\theta-(\theta_{\alpha\gamma}-\theta_{\alpha\beta})).
+\end{align}
+Finally, the numerical measurement of $\hat{g}^{(3)}$ requires us to
+discretize the dirac delta functions. If we define $\delta_{i,j}$ as
+the Kronecker delta function, then
+\begin{align}
+  &2\pi\frac{N^3}{A^2}\hat{g}^{(3)}(u,v,\cos\theta)\nonumber\\
+  =&\sum_{\alpha,\beta,\gamma}^N\prime
+  \frac{\delta_{u,x_{\alpha\beta}}}{\frac{(u+\Delta u)^2-u^2}{2}}
+  \frac{\delta_{v,x_{\alpha\gamma}}}{\frac{(v+\Delta v)^2-v^2}{2}}
+  \frac{\delta_{\theta,\theta_{\gamma\beta}}}{\Delta \theta},
+\end{align}
+where $\Delta u$, $\Delta v$, and $\Delta \theta$ are the sizes of the
+bins in the numerical calculation.
+\end{document}

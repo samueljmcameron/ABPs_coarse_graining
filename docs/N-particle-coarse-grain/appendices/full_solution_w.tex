@@ -1,0 +1,56 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+     
+The full solution to eqn \ref{eq:WODE_isotropic} can be solved using variation
+of parameters. To do this requires finding both the homogeneous solution
+as found in eqn \ref{eq:Whomo}, and additionally the particular solution.
+
+\subsection{Wronskian of homogeneous solution.}
+To use variation of parameters, the Wronskian of eqn \ref{eq:Whomo} must be
+calculated. he linearly independent solutions to the homogeneous equation are
+\begin{subequations}
+  \label{eqs:linindependentWhomo}
+  \begin{align}
+    w_1(r)&=\frac{I_1(\sqrt{\Pi}r)}{r},\\
+    w_2(r)&=\frac{K_1(\sqrt{\Pi}r)}{r}.
+  \end{align}
+\end{subequations}
+The $n^{th}$ order modified Bessel functions satisfy the ODE
+\begin{align}
+  y'=\frac{(x^2+n^2)y-x^2y''}{x}
+\end{align}
+and so the Wronskian of the modified Bessel functions satisfy the ODE
+\begin{align}
+  s_n(x)=
+  & I_n(x)K_n'(x)-K_n(x)I_n'(x)\nonumber\\
+  =& I_n(x)\frac{(x^2+n^2)K_n(x)-x^2K_n''(x)}{x}\nonumber\\
+  & -K_n(x)\frac{(x^2+n^2)I_n(x)-x^2I_n''(x)}{x}\nonumber\\
+  =& -x(I_n(x)K_n''(x)-K_n(x)I_n''(x))\nonumber\\
+  =& - x s_n'(x),
+\end{align}
+which has the solution
+\begin{align}
+  s_n(x)=-\frac{1}{x}
+\end{align}
+due to the asymptotics of $I_1(x)$ and $K_1(x)$, namely
+\begin{align}
+  I_n(z)&\sim\frac{e^z}{(2\pi z)^{\frac{1}{2}}},\\
+  K_n(z)&\sim\bigg(\frac{\pi}{(2 z)}\bigg)^{\frac{1}{2}}e^{-z},\\
+  I_n(z)&\sim\frac{e^z}{(2\pi z)^{\frac{1}{2}}},\\
+  K_n(z)&\sim-\bigg(\frac{\pi}{(2 z)}\bigg)^{\frac{1}{2}}e^{-z}.
+\end{align}
+Therefore, the Wronskian of eqns \ref{eqs:linindependentWhomo} is
+\begin{align}\label{eq:wronskian}
+  W(r)=
+  & \frac{I_1(\sqrt{\Pi}r)}{r}\bigg[-\frac{K_1(\sqrt{\Pi}r)}{r^2}
+    +\sqrt{\Pi}\frac{K_1'(\sqrt{\Pi}r)}{r}\bigg]\nonumber\\
+  &-\frac{K_1(\sqrt{\Pi}r)}{r}\bigg[-\frac{I_1(\sqrt{\Pi}r)}{r^2}
+    +\sqrt{\Pi}\frac{I_1'(\sqrt{\Pi}r)}{r}\bigg]\nonumber\\
+  =& \frac{\sqrt{\Pi}}{r^2}\bigg[I_1(\sqrt{\Pi}r)K_1'(\sqrt{\Pi}r)
+     - K_1(\sqrt{\Pi}r)I_1'(\sqrt{\Pi}r)\bigg]\nonumber\\
+  =& \frac{\sqrt{\Pi}}{r^2}\bigg(-\frac{1}{\sqrt{\Pi}r}\bigg)\nonumber\\
+  =& -\frac{1}{r^3}.
+\end{align}
+
+\end{document}

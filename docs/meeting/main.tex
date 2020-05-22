@@ -1,0 +1,50 @@
+\documentclass[twocolumn,amsmath,amssymb,aps]{revtex4-1}%{article}
+%\usepackage[hmargin=1.25cm,vmargin=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{bm}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{dcolumn}
+\usepackage[caption=false]{subfig}
+\usepackage{subfiles}
+
+\begin{document}
+ 
+\title{calculation: coarse-graining active brownian particles}
+\author{Sam Cameron}
+\affiliation{%
+  University of Bristol}%
+\date{\today}
+
+\begin{abstract}
+  In equilibrium systems, collective properties are calculated
+  through knowledge of the Boltzmann probability density,
+  $e^{-\beta \mathcal{H}(\{\bm{x}_i)\}}$ and the corresponding partition
+  function. In contrast, non-equilibrium/active systems do not obey
+  Boltzmann statistics, and so the functional form of the steady-state
+  probability density (if it exists) is not known a priori. In this letter,
+  we present a systematic way of calculating the steady-state
+  probability density of an active systems. As a proof of concept, we use
+  this method to calculate the steady-state probability density of
+  interacting active brownian particles. Finally, we compare our calculation
+  to Molecular Dynamics simulations.
+\end{abstract}
+
+
+\maketitle
+
+\section{Equilibrium pressure in terms of correlation
+ functions.\label{app:pressure}}
+
+\subfile{appendices/correlation_functions_and_pressure.tex}
+
+\section{Non-equilibrium pressure for ABPs.}
+
+\subfile{appendices/non_eq_pressure.tex}
+
+\bibliographystyle{plain}
+\bibliography{main}
+
+\end{document}

@@ -1,0 +1,97 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+In this section, I would like to determine the many body terms
+of $b_i^{2n}$, where $b_i$ is defined in eqn \ref{eq:b_i}.
+The squared term is
+\begin{align}
+  b_i^2
+  =&\sum_{j\neq i}^Nw^2(r_{ij})r_{ij}^2\nonumber\\
+   &+\sum_{j\neq i}^N\sum_{\substack{k\neq i \\ k\neq j}}^N
+  w(r_{ij})w(r_{ik})\bm{r}_{ij}\cdot\bm{r}_{ik}.
+\end{align}
+I will define
+\begin{subequations}
+  \begin{align}
+    r &= \sum_{j\neq i}^Nw^2(r_{ij})r_{ij}^2,\\
+    s &=\sum_{j\neq i}^N\sum_{\substack{k\neq i \\ k\neq j}}^N
+    w(r_{ij})w(r_{ik})\bm{r}_{ij}\cdot\bm{r}_{ik},
+  \end{align}
+\end{subequations}
+so we can utilize the binomial theorem
+\begin{align}
+  b_i^{2n} = \sum_{k=0}^n{ n \choose k} r^{n-k}s^k.
+\end{align}
+We would like to limit the expansion to just including two-body
+and three-body terms. Limiting to just a two body expansion is
+straightforward, as any product $r^{n-k}s^k$ with $k\neq 0$ will
+have a product of a two-body and a three-body term, which is
+irreducible to anything less than a three-body term (if this
+wasn't the case, then the three-body term itself would be
+reducible to a two-body term, leading to a contradiction of us
+assuming it was a three-body term). Therefore, we start by
+using the multinomial formula,
+\begin{align}
+  (\sum_{j\neq i}^Nx_j)^k = \sum_{j_1+j_2+\cdots+j_N=k}
+  { k \choose j_1,j_2,\cdots j_N }\prod_{t=1,t\neq i}^N x_t^{j_t}.
+\end{align}
+For us, this simplifies to 
+\begin{widetext}
+  \begin{align}
+    r^k &= \bigg(\sum_{j\neq i}^Nw^2(r_{ij})r_{ij}^2\bigg)^k
+    \nonumber\\
+    &=\sum_{j\neq i}^Nw^{2k}(r_{ij})r_{ij}^{2k}
+    + \frac{1}{2}\sum_{l\neq i}\sum_{\substack{m\neq i \\ m\neq l}}
+    \sum_{\substack{j_l+j_m=k \\ j_l\neq 0 \\ j_m\neq 0}}
+        { k \choose j_l,j_m }
+        (w(r_{il})r_{il})^{2j_l}(w(r_{im})r_{im})^{2j_m}
+        +\textrm{four (and higher) body terms}.
+  \end{align}
+\end{widetext}
+From the looks of this, it seems like three-body terms will be
+difficult to include in any sort of coherent way...
+
+Continuing on with just two body terms then, $b_i^{2k}$ simplifies
+substantially to
+\begin{align}
+  b_i^{2k}=\sum_{j\neq i}^N(w(r_{ij})r_{ij})^{2k}
+  +\textrm{three (and higher) body terms}.
+\end{align}
+we can write the effective
+potential as
+\begin{widetext}
+  \begin{align}
+    V_{\mathrm{eff}}(\{\bm{r}_i\})
+    =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\ln(I_0(\lambda b_i))\nonumber\\
+    =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\ln\bigg(\sum_{k=0}^{\infty}
+    \frac{\bigg(\frac{1}{4}(\lambda^2 b_i^2)\bigg)^k}{(k!)^2}\bigg)\nonumber\\
+    =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\ln\bigg(\sum_{k=0}^{\infty}
+    \frac{\bigg(\frac{1}{4}\lambda^2\bigg)^k}{(k!)^2}b_i^{2k}\bigg)\nonumber\\
+    \approx&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\ln\bigg(\sum_{j\neq i}\sum_{k=0}^{\infty}
+    \frac{\bigg(\frac{1}{4}\lambda^2\bigg)^k}{(k!)^2}
+    (w(r_{ij})r_{ij})^{2k}\bigg)\nonumber\\
+    \approx&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\ln\bigg(1+\sum_{j\neq i}\sum_{k=1}^{\infty}
+    \frac{\bigg(\frac{1}{4}\lambda^2\bigg)^k}{(k!)^2}
+    (w(r_{ij})r_{ij})^{2k}\bigg)\nonumber\\
+    \approx&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\sum_{n=0}^{\infty}\frac{(-1)^{n+1}}{n}
+    \bigg(\sum_{j\neq i}\sum_{k=1}^{\infty}
+    \frac{\bigg(\frac{1}{4}\lambda^2\bigg)^k}{(k!)^2}
+    (w(r_{ij})r_{ij})^{2k}\bigg)^n\nonumber\\
+    \approx&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\sum_{j\neq i}\sum_{n=0}^{\infty}\frac{(-1)^{n+1}}{n}
+    \bigg(\sum_{k=1}^{\infty}
+    \frac{\bigg(\frac{1}{4}\lambda^2\bigg)^k}{(k!)^2}
+    (w(r_{ij})r_{ij})^{2k}\bigg)^n\nonumber\\
+    =&\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N\mathcal{V}(r_{ij})
+    -\sum_{i=1}^N\sum_{j\neq i}\ln(I_0(\lambda w(r_{ij})r_{ij}))
+    +\textrm{three (and higher) body terms}.
+  \end{align}
+\end{widetext}
+
+\end{document}

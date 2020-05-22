@@ -1,0 +1,100 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+
+In this section, we will derive the partition function of the
+generalized steady state. Since we are also interested in the
+correlation functions of the couplings between orientation and
+position, we also include an extra parameter $J$, which will
+then serve as a way to generate this couplings (in the language
+of probability, $Z(J)$ is a characteristic function, and the
+partition function is $Z(0)$). With this, we get
+\begin{widetext}
+\begin{align}\label{appeq:genfunc}
+  Z(J)
+  =&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
+  \times\exp\bigg(-\sum_{i=1}^N\sum_{j=1}^{i-1}\big[
+    \mathcal{V}(r_{ij})+\lambda (w(r_{ij})+J)\bm{r}_{ij}
+    \cdot\bm{u}_{ij}\big]\bigg)\nonumber\\
+  =&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
+  \times\exp\bigg(-\frac{1}{2}\sum_{i,j;j\neq i}\big[
+    \mathcal{V}(r_{ij})+\lambda (w(r_{ij})+J)\bm{r}_{ij}
+    \cdot\bm{u}_{ij}\big]\bigg)\nonumber\\
+  =&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
+  \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
+  \mathcal{V}(r_{ij})
+  +\lambda\sum_{i=1}^N\sum_{j\neq i}^N\bm{u}_{i}
+  \cdot \bm{r}_{ij}(w(r_{ij})+J)\bigg).
+\end{align}
+\end{widetext}
+where we have used eqn \ref{eq:u_itou_ij}. With the definition of
+\begin{align}\label{appeq:b_i}
+  \tilde{b}_i(J) = |\tilde{\bm{b}}_i(J)|\equiv
+  \bigg|\sum_{j\neq i}^N(w(r_{ij})+J)
+  \bm{r}_{ij}\bigg|,
+\end{align}
+or equivalently,
+\begin{align}\label{appeq:b_i2}
+  \sum_{i=1}^N\tilde{b}_i^2(J)
+  =&\sum_{i=1}^N\sum_{j\neq i}^N(w(r_{ij})+J)^2r_{ij}^2\nonumber\\
+  &+\sum_{i=1}^N\sum_{j\neq i}^N\sum_{\substack{k\neq i \\ k\neq j}}^N
+  (w(r_{ij})+J)(w(r_{ik})+J)\bm{r}_{ij}\cdot\bm{r}_{ik},
+\end{align}
+this is re-written as
+\begin{widetext}
+\begin{align}
+  Z=&\int\prod_{i=1}^N\big(d^2r_id\theta_i)
+     \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
+     \mathcal{V}(r_{ij})+2\lambda\sum_{i=1}^N\bm{u}_{i}
+     \cdot \bm{b}_{i}\bigg)\nonumber\\
+  =&\int\prod_{i=1}^N\big(d^2r_i)
+     \exp\bigg(-\frac{1}{2}\sum_{i=1}^N\sum_{j\neq i}^N
+     \mathcal{V}(r_{ij})\bigg)\int\prod_{i=1}^N\bigg[d\theta_i
+     \exp(\lambda\bm{u}_{i}\cdot \bm{b}_{i})\bigg].
+\end{align}
+\end{widetext}
+The angular integrals can be re-written as
+\begin{widetext}
+\begin{align}
+  \int_0^{2\pi} d\theta_u\exp(\bm{u}\cdot\lambda\bm{b})
+  &=\int_0^{2\pi} d\theta_u\exp(\lambda|\bm{b}|\cos(\theta_b-\theta_u))
+    \nonumber\\
+  &=\int_{-\theta_b}^{2\pi-\theta_b} d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    \nonumber\\
+  &=\bigg(\int_{-\theta_b}^0
+    +\int_0^{2\pi}
+    -\int_{2\pi-\theta_b}^{2\pi}\bigg)
+    d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    \nonumber\\
+  &=\bigg(\int_{-\theta_b}^0
+    -\int_{2\pi-\theta_b}^{2\pi}\bigg)
+    d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    +\int_0^{2\pi}d\phi\exp(|\bm{b}|\cos(\phi))
+    \nonumber\\
+    &=\int_{-\theta_b}^0d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    -\int_{2\pi-\theta_b}^{2\pi}d\phi'\exp(\lambda|\bm{b}|\cos(\phi'))
+    +\int_0^{2\pi}d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    \nonumber\\
+  &=\int_{-\theta_b}^0d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    +\int_{\theta_b}^{0}d\phi''\exp(\lambda|\bm{b}|\cos(2\pi-\phi''))
+    +\int_0^{2\pi}d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    \nonumber\\
+  &=\int_{-\theta_b}^0d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    -\int_{-\theta_b}^{0}d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    +\int_0^{2\pi}d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+    \nonumber\\
+  &=\int_0^{2\pi}d\phi\exp(\lambda|\bm{b}|\cos(\phi))
+\end{align}
+\end{widetext}
+which is $I_0(\lambda|b|)$ using the definition of eqn \ref{eq:Iintegral}.
+Inserting these results back into the partition function gives eqn
+\ref{eq:partitionfunction}.
+
+From the definition of eqn \ref{appeq:genfunc}, one can see that
+\begin{align}
+  \bigg<\sum_{i,j;j\neq i} \bm{u}_{ij}\cdot\bm{r}_{ij}
+  \bigg>= -\frac{\partial \ln Z}{\partial \lambda J}.
+\end{align}
+
+\end{document}
