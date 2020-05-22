@@ -9,37 +9,37 @@ from conservativepotential import WCApotential
 
 class SoftSphereBase(WCApotential):
 
-    def __init__(self,l0,epsilon,Pi):
+    def __init__(self,Pe,epsilon,Pi):
 
         super().__init__(epsilon=epsilon)
         
-        self.l0 = l0
+        self.Pe = Pe
         self.Pi = Pi
 
         return
 
     def a_0(self):
 
-        return self.l0/(12*np.sqrt(3)*self.epsilon)
+        return self.Pe/(24*np.sqrt(3)*self.epsilon)
 
     def r_0_large_a_0(self):
 
-        q = self.a_0()**(-1/13)
-        p = self.a_0()**(-6/13)
+        q = (2**(7./6.)*self.a_0())**(-1/13)
+        p = (2**(7./6.)*self.a_0())**(-6/13)
         f7 = 13-7*p
         g4 = 13-4*p
         
-        return q*(1+1/14*f7/g4*(1-np.sqrt(1+28*p*g4/f7**2)))
+        return 2**(1./6.)*q*(1+1/14*f7/g4*(1-np.sqrt(1+28*p*g4/f7**2)))
 
     def r_0_small_a_0(self):
 
-        return 1+1/21*(1-np.sqrt(1+7*self.a_0()))
+        return 2**(1./6.)*(1+1/21*(1-np.sqrt(1+7*(2**(7./6.)*self.a_0()))))
 
     
     def r_0_approx(self):
 
-        if self.epsilon == 0 or self.l0 == 0:
-            return 1
+        if self.epsilon == 0 or self.Pe == 0:
+            return 2**(1./6.)
 
         a0 = self.a_0()
 
@@ -56,13 +56,13 @@ class SoftSphereBase(WCApotential):
     
     def forcebalance(self,r):
         
-        return self.a_0() - r**(-13) + r**(-7)
+        return self.a_0() - 2*r**(-13) + r**(-7)
 
     def r_0(self):
         
         r0 = self.r_0_approx()
 
-        if r0 != 1:
+        if (r0-2**(1./6.))>1e-12:
 
             r0 = optimize.newton(self.forcebalance,r0)
 
@@ -82,7 +82,7 @@ class SoftSphereBase(WCApotential):
     def k_1(self):
 
         return -0.5*integrate.quad(self.nu_1_integrand,
-                                   self.r0,1)[0]
+                                   self.r0,2**(1./6.))[0]
 
     def k_2(self,dumk1):
 
@@ -94,7 +94,8 @@ class SoftSphereBase(WCApotential):
 
     def c_2(self,dumk2):
 
-        return dumk2 - 0.5*integrate.quad(self.nu_2_integrand,self.r0,1)[0]
+        return dumk2 - 0.5*integrate.quad(self.nu_2_integrand,
+                                          self.r0,2**(1/6.))[0]
 
     def constants(self):
 
@@ -108,13 +109,13 @@ class SoftSphereBase(WCApotential):
 
 class SoftSphere(SoftSphereBase):
 
-    def __init__(self,Omega=None,l0=1,epsilon=1,Pi=1):
+    def __init__(self,Omega=None,Pe=1,epsilon=1,Pi=1):
 
         if Omega != None:
             epsilon = 1
-            l0 = Omega*12*np.sqrt(3)*epsilon
+            Pe = Omega*24*np.sqrt(3)*epsilon
 
-        super().__init__(l0,epsilon,Pi)
+        super().__init__(Pe,epsilon,Pi)
 
         self.r0 = self.r_0()
 
@@ -174,7 +175,7 @@ class SoftSphere(SoftSphereBase):
 
     def w_minus(self,r):
 
-        if self.r0 == 1:
+        if (self.r0-2**(1./6.)) < 1e-12:
 
             return r*0
 
@@ -183,7 +184,7 @@ class SoftSphere(SoftSphereBase):
 
     def w_minus_prime(self,r):
 
-        if self.r0 == 1:
+        if (self.r0-2**(1./6.)) < 1e-12:
 
             return r*0
         
@@ -199,7 +200,6 @@ class SoftSphere(SoftSphereBase):
 
     
     def w_plus(self,r):
-
         
         return self.c2*special.k1(np.sqrt(self.Pi)*r)/r
 
@@ -213,12 +213,12 @@ class SoftSphere(SoftSphereBase):
 
     def w(self,r):
         
-        return np.where(r>=1,self.w_plus(r),self.w_minus(r))
+        return np.where(r>=2**(1./6.),self.w_plus(r),self.w_minus(r))
 
     
     def w_prime(self,r):
 
-        a = np.where(r>=1,self.w_plus_prime(r),
+        a = np.where(r>=2**(1./6.),self.w_plus_prime(r),
                      self.w_minus_prime(r))
 
         return a
@@ -228,11 +228,11 @@ if __name__ == "__main__":
 
     rs = np.linspace(0.8,40,num=500,endpoint=True)
 
-    l0 = 1.0
+    Pe = 1.0
     epsilon = 10.0
     Pi = 1.0
 
-    ss = SoftSphere(l0,epsilon,Pi)
+    ss = SoftSphere(Pe,epsilon,Pi)
 
     print(ss.r0)
     fig,axarr = plt.subplots(3,sharex=True)
