@@ -129,7 +129,7 @@ def quadrature_vec(func, a, bs, args=(), tol=1.49e-8, rtol=1.49e-8, maxiter=50,
         oldval = val
         val = newval
 
-        if np.max(err) < tol or np.any(err < rtol*abs(val)):
+        if np.max(err) < tol or np.all(err < rtol*abs(val)):
             break
     else:
         warnings.warn(

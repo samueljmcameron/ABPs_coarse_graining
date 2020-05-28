@@ -1,0 +1,389 @@
+\documentclass[twocolumn,amsmath,amssymb,aps]{revtex4-1}%{article}
+%\usepackage[hmargin=1.25cm,vmargin=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{bm}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{dcolumn}
+\usepackage[caption=false]{subfig}
+\usepackage{braket}
+\usepackage{subfiles}
+
+\begin{document}
+ 
+\title{May 27, 2020: Summary of pressure calculations.}
+\author{Sam Cameron}
+\affiliation{%
+  University of Bristol}%
+\date{\today}
+
+\begin{abstract}
+  In this report, I discuss the two different methods that pressure
+  can be measured in active brownian particle (ABP) systems. The
+  first method to measure the pressure follows the work of Winkler
+  et al \cite{C5SM01412C}, and is a direct measurement of the
+  pressure using molecular dynamics (LAMMPS) software.
+  The second method utilises a non-equilibrium, steady-state
+  probability distribution \cite{liverpool2018nonequilibrium}
+  to measure the pressure via correlation functions.
+\end{abstract}
+
+
+\maketitle
+
+\section{Equations of motion of active brownian particles and
+  dimensionless units.}
+
+The equations of motion of the ABP system in $2D$ is
+\begin{subequations}
+  \label{eqs:ABPsEOMs}
+  \begin{align}
+    \dot{\bm{r}}_i
+    &= -\nabla_i U+\mathrm{Pe}\:\bm{e}_i + \sqrt{2}\bm{\xi}_{i}^r,
+    \label{eq:pos_EOM}\\
+    \dot{\theta}_i &= \sqrt{4\Pi}\xi_i^{\theta}\label{eq:theta_EOM},
+  \end{align}
+\end{subequations}
+where $\Pi=\sigma^2D^r/(2D^t)$ and $\mathrm{Pe} = f^P\beta\sigma$ are the
+(dimensionless) rotational diffusion constant and Peclet number,
+respectively ($f^P$ is the self-propulsion force of a single particle).
+We measure length in units of a microscopic length scale $\sigma$
+(specified by the potential $ U$), time in units of $\sigma^2/D^t$,
+and energy in units of $\beta^{-1}= k_B T$, where $T$ is the temperature
+of the passive solvent.
+$\bm{e}_i = \cos\theta_i\bm{e}_x + \sin\theta_i\bm{e}_y$ is the direction
+of self-propulsion for particle $i$.
+
+One further assumption we make is that the interaction potential $U$
+is two-bodied, and so can be written as
+\begin{align}
+  U(\{\bm{r}_i\})
+  = \sum_{i=1}^N\sum_{j=1}^{i-1}\mathcal{V}(r_{ij}).
+\end{align}
+
+\section{Direct measurement of pressure via simulation.}
+
+From eqns \ref{eqs:ABPsEOMs}, a straight-forward generalisation of the
+derivation in ref. \cite{C5SM01412C} to $d=2$ gives the ABP pressure
+for a system of $N$ particles in periodic boundary conditions with
+density $N/A=\rho$
+\begin{align}\label{eq:fullP_winkler}
+  P_L=
+  P_{\mathrm{id},p} + P_{\mathrm{id},s}
+  P_{\mathrm{int},p} + P_{\mathrm{int},s}
+\end{align}
+I have broken up the pressure into four different terms for later
+convenience. The first term on the right of eqn \ref{eq:fullP_winkler} is just
+the standard ``ideal gas'' term,
+\begin{align}\label{eq:P_id_p}
+  P_{\mathrm{id},p}
+  = \rho,
+\end{align}
+which is present in all gases, whether they are passive or active,
+interacting or not.
+The second term on the right of eqn \ref{eq:fullP_winkler} is the
+``ideal swim pressure''
+\cite{C5SM01412C,PhysRevLett.113.028103}
+\begin{align}\label{eq:P_id_s}
+  P_{\mathrm{id},s}
+  = \rho\frac{\mathrm{Pe}^2}{4\Pi},
+\end{align}
+which is present only in active gases, but is there regardless of
+interactions.
+The third term on the right of eqn \ref{eq:fullP_winkler} is the
+``interacting passive'' term,
+\begin{align}\label{eq:P_int_p}
+  P_{\mathrm{int},p}
+  =\frac{\rho}{4N}\sum_{i=1}^N\sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  \Braket{\bm{F}_{ij}^{\bm{n}}\cdot(\bm{r}_i-\bm{r}_j-\bm{R}_{\bm{n}})},
+\end{align}
+which is present in both passive and active gases, for pairwise
+interactions $\bm{F}_{ij}=-\nabla{i}\mathcal{V}(r_{ij})$. The
+bold $\bm{n}$ term corresponds to summing interactions over
+all groups of particles which are partially within the the
+unit cell (known as the \textit{minimum image-convention}
+when only two-body interactions are present
+\cite{doi:10.1063/1.3245303}).
+The final term in eqn \ref{eq:fullP_winkler} is the
+``interacting swim pressure'',
+\begin{align}\label{eq:P_int_s}
+  P_{\mathrm{int},s}
+  = \frac{\rho\mathrm{Pe}}{8\Pi N}
+  \sum_{i=1}^N\sum_{j=1;j\neq i}^N\sum_{\bm{n}}
+  \Braket{\bm{F}_{ij}^{\bm{n}}\cdot(\bm{e}_i-\bm{e}_j)}
+\end{align}
+which is present only for active, interacting gases. One further
+thing to note is that eqn \ref{eq:P_int_s} is only valid in
+the steady-state (see eqn 31 in ref. \cite{C5SM01412C}).
+
+Eqns \ref{eq:P_int_p} and \ref{eq:P_int_s} are measured in
+LAMMPS by assuming that the system is ergodic and in steady-state.
+We wait for $t > 10$ to start measuring pressure, and take
+measurements of $P_{\mathrm{int},p} + P_{\mathrm{int},s}$
+in intervals of $\delta t = 10$ to reduce correlations between
+measurements. The relaxation time of the system is $\approx 1$
+since simulation time is rescaled in terms of the translational
+diffusion. Eqns \ref{eq:P_id_p} and \ref{eq:P_id_s} are just
+added on after the calculation is completed, since they are
+just constants.
+
+\section{Indirect measurement of pressure via correlation functions.}
+
+\subsection{Standard definition of pressure in equilibrium systems.
+  \label{sub:eq}}
+In order to obtain the pressure using correlation functions, it is
+assumed that there exists a steady-state distribution
+$\{\bm{r}_i\}\sim \frac{1}{Z}\exp(-\tilde{\beta} f(\{\bm{r}_i\}))$,
+where $Z$ is the normalising factor (i.e. the partition function),
+\begin{align}\label{eq:Zstandard}
+  Z = \int\prod_{i=1}^N(d^2r_i)\exp[-\tilde{\beta} f(\{\bm{r}_i\})].
+\end{align}
+We have written temporarily $\tilde{\beta}$ (dimensional inverse
+temperature) instead of setting it to $1$ as is done in the rest of
+this report, just to highlight that there is a temperature dependence
+of the pressure defined below.
+Through the usual methods, one can write
+\begin{align}\label{eq:betaP}
+  \tilde{\beta} P
+  &= \frac{\partial \ln Z}{\partial A}\nonumber\\
+  &= \frac{N}{A}
+  -\frac{\tilde{\beta}}{2A}\Braket{\sum_{j=1}\bm{r}_j\cdot
+  \frac{\partial f}{\partial\bm{r}_j}},
+\end{align}
+where
+\begin{align}
+  \Braket{\cdots} = \frac{1}{Z}
+  \int\prod_{k=1}^N(d^2r_k)
+  \cdots\exp[-\beta f(\{\bm{r}_i\})],
+\end{align}
+For us to use this definition, it would require that the
+temperature of the ABPs is
+the same as the temperature of the solvent molecules, which is
+$\tilde{\beta}^{-1}=1$ in our case.
+However, it does not seem likely that the temperature of the
+ABPs, if it is well defined, would be the same as the solvent
+temperature. Instead, it seems more likely that the effective
+temperature of the ABPs would be different than that of the solvent
+(switching back now to dimensionless units),
+\begin{align}
+  \beta_{\mathrm{eff}}^{-1}
+  = 1 + \frac{\mathrm{Pe}^2}{4\Pi},
+\end{align}
+or in dimensional units with  $\tilde{\beta}_{\mathrm{eff}}$ being
+the dimensional ABP temperature,
+$\tilde{\beta}_{\mathrm{eff}}^{-1}
+=\tilde{\beta}^{-1}[1+(f^P\tilde{\beta})^2D^t/(2D^r)]$.
+
+Therefore, we might instead consider the pressure to be
+defined as
+\begin{align}\label{eq:beta_effP}
+  \beta_{\mathrm{eff}} P
+  &= \frac{\partial \ln Z}{\partial A}\nonumber\\
+  &= \frac{N}{A}
+  -\frac{\beta_{\mathrm{eff}}}{2A}\Braket{\sum_{j=1}\bm{r}_j\cdot
+  \frac{\partial \mathcal{V}_{\mathrm{eff}}}{\partial\bm{r}_j}},
+\end{align}
+where
+\begin{align}\label{eq:Veff_def}
+  \beta_{\mathrm{eff}} \mathcal{V}_{\mathrm{eff}}
+  = \beta f
+\end{align}
+by definition. This further implies that eqn \label{eq:Zstandard}
+can be written as
+\begin{align}\label{eq:Zeff}
+  Z = \int\prod_{i=1}^N(d^2r_i)\exp[-\beta_{\mathrm{eff}}
+    \mathcal{V}_{\mathrm{eff}}(\{\bm{r}_i\})].
+\end{align}
+
+In this case, the ideal terms $P_{\mathrm{id},p}$ and
+$P_{\mathrm{id},s}$ (eqns \ref{eq:P_id_p} and \ref{eq:P_id_s},
+respectively), are automatically included since
+\begin{align}
+  \beta_{\mathrm{eff}}^{-1}\frac{N}{A}
+  = P_{\mathrm{id},p} + P_{\mathrm{id},s}.
+\end{align}
+
+\subsection{Indirect pressure of ABPs.}
+
+
+\begin{figure}[t!]
+  \includegraphics[width=0.5\textwidth]{{Figures/2020_05_27_threebody_correctionno_eff_temp_P_vs_fp_rho_is_0.05_and_0.5}.pdf}
+  \caption{Steady-pressure of the ABP system for $\rho=0.05$ (top) and
+    $\rho=0.5$ (bottom), with the effective temperature of the ABPs
+    assumed to be the same as the solvent.
+    Orange circles denote the simulation pressure
+    as measured in LAMMPS, $P_L$, less the ideal gas term
+    $P_{\mathrm{id}}=\rho$. The green
+    squares denote the pressure calculated using only the two-body
+    distribution function, $S^{(2)}$ (eqn \ref{eq:S2} in the text),
+    whereas the red triangles denote the pressure calculated using both
+    $S^{(2)}$ and the three-body distribution function, $S^{(3)}$
+    (eqn \ref{eq:S3} in the text). For the theory to be a good predictor
+    of the simulation, we would expect that the red curves (and/or green
+    curves)
+    would overlap with the orange curves.
+  }\label{fig:1}
+\end{figure}
+
+\begin{figure}[t!]
+  \includegraphics[width=0.5\textwidth]{{Figures/2020_05_27_threebody_correctionwith_eff_temp_P_vs_fp_rho_is_0.05_and_0.5}.pdf}
+  \caption{Steady-pressure of the ABP system for $\rho=0.05$ (top) and
+    $\rho=0.5$ (bottom), with the effective temperature of the ABPs
+    assumed to be larger than the solvent by a multiplicative factor of
+    $1 + \frac{\mathrm{Pe}^2}{4\Pi}$.
+    Orange circles denote the simulation pressure
+    as measured in LAMMPS, $P_L$, less the ideal gas term
+    $P_{\mathrm{id},p}=\rho$ and the ideal swim pressure term,
+    $P_{\mathrm{id},s}=\rho\mathrm{Pe}^2/(4\Pi)$. The green
+    squares denote the pressure calculated using only the two-body
+    distribution function, $S^{(2)}$ (eqn \ref{eq:S2} in the text),
+    whereas the red triangles denote the pressure calculated using both
+    $S^{(2)}$ and the three-body distribution function, $S^{(3)}$
+    (eqn \ref{eq:S3} in the text). For the theory to be a good predictor
+    of the simulation, we would expect that the red curves (and/or green
+    curves)
+    would overlap with the orange curves.
+  }\label{fig:2}
+\end{figure}
+
+We have shown in a separate calculation that such a steady-state
+function does exist for ABPs. Up to $O(\mathrm{Pe}^4)$, the form
+of the function $\beta f$ with partition function given by
+eqn \ref{eq:Zstandard}, or equivalently due to eqn \ref{eq:Veff_def},
+$\beta_{\mathrm{eff}}$ with partition function given by eqn
+\ref{eq:Zeff},
+\begin{align}
+  \beta f(\{\bm{r}_i\})
+  &= \beta_{\mathrm{eff}} \mathcal{V}_{\mathrm{eff}}\nonumber\\
+  &=\sum_{j<i}W_2(r_{ij})
+  +\sum_{k<j<i}W_3(r_{ij},r_{ik},\theta_{ij,ik}),
+\end{align}
+where $\bm{r}_{ij} = \bm{r}_j-\bm{r}_i$. Therefore,
+\begin{align}\label{eq:P_basic}
+  P
+  &= \beta_{\mathrm{eff}}^{-1}\frac{N}{A}
+  +\beta_{\mathrm{eff}}^{-1}S^{(2)}
+  +\beta_{\mathrm{eff}}^{-1}S^{(3)}
+\end{align}
+where
+\begin{subequations}
+  \label{eqs:S2andS3}
+  \begin{align}
+    S^{(2)}
+    &\equiv-\frac{\pi N^2}{2A^2}\int du W_2'(u)u^2 g^{(2)}(u),
+    \label{eq:S2}\\
+    S^{(3)}
+    &\equiv-\frac{2\pi N^3}{3A^3}\int dudvd\theta u^2v
+    \frac{\partial W_3(u,v,\theta)}{\partial u}
+    g^{(3)}(u,v,\theta),\label{eq:S3}
+  \end{align}
+\end{subequations}
+are the contributions to the pressure due to two-body and
+three-body correlations.
+
+If we set $\beta_{\mathrm{eff}}=1$, we are saying that the ABP particle
+effective temperature is the same as the solvent, which is unlikely.
+However, changing $\beta_{\mathrm{eff}}$ in eqn \ref{eq:P_basic} to
+any other number just results in changing the pressure by a
+multiplicative factor, namely $\beta_{\mathrm{eff}}$.
+
+\subsubsection{Setting $\beta_{\mathrm{eff}}=1$.}
+
+
+If we choose the effective temperature of the ABPs to be
+$\beta_{\mathrm{eff}}=1$, then eqn \ref{eq:P_basic} becomes
+\begin{align}\label{eq:beta1}
+  P_{\beta_{\mathrm{eff}}=1}
+  &= P_{\mathrm{id},p}+S^{(2)}+S^{(3)}.
+\end{align}
+
+In Figure \ref{fig:1}, we compare this interpretation of the
+pressure to the pressure measured from LAMMPs (defined in
+eqn \ref{eq:fullP_winkler}), less the ideal, passive component,
+$P_L - P_{\mathrm{id},p}$. We expect that if this were the
+correct interpretation, then $P_{\beta_{\mathrm{eff}}=1} = P_L$.
+From eqn \ref{eq:beta1}, this would imply that
+$P_L - P_{\mathrm{id},p}$ would
+be approximately equal to $S^{(2)}+S^{(3)}$.
+
+As can be seen in Figure \ref{fig:1}, we do not match the behaviour
+well between the theory (green and red curves) and the simulation
+(orange curves) in either the low density case of $\rho=0.05$ or
+the high density case $\rho = 0.5$. In both cases, we are greatly
+under-estimating the simulation pressure.
+
+\subsubsection{Setting $\beta_{\mathrm{eff}}
+  = 1 + \frac{\mathrm{Pe}^2}{4\Pi}$.}
+
+If we instead choose the effective temperature of the ABPs to
+be $\beta_{\mathrm{eff}} = 1 + \frac{\mathrm{Pe}^2}{4\Pi}$, which
+is what it would be in the limit of no interactions, then
+eqn \ref{eq:P_basic} becomes
+\begin{align}\label{eq:betaeff}
+  P_{\beta_{\mathrm{eff}}}
+  &= P_{\mathrm{id},p}+P_{\mathrm{id},s}
+  +\beta_{\mathrm{eff}}(S^{(2)}+S^{(3)}).
+\end{align}
+
+In Figure \ref{fig:2}, we compare this interpretation of the
+pressure to the pressure measured from LAMMPS $P_L$, except this time
+we exclude both the active and passive ideal components,
+$P_L-P_{\mathrm{id},p}-P_{\mathrm{id},s}$. We expect that if this
+were the correct interpretation, then
+$P_{\beta_{\mathrm{eff}}}=P_L$. From eqn \ref{eq:betaeff},
+this would imply that
+$P_L-P_{\mathrm{id},p}-P_{\mathrm{id},s}$ would be approximately
+equal to $\beta_{\mathrm{eff}}(S^{(2)}+S^{(3)})$.
+
+As can be seen in Figure \ref{fig:2}, we match the behaviour well
+between theory (green and red curves) and the simulation
+(orange curves) only when the Peclet number is very small.
+
+\subsubsection{Hacking the curve to get it to fit!}
+
+The case that seems to work the best is if we instead define
+the pressure to be
+\begin{align}\label{eq:Prand}
+  P
+  &= \beta_{\mathrm{eff}}^{-1}\frac{N}{A} + S^{(2)} + S^{(3)}
+  \nonumber\\
+  &= P_{\mathrm{id},p} + P_{\mathrm{id},s} + S^{(2)} + S^{(3)}.
+\end{align}
+
+As can be seen from eqn \ref{eq:P_basic}, this form of the pressure
+does not follow from our derivation given in section \ref{sub:eq}. But,
+it seems to work slightly better when matching it to simulations.
+
+In Figure \ref{fig:3}, we plot $P_L-P_{\mathrm{id},p}-P_{\mathrm{id},s}$,
+$S^{(2)}$, and $S^{(2)}+S^{(3)}$. If we accept \ref{eq:Prand} as true
+(which again, isn't clear that it should be), then we would expect
+these curves to overlap.
+
+
+\begin{figure}[t!]
+  \includegraphics[width=0.5\textwidth]{{Figures/2020_05_27_threebody_correctionhack_P_vs_fp_rho_is_0.05_and_0.5}.pdf}
+  \caption{Steady-pressure of the ABP system for $\rho=0.05$ (top) and
+    $\rho=0.5$ (bottom), with the effective temperature of the ABPs
+    assumed to be larger than the solvent by a multiplicative factor of
+    $1 + \frac{\mathrm{Pe}^2}{4\Pi}$.
+    Orange circles denote the simulation pressure
+    as measured in LAMMPS, $P_L$, less the ideal gas term
+    $P_{\mathrm{id},p}=\rho$ and the ideal swim pressure term,
+    $P_{\mathrm{id},s}=\rho\mathrm{Pe}^2/(4\Pi)$. The green
+    squares denote the pressure calculated using only the two-body
+    distribution function, $S^{(2)}$ (eqn \ref{eq:S2} in the text),
+    whereas the red triangles denote the pressure calculated using both
+    $S^{(2)}$ and the three-body distribution function, $S^{(3)}$
+    (eqn \ref{eq:S3} in the text). For the theory to be a good predictor
+    of the simulation, we would expect that the red curves (and/or green
+    curves)
+    would overlap with the orange curves.
+  }\label{fig:3}
+\end{figure}
+
+\bibliographystyle{plain}
+\bibliography{summary_of_pressure_calculations}
+
+\end{document}

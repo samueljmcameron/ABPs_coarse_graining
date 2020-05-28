@@ -7,6 +7,8 @@ import time
 from vectorquad import quadrature_vec
 from conservativepotential import WCApotential
 
+from homemade_ufuncs.src import nufuncs
+
 class SoftSphereBase(WCApotential):
 
     def __init__(self,Pe,epsilon,Pi):
@@ -43,7 +45,7 @@ class SoftSphereBase(WCApotential):
 
         a0 = self.a_0()
 
-        if a0 < 1:
+        if a0 < 2**(-7./6.):
 
             r0 = self.r_0_small_a_0()
 
@@ -59,10 +61,10 @@ class SoftSphereBase(WCApotential):
         return self.a_0() - 2*r**(-13) + r**(-7)
 
     def r_0(self):
-        
+
         r0 = self.r_0_approx()
 
-        if (r0-2**(1./6.))>1e-12:
+        if abs(r0-2**(1./6.))>1e-14:
 
             r0 = optimize.newton(self.forcebalance,r0)
 
@@ -95,7 +97,7 @@ class SoftSphereBase(WCApotential):
     def c_2(self,dumk2):
 
         return dumk2 - 0.5*integrate.quad(self.nu_2_integrand,
-                                          self.r0,2**(1/6.))[0]
+                                          self.r0,2**(1./6.))[0]
 
     def constants(self):
 
@@ -109,7 +111,8 @@ class SoftSphereBase(WCApotential):
 
 class SoftSphere(SoftSphereBase):
 
-    def __init__(self,Omega=None,Pe=1,epsilon=1,Pi=1):
+    def __init__(self,Omega=None,Pe=1,epsilon=1,Pi=1,
+                 miniter=1,maxiter=50,int_err=1e-6):
 
         if Omega != None:
             epsilon = 1
@@ -121,61 +124,53 @@ class SoftSphere(SoftSphereBase):
 
         self.k1,self.k2,self.c2 = self.constants()
 
+        self.miniter = miniter
+        self.maxiter=maxiter
+        self.int_err = int_err
+
         return
-
-    def nonvec_nu_1(self,r):
-
-        # can only take scalars as input
-
-        return self.k1+0.5*integrate.quad(self.nu_1_integrand,
-                                          self.r0,r)[0]
 
     def nu_1_prime(self,r):
 
         return 0.5*self.nu_1_integrand(r)
 
-    def nonvec_nu_2(self,r):
-
-        # can only take scalars as input
-
-        return self.k2-0.5*integrate.quad(self.nu_2_integrand,
-                                          self.r0,r)[0]
-
     def nu_2_prime(self,r):
 
         return -0.5*self.nu_2_integrand(r)
 
+
     def nu_1_old(self,r):
 
-        # only valid for r <= 1 !!!!!
-
-        return np.vectorize(self.nonvec_nu_1)(r)
-
+        print('nu_1',self.r0,self.Pi)
+        return self.k1+0.5*quadrature_vec(self.nu_1_integrand,
+                                          self.r0,r,
+                                          miniter=self.miniter,
+                                          maxiter=self.maxiter,
+                                          tol=self.int_err,
+                                          rtol=self.int_err)[0]
 
     def nu_2_old(self,r):
-
-        # only valid for r <= 1 !!!!!
-
-        a = np.vectorize(self.nonvec_nu_2,cache=False)(r)
-
-
-        return a
-
+        print('nu_2',self.r0,self.Pi)
+        return self.k2-0.5*quadrature_vec(self.nu_2_integrand,
+                                          self.r0,r,
+                                          miniter=self.miniter,
+                                          maxiter=self.maxiter,
+                                          tol=self.int_err,
+                                          rtol=self.int_err)[0]
 
     def nu_1(self,r):
-        
-        return self.k1+0.5*quadrature_vec(self.nu_1_integrand,
-                                          self.r0,r)[0]
+        return self.k1 + 0.5*self.epsilon*nufuncs.k1_V_int(r,
+                                                           self.Pi,
+                                                           self.r0)
 
     def nu_2(self,r):
-        
-        return self.k2-0.5*quadrature_vec(self.nu_2_integrand,
-                                          self.r0,r)[0]
-
+        return self.k2 - 0.5*self.epsilon*nufuncs.i1_V_int(r,
+                                                           self.Pi,
+                                                           self.r0)
 
     def w_minus(self,r):
 
-        if (self.r0-2**(1./6.)) < 1e-12:
+        if abs(self.r0-2**(1./6.)) < 1e-15:
 
             return r*0
 
@@ -184,7 +179,7 @@ class SoftSphere(SoftSphereBase):
 
     def w_minus_prime(self,r):
 
-        if (self.r0-2**(1./6.)) < 1e-12:
+        if abs(self.r0-2**(1./6.)) < 1e-15:
 
             return r*0
         
@@ -226,11 +221,32 @@ class SoftSphere(SoftSphereBase):
 
 if __name__ == "__main__":
 
-    rs = np.linspace(0.8,40,num=500,endpoint=True)
+
 
     Pe = 1.0
-    epsilon = 10.0
+    epsilon = 1.0
     Pi = 1.0
+
+    rs = np.linspace(0.5,30,num=100,endpoint=True)
+    
+    ss = SoftSphere(Pe,epsilon,Pi)
+
+    fig,axarr = plt.subplots(2,sharex=True)
+
+    axarr[0].plot(rs,ss.nu_1(rs),label='old')
+    axarr[0].plot(rs,ss.nu_1_new(rs),label='new')
+    axarr[1].plot(rs,ss.nu_2(rs),label='old')
+    axarr[1].plot(rs,ss.nu_2_new(rs),label='new')
+
+    axarr[0].legend(frameon=False)
+    plt.show()
+    
+    """
+    rs = np.linspace(0.8,40,num=500,endpoint=True)*2**(1./6.)
+
+    Pe = 1.0/2**(1./6.)
+    epsilon = 10.0
+    Pi = 1.0/2**(1./3.)
 
     ss = SoftSphere(Pe,epsilon,Pi)
 
@@ -250,3 +266,4 @@ if __name__ == "__main__":
     axarr[2].set_yscale('log')
 
     plt.show()
+    """

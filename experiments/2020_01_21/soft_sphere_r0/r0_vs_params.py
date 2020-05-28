@@ -12,7 +12,7 @@ if __name__=="__main__":
 
     epsilon = 1
 
-    l0s = np.logspace(-3,5,num=10001,endpoint=True)
+    l0s = np.logspace(-3,5,num=10001,endpoint=True)/2**(1./6.)
 
     r0s = np.copy(l0s)
 
@@ -23,7 +23,7 @@ if __name__=="__main__":
 
     for i,l0 in enumerate(l0s):
 
-        ss.l0 = l0
+        ss.Pe = l0
         
         r0s[i] = ss.r_0()
 
@@ -32,7 +32,7 @@ if __name__=="__main__":
         #else:
         #    r0smalls[i] = np.nan
 
-        if 0.5<= ss.a_0():
+        if 0.5<= ss.a_0()*(2**(7./6.)):
             r0larges[i] = ss.r_0_large_a_0()
         else:
             r0larges[i] = np.nan
@@ -41,7 +41,7 @@ if __name__=="__main__":
     fig,axarr = plt.subplots(2,sharex=True)
     fig.set_size_inches(3.6,4)
 
-    a0s = l0s/(12*np.sqrt(3)*epsilon)
+    a0s = l0s/(24*np.sqrt(3)*epsilon)
     
     axarr[0].plot(a0s,r0s,'-',color=colors[3])
     axarr[0].set_ylabel(r'$r_0$')
@@ -54,6 +54,7 @@ if __name__=="__main__":
     axarr[1].set_ylabel(r'fractional error')
     axarr[1].set_yscale('log')
     axarr[1].set_xscale('log')
+    axarr[1].set_ylim(bottom=1e-11)
     axarr[1].legend(frameon=False,loc='upper left')
 
     fig.subplots_adjust(left=0.2,right=0.9)

@@ -12,8 +12,8 @@ if __name__=="__main__":
 
     # start by plotting at different Omegas
     
-    Pi = 1
-    Omegas = [0.1,10,1000]
+    Pi = 1./2**(1./3.)
+    Omegas = np.array([0.1,10,1000],float)*2**(7./6.)
 
 
     fig,axarr = plt.subplots(2,sharex=True)
@@ -21,18 +21,23 @@ if __name__=="__main__":
     
     for i,Omega in enumerate(Omegas):
     
-        ss = SoftSphere(Omega=Omega,Pi=Pi)
+        ss = SoftSphere(Omega=Omega,Pi=Pi,miniter=50,maxiter=100,
+                        int_err=1e-5)
 
         r0 = ss.r_0()
-        rs = np.linspace(r0/2,5,num=1000,endpoint=True)
-
+        if r0 > 2**(1./6.):
+            print (f'r0 = {r0}')
+        rs = np.linspace(r0/2,5,num=2000,endpoint=True)/2**(1./6.)
+        
         axarr[0].plot(rs,ss.w(rs),color=colors[i],
-                      label=rf'$\Omega={Omega}$')
+                      label=rf'$\Omega={Omega:.2e}$')
         if i == len(Omegas)-1:
             r0label=r'$r_0$'
         else:
             r0label=None
             
+
+        
         axarr[0].plot(r0,ss.w(r0),'ko',ms=2,label=r0label)
 
     axarr[0].set_yscale('log')
@@ -42,8 +47,8 @@ if __name__=="__main__":
 
     # now plot at different Pis
     
-    Omega = 1
-    Pis = [0.1,10,1000]
+    Omega = 1*2**(7./6.)
+    Pis = np.array([0.1,10,1000],float)/2**(1./3.)
     
 
     for i,Pi in enumerate(Pis):
@@ -51,10 +56,10 @@ if __name__=="__main__":
         ss = SoftSphere(Omega=Omega,Pi=Pi)
 
         r0 = ss.r_0()
-        rs = np.linspace(r0/100,5,num=1000,endpoint=True)
+        rs = np.linspace(r0/100,5,num=1000,endpoint=True)/2**(1./6.)
 
         axarr[1].plot(rs,ss.w(rs),color=colors[i+len(Omegas)],
-                      label=rf'$\Pi={Pi}$')
+                      label=rf'$\Pi={Pi:.2e}$')
         if i == len(Pis)-1:
             r0label=r'$r_0$'
         else:

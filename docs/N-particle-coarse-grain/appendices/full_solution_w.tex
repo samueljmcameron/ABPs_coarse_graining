@@ -53,4 +53,87 @@ Therefore, the Wronskian of eqns \ref{eqs:linindependentWhomo} is
   =& -\frac{1}{r^3}.
 \end{align}
 
+\subsection{Full solution.}
+
+Next, through variation of parameters, we know that
+\begin{align}
+  w_{-}(r) = \frac{I_1(\sqrt{\Pi}r)}{r}\nu_1(r)
+  +\frac{K_1(\sqrt{\Pi}r)}{r}\nu_2(r)
+\end{align}
+where, using eqn \ref{eq:wronskian}, eqns \ref{eqs:ODEcoefficientsVOP} from
+the main text, and the derivatives,
+\begin{widetext}
+  \begin{align}
+  w_{-}'(r) = \sqrt{\Pi}\frac{I_1'(\sqrt{\Pi}r)}{r}\nu_1(r)
+  +\sqrt{\Pi}\frac{K_1'(\sqrt{\Pi}r)}{r}\nu_2(r)
+  -\frac{I_1(\sqrt{\Pi}r)}{r^2}\nu_1(r)
+  -\frac{K_1(\sqrt{\Pi}r)}{r^2}\nu_2(r)
+  +\frac{I_1(\sqrt{\Pi}r)}{r}\nu_1'(r)
+  +\frac{K_1(\sqrt{\Pi}r)}{r}\nu_2'(r),
+  \end{align}
+\end{widetext}
+with 
+\begin{subequations}
+  \label{eqs:ODEnu_derivs}
+  \begin{align}
+    \nu_1'(r)
+    &= \frac{1}{2}K_1(\sqrt{\Pi}r)
+      \mathcal{V}'(r)r,\nonumber\\
+    \nu_2'(r)
+    &= - \frac{1}{2}I_1(\sqrt{\Pi}r)
+      \mathcal{V}'(r)r,
+  \end{align}
+\end{subequations}
+and
+\begin{align}
+  w_{+}(r) = c_2\frac{K_1(\sqrt{\Pi}r)}{r},
+\end{align}
+\begin{align}
+  w_{+}'(r) = c_2\sqrt{\Pi}\frac{K_1'(\sqrt{\Pi}r)}{r}
+  -c_2\frac{K_1(\sqrt{\Pi}r)}{r^2},
+\end{align}
+we can compute the matching conditions.
+
+The first matching condition is $w_{-}(2^{1/6})=w_{+}(2^{1/6})$, so
+\begin{widetext}
+  \begin{align}
+    0=\frac{I_1(\sqrt{\Pi}2^{1/6})}{2^{1/6}}\bigg[
+      k_1 + \frac{1}{2}\int_{r_0}^{2^{1/6}}dsK_1(\sqrt{\Pi}s)
+      \mathcal{V}'(s)s\bigg]
+    +\frac{K_1(\sqrt{\Pi}2^{1/6})}{2^{1/6}}
+    \bigg[k_2 - \frac{1}{2}\int_{r_0}^{2^{1/6}}dsI_1(\sqrt{\Pi}s)
+      \mathcal{V}'(s)s-c_2\bigg].
+  \end{align}
+  The second matching condition is $w_{-}'(2^{1/6})=w_{+}'(2^{1/6})$, so
+  \begin{align}
+    &\bigg[\sqrt{\Pi}\frac{I_1'(\sqrt{\Pi}2^{1/6})}{2^{1/6}}
+    -\frac{I_1(\sqrt{\Pi}2^{1/6})}{(2^{1/6})^2}\bigg]
+    \bigg[k_1 + \frac{1}{2}\int_{r_0}^{2^{1/6}}dsK_1(\sqrt{\Pi}s)
+      \mathcal{V}'(s)s\bigg]\nonumber\\
+    &+\bigg[\sqrt{\Pi}\frac{K_1'(\sqrt{\Pi}2^{1/6})}{2^{1/6}}
+      -\frac{K_1(\sqrt{\Pi}2^{1/6})}{(2^{1/6})^2}\bigg]
+    \bigg[k_2 - \frac{1}{2}\int_{r_0}^{2^{1/6}}dsI_1(\sqrt{\Pi}s)
+      \mathcal{V}'(s)s\bigg]\nonumber\\
+  &+\frac{I_1(\sqrt{\Pi}2^{1/6})}{2^{1/6}}\frac{1}{2}K_1(\sqrt{\Pi}2^{1/6})
+      \mathcal{V}'(2^{1/6})2^{1/6}
+  -\frac{K_1(\sqrt{\Pi}2^{1/6})}{2^{1/6}}\frac{1}{2}I_1(\sqrt{\Pi}2^{1/6})
+  \mathcal{V}'(2^{1/6})2^{1/6}\nonumber\\
+  =&c_2\bigg[\sqrt{\Pi}\frac{K_1'(\sqrt{\Pi}2^{1/6})}{2^{1/6}}
+  -\frac{K_1(\sqrt{\Pi}2^{1/6})}{(2^{1/6})^2}\bigg].
+  \end{align}
+  Since $\mathcal{V}'(2^{1/6})=0$, this simplifies to
+  \begin{align}
+    0=&\bigg[\sqrt{\Pi}\frac{I_1'(\sqrt{\Pi}2^{1/6})}{2^{1/6}}
+      -\frac{I_1(\sqrt{\Pi}2^{1/6})}{(2^{1/6})^2}\bigg]
+    \bigg[\sqrt{\Pi}\frac{K_1'(\sqrt{\Pi}2^{1/6})}{2^{1/6}}
+      -\frac{K_1(\sqrt{\Pi}2^{1/6})}{(2^{1/6})^2}\bigg]^{-1}
+    \bigg[k_1 + \frac{1}{2}\int_{r_0}^{2^{1/6}}dsK_1(\sqrt{\Pi}s)
+      \mathcal{V}'(s)s\bigg]\nonumber\\
+    &+\bigg[k_2 - \frac{1}{2}\int_{r_0}^{2^{1/6}}dsI_1(\sqrt{\Pi}s)
+      \mathcal{V}'(s)s-c_2\bigg].
+  \end{align}
+\end{widetext}
+The above two equations are satisfied for eqns \ref{eqs:specificmatching}
+in the main text.
+\pagebreak
 \end{document}

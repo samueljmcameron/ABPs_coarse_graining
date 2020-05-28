@@ -31,3 +31,5 @@
 *.fixprint
 *lmp.pll
 *lmp.serial
+**/build
+*.so
