@@ -42,7 +42,8 @@ if __name__=="__main__":
     fig.set_size_inches(3.6,4)
 
     a0s = l0s/(24*np.sqrt(3)*epsilon)
-    
+
+    np.savetxt('data_newscaling.txt',[a0s,r0s,r0smalls,r0larges])
     axarr[0].plot(a0s,r0s,'-',color=colors[3])
     axarr[0].set_ylabel(r'$r_0$')
 
