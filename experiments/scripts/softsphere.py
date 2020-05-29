@@ -124,6 +124,8 @@ class SoftSphere(SoftSphereBase):
 
         self.k1,self.k2,self.c2 = self.constants()
 
+        print(self.k1,self.k2,self.c2)
+
         self.miniter = miniter
         self.maxiter=maxiter
         self.int_err = int_err
@@ -141,57 +143,106 @@ class SoftSphere(SoftSphereBase):
 
     def nu_1_old(self,r):
 
-        print('nu_1',self.r0,self.Pi)
         return self.k1+0.5*quadrature_vec(self.nu_1_integrand,
                                           self.r0,r,
                                           miniter=self.miniter,
                                           maxiter=self.maxiter,
                                           tol=self.int_err,
                                           rtol=self.int_err)[0]
-
+    
     def nu_2_old(self,r):
-        print('nu_2',self.r0,self.Pi)
+
         return self.k2-0.5*quadrature_vec(self.nu_2_integrand,
                                           self.r0,r,
                                           miniter=self.miniter,
                                           maxiter=self.maxiter,
                                           tol=self.int_err,
                                           rtol=self.int_err)[0]
-
-    def nu_1(self,r):
+    
+    def nu_1_new(self,r):
+        
         return self.k1 + 0.5*self.epsilon*nufuncs.k1_V_int(r,
                                                            self.Pi,
                                                            self.r0)
 
-    def nu_2(self,r):
+    def nu_2_new(self,r):
         return self.k2 - 0.5*self.epsilon*nufuncs.i1_V_int(r,
                                                            self.Pi,
                                                            self.r0)
 
-    def w_minus(self,r):
+
+    def test_bounds(self,r):
+        
+        r = np.atleast_1d(r)
+        
+        flag = False
+        if (np.sqrt(self.Pi)*self.r0 < 0.5 or
+            np.sqrt(self.Pi)*self.r0 > 30.0):
+            print(f'product sqrt(Pi)*r0= {np.sqrt(self.Pi)*self.r0} '
+                  ' is out of bounds (should be between 0.5 and 30.0).')
+            flag = True
+        elif (np.sqrt(self.Pi)*r[0] < 0.5 or
+              np.sqrt(self.Pi)*r[0] > 30.0):
+
+            print(f'product sqrt(Pi)*r[0] = {np.sqrt(self.Pi)*r[0]} '
+                  ' is out of bounds (should be between 0.5 and 30.0).')
+            flag = True
+        elif (np.sqrt(self.Pi)*r[-1] < 0.5 or
+              np.sqrt(self.Pi)*r[-1] > 30.0):
+            
+            print(f'product sqrt(Pi)*r[-1] = {np.sqrt(self.Pi)*r[-1]} '
+                  ' is out of bounds (should be between 0.5 and 30.0).')
+            flag = True
+
+        return flag
+    
+    def nu_1(self,r,flag=False):
+        
+        if flag == True:
+            print('Reverting to slow calculation of nu_1(r)')
+            return self.nu_1_old(r)
+        else:
+            return self.nu_1_new(r)
+
+    def nu_2(self,r,flag=False):
+                
+        if flag == True:
+            print('Reverting to slow calculation of nu_1(r)')
+            return self.nu_1_old(r)
+        else:
+            return self.nu_1_new(r)
+    
+    def w_minus(self,r,flag=None):
 
         if abs(self.r0-2**(1./6.)) < 1e-15:
 
             return r*0
 
-        return (special.i1(np.sqrt(self.Pi)*r)*self.nu_1(r)/r
-                +special.k1(np.sqrt(self.Pi)*r)*self.nu_2(r)/r)
+        if flag == None:
 
-    def w_minus_prime(self,r):
+            flag = self.test_bounds(r)
+        
+        return (special.i1(np.sqrt(self.Pi)*r)*self.nu_1(r,flag=flag)/r
+                +special.k1(np.sqrt(self.Pi)*r)*self.nu_2(r,flag=flag)/r)
+
+    def w_minus_prime(self,r,flag = None):
 
         if abs(self.r0-2**(1./6.)) < 1e-15:
 
             return r*0
+
+        if flag == None:
+            flag = self.test_bounds(r)
         
         sPi = np.sqrt(self.Pi)
 
         return (sPi*special.ivp(1,sPi*r,1)
-                *self.nu_1(r)/r
+                *self.nu_1(r,flag=flag)/r
                 +special.i1(sPi*r)*self.nu_1_prime(r)/r
                 +sPi*special.kvp(1,sPi*r,1)
-                *self.nu_2(r)/r
+                *self.nu_2(r,flag=flag)/r
                 +special.k1(sPi*r)*self.nu_2_prime(r)/r
-                -self.w_minus(r)/r)
+                -self.w_minus(r,flag=flag)/r)
 
     
     def w_plus(self,r):
@@ -223,29 +274,10 @@ if __name__ == "__main__":
 
 
 
-    Pe = 1.0
-    epsilon = 1.0
-    Pi = 1.0
-
-    rs = np.linspace(0.5,30,num=100,endpoint=True)
-    
-    ss = SoftSphere(Pe,epsilon,Pi)
-
-    fig,axarr = plt.subplots(2,sharex=True)
-
-    axarr[0].plot(rs,ss.nu_1(rs),label='old')
-    axarr[0].plot(rs,ss.nu_1_new(rs),label='new')
-    axarr[1].plot(rs,ss.nu_2(rs),label='old')
-    axarr[1].plot(rs,ss.nu_2_new(rs),label='new')
-
-    axarr[0].legend(frameon=False)
-    plt.show()
-    
-    """
-    rs = np.linspace(0.8,40,num=500,endpoint=True)*2**(1./6.)
+    rs = np.linspace(0.8,10,num=5000,endpoint=True)*2**(1./6.)
 
     Pe = 1.0/2**(1./6.)
-    epsilon = 10.0
+    epsilon = 1.0
     Pi = 1.0/2**(1./3.)
 
     ss = SoftSphere(Pe,epsilon,Pi)
@@ -256,7 +288,10 @@ if __name__ == "__main__":
     fig.set_size_inches(4,4*2)
 
     axarr[0].plot(rs,ss.w(rs))
-
+    axarr[0].plot(2**(1./6.),ss.w(2**(1./6.)),'ko')
+    axarr[0].plot(2**(1./6.),ss.w_plus(2**(1./6.)),'r.')
+    axarr[0].plot(2**(1./6.),ss.w_minus(2**(1./6.)),'b.')
+    
     true_p = ss.w_prime(rs)
     num_p = np.gradient(ss.w(rs),rs)
     axarr[1].plot(rs,true_p,'.')
@@ -266,4 +301,3 @@ if __name__ == "__main__":
     axarr[2].set_yscale('log')
 
     plt.show()
-    """
